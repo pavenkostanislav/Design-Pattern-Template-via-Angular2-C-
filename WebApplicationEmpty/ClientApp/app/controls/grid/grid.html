@@ -1,0 +1,240 @@
+﻿<div class="panel panel-default">
+    <div class="panel-body">
+        <div class="form-group" *ngIf="name">
+            <div class="col-lg-12 col-sm-12">
+                <h4>{{name}}</h4>
+            </div>
+        </div>
+        <p></p>
+        <div class="form-group">
+            <div shadowbox [show]="freeze" class="panel-body">
+                <div *ngIf="gridSize!=GridSize.xs && gridSize!=GridSize.sm" class="hidden-xs hidden-sm">
+                    <table class="table table-hover table-striped">
+                        <thead>
+                            <tr>
+                                <th class="text-center" style="width: 75px" rowspan="2">
+                                    <a (click)="onRefreshGrid()" class="btn" title="Обновить таблицу {{name}}">
+                                        <i class="fa fa-refresh fa-fw text-warning"></i>
+                                    </a>
+                                    <a (click)="onClickAddNew()" class="btn" title="Добавить новую запись в таблицу {{name}}">
+                                        <i class="fa fa-{{isAddNew ? 'minus' : 'plus'}} fa-fw text-warning"></i>
+                                    </a>
+                                </th>
+                                <th *ngFor="let col of listColumn" class="text-center {{col.class ? col.class : ''}}">{{col.name}}</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let row of listRow" [class.danger]="row == selectedRow" (click)="selectedRow = row">
+                                <td *ngIf="editRowModel && row.id === editRowModel.id; then editTemplate; else itemTemplate"></td>
+                                <ng-template #itemTemplate>
+                                    <td class="text-center hidden-xs hidden-sm" style="width: 75px">
+                                        <a (click)="onEditRow(row)" class="btn" [class.disabled]="!permissions.canEdit || isViewOnly">
+                                            <i class="fa fa-edit fa-fw text-success"></i>
+                                        </a>
+                                        <a (click)="onDeleteRow(row)" class="btn" [class.disabled]="!permissions.canDelete || isViewOnly" title="Удалить выбранную строку">
+                                            <i class="fa fa-trash fa-fw text-danger"></i>
+                                        </a>
+                                    </td>
+                                    <td *ngFor="let col of listColumn" class="hidden-xs hidden-sm">
+                                        <div *ngIf="col.type == 'none'">
+                                            {{row[col.key]}}
+                                        </div>
+                                        <div *ngIf="col.type == 'text'">
+                                            {{row[col.key]}}
+                                        </div>
+                                        <div *ngIf="col.type == 'number'">
+                                            {{row[col.key]}}
+                                        </div>
+                                        <div *ngIf="col.type == 'date'">
+                                            {{row[col.key] | ruDate}}
+                                        </div>
+                                        <div *ngIf="col.type == 'datetime'">
+                                            {{row[col.key]}}
+                                        </div>
+                                        <div *ngIf="col.type == 'time'">
+                                            {{row[col.key]}}
+                                        </div>
+                                        <div *ngIf="col.type == 'dropdown'">
+                                            {{row[col.keyName]}}
+                                        </div>
+                                        <div *ngIf="col.type == 'checkbox'">
+                                            <i class="fa {{row[col.key] ? 'fa fa-check' : ''}}"></i>
+                                        </div>
+                                    </td>
+                                </ng-template>
+                                <ng-template #editTemplate>
+                                    <td class="text-center hidden-xs hidden-sm" style="width: 75px">
+                                        <a (click)="onCancelRow()" class="btn"><i class="fa fa-undo fa-fw text-danger"></i></a>
+                                        <a (click)="onSaveRow()" class="btn"><i class="fa fa-save fa-fw text-success"></i></a>
+                                    </td>
+                                    <td *ngFor="let col of listColumn" class="hidden-xs hidden-sm">
+                                        <div *ngIf="col.type == 'none'"></div>
+                                        <div *ngIf="col.type == 'text'">
+                                            <input type="text" [(ngModel)]="editRowModel[col.key]" name="editRowModel.key" required [disabled]="!permissions.canEdit || isViewOnly" class="form-control" />
+                                        </div>
+                                        <div *ngIf="col.type == 'number'">
+                                            <input type="number" [(ngModel)]="editRowModel[col.key]" name="editRowModel.key" required [disabled]="!permissions.canEdit || isViewOnly" class="form-control text-center" />
+                                        </div>
+                                        <div class="text-center" *ngIf="col.type == 'date'">
+                                            <date-time [(ngModel)]="editRowModel[col.key]" [format]="'DD.MM.YYYY'" name="editRowModel.key"></date-time>
+                                        </div>
+                                        <div class="text-center" *ngIf="col.type == 'datetime'">
+                                            <date-time [(ngModel)]="editRowModel[col.key]" [format]="'DD.MM.YYYY hh:mm'" name="editRowModel.key"></date-time>
+                                        </div>
+                                        <div class="text-center" *ngIf="col.type == 'time'">
+                                            <date-time [(ngModel)]="editRowModel[col.key]" [format]="'hh:mm:ss'" name="editRowModel.key"></date-time>
+                                        </div>
+                                        <div *ngIf="col.type == 'dropdown'">
+                                            <dropdown [itemType]="col.itemType"
+                                                      [minTerm]="col.minTerm?col.minTerm:0"
+                                                      [allowClear]="col.allowClear?col.allowClear:true"
+                                                      [(ngModel)]="editRowModel[col.key]"
+                                                      required
+                                                      class="form-control">
+                                            </dropdown>
+                                        </div>
+                                        <div class="text-center" *ngIf="col.type == 'checkbox'">
+                                            <input type="checkbox" name="editRowModel.key" [(ngModel)]="editRowModel[col.key]" class="form-control">
+                                        </div>
+                                    </td>
+                                </ng-template>
+                            </tr>
+                        </tbody>
+                        <tfoot *ngIf="isAddNew">
+                            <tr>
+                                <td class="text-center hidden-xs hidden-sm" style="width: 75px">
+                                    <a (click)="onSaveNewRow()" class="btn" [class.disabled]="!permissions.canAdd || isViewOnly" title="Сохранить новую запись">
+                                        <i class="fa fa-save fa-fw text-success"></i>
+                                    </a>
+                                    <a (click)="onCancelNewRow()" class="btn"><i class="fa fa-undo fa-fw text-danger"></i></a>
+                                </td>
+                                <td *ngFor="let col of listColumn" class="hidden-xs hidden-sm">
+                                    <div *ngIf="col.type == 'none'"></div>
+                                    <div *ngIf="col.type == 'text'">
+                                        <input type="text" [(ngModel)]="newRowModel[col.key]" name="col.key" required [disabled]="!permissions.canEdit || isViewOnly" class="form-control" />
+                                    </div>
+                                    <div *ngIf="col.type == 'date'">
+                                        <date-time [(ngModel)]="newRowModel[col.key]" [format]="'DD.MM.YYYY'" name="editRowModel.key"></date-time>
+                                    </div>
+                                    <div *ngIf="col.type == 'datetime'">
+                                        <date-time [(ngModel)]="newRowModel[col.key]" [format]="'DD.MM.YYYY hh:mm'" name="editRowModel.key"></date-time>
+                                    </div>
+                                    <div *ngIf="col.type == 'time'">
+                                        <date-time [(ngModel)]="newRowModel[col.key]" [format]="'hh:mm:ss'" name="editRowModel.key"></date-time>
+                                    </div>
+                                    <div *ngIf="col.type == 'dropdown'">
+                                        <dropdown [itemType]="col.itemType"
+                                                  [minTerm]="col.minTerm?col.minTerm:0"
+                                                  [allowClear]="col.allowClear?col.allowClear:true"
+                                                  [(ngModel)]="newRowModel[col.key]"
+                                                  required
+                                                  class="form-control">
+                                        </dropdown>
+                                    </div>
+                                    <div *ngIf="col.type == 'checkbox'">
+                                        <input type="checkbox" name="newRowModel.key" [(ngModel)]="newRowModel[col.key]" class="form-control">
+                                    </div>
+                                </td>
+                                <td></td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+                <div *ngIf="gridSize==GridSize.xs || gridSize==GridSize.sm"  class="hidden-md hidden-lg">
+                    <div id="myCarousel" class="carousel slide" data-interval="3000" data-ride="carousel">
+                        <div class="carousel-inner">
+                            <div class="item text-center" *ngFor="let row of listRow; let i = index;" data-slide="pause" [class.active]="selectedIndex == i">
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">
+                                        <h2>
+                                            <span *ngIf="listColumn[0].type == 'none'"></span>
+                                            <span *ngIf="listColumn[0].type == 'text'">
+                                                {{row[listColumn[0].key]}}
+                                            </span>
+                                            <span *ngIf="listColumn[0].type == 'date'">
+                                                {{row[listColumn[0].key] | ruDate}}
+                                            </span>
+                                            <span *ngIf="listColumn[0].type == 'datetime'">
+                                                {{row[listColumn[0].key]}}
+                                            </span>
+                                            <span *ngIf="listColumn[0].type == 'time'">
+                                                {{row[listColumn[0].key]}}
+                                            </span>
+                                            <span *ngIf="listColumn[0].type == 'dropdown'">
+                                                {{row[listColumn[0].keyName]}}
+                                            </span>
+                                            <span *ngIf="listColumn[0].type == 'checkbox'">
+                                                <i class="{{row[listColumn[0].key] ? 'fa fa-check' : ''}}"></i>
+                                            </span>
+                                        </h2>
+                                    </div>
+                                    <div class="panel-body">
+                                        <fieldset class="form-horizontal">
+                                            <div class="form-group" *ngFor="let col of listColumn; let i = index;">
+                                                <div class="col-xs-11 col-sm-11 text-right" style="font-size: large;" *ngIf="row[col.key]">{{col.name}}</div>
+                                                <div class="col-xs-25 col-sm-25 text-left" style="font-size: large;" *ngIf="row[col.key]">
+                                                    <span *ngIf="col.type == 'none'"></span>
+                                                    <span *ngIf="col.type == 'text'">
+                                                        {{row[col.key]}}
+                                                    </span>
+                                                    <span *ngIf="col.type == 'date'">
+                                                        {{row[col.key] | ruDate}}
+                                                    </span>
+                                                    <span *ngIf="col.type == 'datetime'">
+                                                        {{row[col.key]}}
+                                                    </span>
+                                                    <span *ngIf="col.type == 'time'">
+                                                        {{row[col.key]}}
+                                                    </span>
+                                                    <span *ngIf="col.type == 'dropdown'">
+                                                        {{row[col.keyName]}}
+                                                    </span>
+                                                    <span *ngIf="col.type == 'checkbox'">
+                                                        {{i+1}}
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </fieldset>
+                                    </div>
+                                </div>
+                                <div *ngIf="!listRow.length" class="item text-center active" data-slide="pause">
+                                    Записей нет
+                                </div>
+                            </div>
+                            <a class="carousel-control left" (click)="onClickCarouselCmd('prev')">
+                                <span class="glyphicon glyphicon-chevron-left"></span>
+                            </a>
+                            <a class="carousel-control right" (click)="onClickCarouselCmd('next')">
+                                <span class="glyphicon glyphicon-chevron-right"></span>
+                            </a>
+                        </div>
+                        <div class="list-group" *ngIf="listRow && listRow.length">
+                            <a class="list-group-item" role="button" *ngFor="let row of listRow; let i = index;" [attr.data-slide-to]="i" (click)="onClickCarouselCmd(i)" [class.list-group-item-danger]="selectedIndex == i">
+                                <span *ngIf="listColumn[0].type == 'none'"></span>
+                                <span *ngIf="listColumn[0].type == 'text'">
+                                    {{row[listColumn[0].key]}}
+                                </span>
+                                <span *ngIf="listColumn[0].type == 'date'">
+                                    {{row[listColumn[0].key] | ruDate}}
+                                </span>
+                                <span *ngIf="listColumn[0].type == 'datetime'">
+                                    {{row[listColumn[0].key]}}
+                                </span>
+                                <span *ngIf="listColumn[0].type == 'time'">
+                                    {{row[listColumn[0].key]}}
+                                </span>
+                                <span *ngIf="listColumn[0].type == 'dropdown'">
+                                    {{row[listColumn[0].keyName]}}
+                                </span>
+                                <span *ngIf="listColumn[0].type == 'checkbox'">
+                                    <i class="{{row[listColumn[0].key] ? 'fa fa-check' : ''}}"></i>
+                                </span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <p></p>
+            </div>
+        </div>
+    </div>
+</div>

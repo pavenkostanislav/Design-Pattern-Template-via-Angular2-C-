@@ -1,0 +1,9 @@
+﻿<grid [controllerName]="'testcontroller'"
+          [id]="currentUser?currentUser.id:0"
+          [keyName]="'authorId'"
+          [name]="'Сообщения'"
+          [listColumn]="[   {name:'От кого',key:'authorName',type:'none'},
+                            {name:'Сообщения',key:'message',type:'text'},
+                            {name:'Нравится',key:'rating',type:'number'},
+                            {name:'Понравилось',key:'ratedUsers',type:'none'}]"
+          [isViewOnly]="isViewOnly"></grid>
