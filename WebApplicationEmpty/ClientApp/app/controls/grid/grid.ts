@@ -81,7 +81,7 @@ export class GridRowList implements OnInit, OnChanges {
 			},
 			(err: any) => {
 				this.freeze = false;
-				this.app.showError(err);
+				console.log(err);
 			}
 		);
 	}
@@ -105,7 +105,7 @@ export class GridRowList implements OnInit, OnChanges {
 			},
 			(err: any) => {
 				this.freeze = false;
-				this.app.showError(err);
+				console.log(err);
 			}
 		);
 	}
@@ -127,7 +127,7 @@ export class GridRowList implements OnInit, OnChanges {
 							},
 							(err: any) => {
 								this.freeze = false;
-								this.app.showError(err);
+								console.log(err);
 							}
 						);
 					}
@@ -146,7 +146,7 @@ export class GridRowList implements OnInit, OnChanges {
 			},
 			(err: any) => {
 				this.freeze = false;
-				this.app.showError(err);
+				console.log(err);
 			}
 		);
 	}
@@ -164,7 +164,7 @@ export class GridRowList implements OnInit, OnChanges {
 			},
 			(err: any) => {
 				this.freeze = false;
-				this.app.showError(err);
+				console.log(err);
 			}
 		);
 	}
@@ -185,7 +185,7 @@ export class GridRowList implements OnInit, OnChanges {
 				this.onRefreshGrid();
 			},
 			(err: any) => {
-				this.app.showError(err);
+				console.log(err);
 			}
 		);
 	}

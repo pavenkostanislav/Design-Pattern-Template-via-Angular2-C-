@@ -81,14 +81,19 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
-    <TypeScriptCompile Include="ClientApp\app\controls\grid\grid.control.ts" />
+    <TypeScriptCompile Include="ClientApp\app\components\chat\chat.ts" />
+    <TypeScriptCompile Include="ClientApp\app\controls\grid\grid.ts" />
     <TypeScriptCompile Include="ClientApp\app\services\grid.service.ts" />
-    <TypeScriptCompile Include="ClientApp\app\views\employee\test.ts" />
-    <TypeScriptCompile Include="ClientApp\app\views\employee\test.routes.ts" />
+    <TypeScriptCompile Include="ClientApp\app\views\chat\test.routes.ts" />
+    <TypeScriptCompile Include="ClientApp\app\views\chat\test.ts" />
+    <TypeScriptCompile Include="ClientApp\app\views\grid\test.ts" />
+    <TypeScriptCompile Include="ClientApp\app\views\grid\test.routes.ts" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="ClientApp\app\controls\grid\grid.html" />
-    <Content Include="ClientApp\app\views\employee\test.html" />
+    <Content Include="ClientApp\app\components\chat\chat.html" />
+    <Content Include="ClientApp\app\controls\grid\grid.control.html" />
+    <Content Include="ClientApp\app\views\chat\test.html" />
+    <Content Include="ClientApp\app\views\grid\test.html" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{4A0DDDB5-7A95-4FBF-97CC-616D07737A77}" />

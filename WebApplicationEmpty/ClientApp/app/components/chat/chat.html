@@ -1,0 +1,71 @@
+﻿<div class="panel panel-default">
+    <div class="panel-heading chat">
+        <div class="form-group">
+			<h4><i class="fa fa-comments-o fa-fw"></i>&nbsp;Сообщения</h4>
+        </div>
+        <div class="form-group">
+            <div shadowbox [show]="freeze" class="media chat-panel" >
+                <div class="chat-msg-parent {{current.name == exp.authorName ? 'chat-msg-right' : 'chat-msg-left'}}" *ngFor="let exp of listRow" (click)="selected = exp" [class.list-group-item-danger]="exp == selected">
+                    <div class="media-left" *ngIf="current.name != exp.authorName">
+                        <img class="img-circle media-object" [src]="exp.photoSrc" alt="{{exp.authorName}}" style="width: 5rem; height: 5rem" />
+                    </div>
+                    <div class="media-body chat-msg {{current.name == exp.authorName ? 'chat-msg-right' : 'chat-msg-left'}}">
+                        <h5 class="media-heading text-info"><strong>{{exp.authorName}}</strong></h5>
+                        <p>
+                            {{exp.message}}
+                        </p>
+                        <div class="btn-group hidden-xs"  title="{{exp.ratedUsers}}">
+                            <a (click)="onSaveRow(exp,'up')" class="btn btn-outline-success" title="{{exp.ratedUsers}}"><i class="fa fa-thumbs-o-up"></i>&nbsp;Нравится&nbsp;|&nbsp;{{exp.rating ? exp.rating : 0}}</a>
+                            <a (click)="onSaveRow(exp,'down')" class="btn btn-outline-danger" title="{{exp.ratedUsers}}"><i class="fa fa-thumbs-o-down"></i></a>
+                        </div>
+                        <a (click)="onClickAttachment(exp)" class="btn btn-outline-default hidden-xs" title="Добавить / загрузить вложения."><i class="fa fa-paperclip"></i>{{exp.attachmentCount ? '&nbsp;|&nbsp;'+exp.attachmentCount : ''}}</a>
+						
+						<a (click)="onDeleteRow(exp)" class="btn btn-outline-danger hidden-xs" [class.disabled]="!permissions.canDelete || isViewOnly || current.name != exp.authorName" title="Удалить выбранную строку">
+							<i class="fa fa-trash"></i>
+						</a>
+						<span style="font-style: italic; font-size: xx-small; color: gray;"><span class="hidden-xs">Отправлено </span>{{exp.createdDate}}</span>
+                    </div>
+                    <div class="media-right media-bottom" *ngIf="current.name == exp.authorName">
+                        <img class="img-circle media-object" [src]="exp.photoSrc" alt="{{exp.authorName}}" style="width: 5rem; height: 5rem" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="panel-body">
+        <div shadowbox [show]="freeze" class="media">
+			<div class="media-body">
+				<p>
+					<textarea rows="4" class="form-control" [(ngModel)]="newRowModel.message"></textarea>
+				</p>
+				<div class="form-group text-right">
+					
+				</div>
+			</div>
+			<div class="media-right">
+				<p>
+					<img [src]="onDownloadPhoto()" class="img-circle center-block" style="width: 4rem; height: 4rem" />
+				</p>
+				<a (click)="onSaveNewRow()" title="Сохранить сообщение!" class="btn btn-outline-success" [class.message]="!newRowModel.message || !permissions.canAdd || isViewOnly">
+					<i class="fa fa-paper-plane-o"></i>&nbsp;<br />Отправить
+				</a>
+			</div>
+        </div>
+    </div>
+</div>
+
+<div id="ModalAttach" class="modal fade" data-keyboard="false">
+    <div class="modal-dialog modal-reference">
+        <div draggable class="modal-content alert alert-info">
+            <form #editForm="ngForm">
+				<div class="modal-header cursor-move">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h4 class="modal-title">Вложения</h4>
+                </div>
+                <div class="modal-body">
+                    <attachment-list [metaObjectId]="attachmentMetaObjectId" [objectId]="attchmentObjectId"></attachment-list>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
