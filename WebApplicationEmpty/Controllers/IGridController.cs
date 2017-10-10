@@ -1,5 +1,5 @@
 ﻿
-namespace TEST.Managers
+namespace TEST.Controllers
 {
     public interface IGridController<T>
     {
