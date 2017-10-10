@@ -1,14 +1,17 @@
-﻿using KPMA.Data;
-using KPMA.Data.Models;
+﻿using TEST.Data;
+using TEST.Data.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Linq;
 
-namespace KPMA.Managers
+namespace TEST.Managers
 {
-    public class GridManager<T> : IGridManager<T> where T : class, Data.Interfaces.IIdModel
+    public class GridManager<T> : IGridManager<T> where T : class, 
+                                                            Data.Interfaces.IIdModel,
+                                                            Data.Interfaces.IDisplayName,
+                                                            Data.Interfaces.IClearVirtualMethodsModel
     {
-        protected readonly CoreDbContext db;
+        public readonly CoreDbContext db;
 
         public GridManager(CoreDbContext db)
         {
@@ -22,49 +25,78 @@ namespace KPMA.Managers
                 return db.CurrentUser;
             }
         }
-        virtual public IQueryable<T> GetGridList(int? parentlId)
+
+        virtual public IQueryable<T> GetGridList(int? keyId = null)
         {
             return db.Set<T>().AsQueryable();
         }
 
-        virtual public T GetGridRowModel(int id)
+        virtual public System.Threading.Tasks.Task<System.Collections.Generic.List<T>> GetGridListAsync(int? keyId = null)
         {
-            return db.Set<T>().Find(id);
+            return this.GetGridList(keyId).ToListAsync();
         }
 
-        virtual public T SaveGridRowModel(T model)
+        virtual public IQueryable<T> GetGridSelectList(int? keyId, string term)
         {
+            var list = db.Set<T>().AsQueryable();
+
+            if (!string.IsNullOrWhiteSpace(term))
+            {
+                list = list.Where(u => u.DisplayName.Contains(term));
+            }
+
+            return list;
+        }
+
+        virtual public System.Threading.Tasks.Task<System.Collections.Generic.List<ViewModels.SelectItemViewModel>> GetGridSelectListAsync(int? keyId, string term)
+        {
+            return this.GetGridSelectList(keyId, term)
+                .Select(u => new ViewModels.SelectItemViewModel { id = u.Id, text = u.DisplayName })
+                .OrderBy(m => m.text)
+                .ToListAsync();
+        }
+
+        virtual public System.Threading.Tasks.Task<T> GetGridRowModelAsync(int id)
+        {
+            return db.Set<T>().FindAsync(id);
+        }
+
+        virtual public void ChangeModelSaveGridRowModel(T model)
+        {
+            //throw new NotImplementedException();
+        }
+
+        virtual public async System.Threading.Tasks.Task<T> SaveGridRowModelAsync(T model)
+        {
+            this.ChangeModelSaveGridRowModel(model);
+
+            T e;
             if (model.Id == 0)
             {
-                this.ClearGridRowProperties(model);
-                var e = db.Set<T>().Add(model).Entity;
-                db.SaveChanges();
-                return e;
+                model.ClearVirtualMethods();
+                e = db.Set<T>().Add(model).Entity;
             }
             else
             {
-                this.ClearGridRowProperties(model);
-                var e = db.Set<T>().Update(model).Entity;
-                db.SaveChanges();
-                return e;
+                model.ClearVirtualMethods();
+                e = db.Set<T>().Update(model).Entity;
             }
+
+            await db.SaveChangesAsync();
+
+            return e;
         }
 
-        virtual public void DeleteGridRowModel(int id)
+        virtual public async System.Threading.Tasks.Task DeleteGridRowModelAsync(int id)
         {
-            var model = db.Set<T>().Find(id);
+            var model = await db.Set<T>().FindAsync(id);
             if (model == null)
             {
                 throw new Exception($"Запись не найдена. ({id})");
             }
 
             db.Set<T>().Remove(model);
-            db.SaveChanges();
-        }
-
-        virtual public void ClearGridRowProperties(T model)
-        {
-            //throw new NotImplementedException();
+            await db.SaveChangesAsync();
         }
     }
 }

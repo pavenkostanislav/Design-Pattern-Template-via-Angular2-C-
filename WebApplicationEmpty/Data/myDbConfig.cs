@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
-using KPMA.Data.Models;
+using TEST.Data.Models;
 using Microsoft.EntityFrameworkCore.Metadata;
 
-namespace KPMA.Data
+namespace TEST.Data
 {
     public class MyDbConfig : IDbContextConfig
     {

@@ -1,17 +1,12 @@
 ﻿using System;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Infrastructure;
-using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Migrations;
-using KPMA.Data;
 
-namespace KPMA.KPI.Data.UACMigrations
+namespace TEST.KPI.Data.UACMigrations
 {
     partial class MyModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity("KPMA.Data.Models.Chat", b =>
+            modelBuilder.Entity("TEST.Data.Models.Chat", b =>
             {
                 b.Property<int>("Id")
                     .ValueGeneratedOnAdd();

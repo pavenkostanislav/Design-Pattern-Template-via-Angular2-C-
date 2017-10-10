@@ -129,7 +129,7 @@ export class ChatList implements OnInit, OnChanges {
     ngOnInit() {
         this.logShow = (window.location.hostname == `localhost`);
         if (this.logShow) {
-            console.log(`EmployeeChatList.ngOnInit`);
+            console.log(`ChatList.ngOnInit`);
         }
         
         if (this.current) {
