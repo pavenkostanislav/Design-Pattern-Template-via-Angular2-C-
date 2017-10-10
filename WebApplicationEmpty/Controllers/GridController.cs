@@ -12,11 +12,6 @@ namespace TEST.Controllers
                                                                                 , new()
     {
         protected readonly IGridManager<T> objManager;
-        protected readonly ICoreManager coreManager;
-        protected readonly IMetaObjectManager moManager;
-        protected readonly IAttachmentManager attManager;
-        protected readonly IConstantManager constManager;
-        protected readonly IEmployeeManager employeeManager;
 
         public readonly MetaObject tableModel;
 
@@ -44,21 +39,21 @@ namespace TEST.Controllers
         }
 
         [HttpGet("{id:int}/{mode?}")]
-        virtual public async System.Threading.Tasks.Task<Microsoft.AspNetCore.Mvc.IActionResult> GetGridRowModelAsync(int id, TEST.Enums.ModeEnum? mode)
+        virtual public async System.Threading.Tasks.Task<Microsoft.AspNetCore.Mvc.IActionResult> GetGridRowModelAsync(int id, Enums.ModeEnum? mode)
         {
             try
             {
                 if (mode == null)
                 {
-                    mode = TEST.Enums.ModeEnum.@default;
+                    mode = Enums.ModeEnum.@default;
                 }
 
                 T model = default(T);
 
                 switch (mode)
                 {
-                    case TEST.Enums.ModeEnum.viewonly:
-                    case TEST.Enums.ModeEnum.@default:
+                    case Enums.ModeEnum.viewonly:
+                    case Enums.ModeEnum.@default:
                         {
                             model = await objManager.GetGridRowModelAsync(id);
 
@@ -69,11 +64,11 @@ namespace TEST.Controllers
 
                         }
                         break;
-                    case TEST.Enums.ModeEnum.@new:
+                    case Enums.ModeEnum.@new:
 
                         model = new T();
                         break;
-                    case TEST.Enums.ModeEnum.copy:
+                    case Enums.ModeEnum.copy:
                         {
                             var _copy = await objManager.GetGridRowModelAsync(id);
                             if (_copy == null)

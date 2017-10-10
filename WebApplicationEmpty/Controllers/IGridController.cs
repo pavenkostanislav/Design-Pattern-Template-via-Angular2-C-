@@ -7,7 +7,7 @@ namespace TEST.Managers
         System.Threading.Tasks.Task<Microsoft.AspNetCore.Mvc.IActionResult> GetGridListAsync(int? keyId);
 
         [Microsoft.AspNetCore.Mvc.HttpGet("{id:int}/{mode?}")]
-        System.Threading.Tasks.Task<Microsoft.AspNetCore.Mvc.IActionResult> GetGridRowModelAsync(int id, TEST.Enums.ModeEnum? mode);
+        System.Threading.Tasks.Task<Microsoft.AspNetCore.Mvc.IActionResult> GetGridRowModelAsync(int id, Enums.ModeEnum? mode);
         
         [Microsoft.AspNetCore.Mvc.HttpPost()]
         System.Threading.Tasks.Task<Microsoft.AspNetCore.Mvc.IActionResult> SaveGridRowModelAsync([Microsoft.AspNetCore.Mvc.FromBody] T model);
