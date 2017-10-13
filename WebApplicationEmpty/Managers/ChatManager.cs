@@ -1,13 +1,16 @@
-﻿using TEST.Data.Models;
+﻿using KPMA.Data;
+using KPMA.Data.Models;
+using Microsoft.EntityFrameworkCore;
+using System;
 using System.Linq;
 
-namespace TEST.Managers
+namespace KPMA.Managers
 {
-    public class ChatManager : GridManager<Chat>, IGridManager<Chat>
+    public class ChatManager : GridManager<Chat, ChatFindModel>
     {
-        public ChatManager(DbContext db) : base(db)
+        public ChatManager(CoreDbContext db) : base(db)
         { }
-        
+
         override public IQueryable<Chat> GetGridList(int? authorId)
         {
             var ret = db.Set<Chat>()

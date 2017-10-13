@@ -1,0 +1,36 @@
+﻿<div class="dd-container">
+	<div class="dd-control" [class.dd-disabled]="disabled" [class.dd-empty]="!selectedItem || !allowClear">
+		<span class="dd-text" [title]="(!selectedItem) ? placeholder : selectedItem.text">{{(!selectedItem) ? placeholder : selectedItem.text}}</span>
+		<ng-template [ngIf]="!disabled">
+			<span *ngIf="selectedItem && allowClear" (click)="clearSelect()" class="dd-btn btn-clear"><i class="fa fa-close" aria-hidden="true"></i></span>
+			<span (click)="showHide(!showDropDown)" class="dd-btn btn-show"><i class="fa fa-chevron-{{showDropDown? 'up': 'down'}}" aria-hidden="true"></i></span>
+		</ng-template>
+	</div>
+	<div *ngIf="showDropDown" class="dd-findform">
+		<div [formGroup]="myGroup">
+			<input #input type="text" [(ngModel)]="searchValue" formControlName="termInput" />
+		</div>
+		<div class="dd-items">
+			<span *ngIf="showGroups; then groupTemplate; else itemTemplate"></span>
+			<ng-template #groupTemplate>
+				<span *ngFor="let group of groupList" class="dd-group">
+					<strong [innerHtml]='group.text'></strong>
+					<span *ngFor="let item of searchList(group.id)"
+						  [class.hover]="item === hoverItem"
+						  [innerHtml]='item.text'
+						  (click)="onSelectItem(item)"
+						  (mouseover)="onHoverItem(item)"
+						  class="dd-item"></span>
+				</span>
+			</ng-template>
+			<ng-template #itemTemplate>
+				<span *ngFor="let item of searchList()"
+					  [class.hover]="item === hoverItem"
+					  [innerHtml]='item.text'
+					  (click)="onSelectItem(item)"
+					  (mouseover)="onHoverItem(item)"
+					  class="dd-item"></span>
+			</ng-template>
+		</div>
+	</div>
+</div>

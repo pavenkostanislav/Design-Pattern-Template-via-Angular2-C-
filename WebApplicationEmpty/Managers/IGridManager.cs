@@ -1,9 +1,9 @@
-﻿using TEST.Data.Models;
+﻿using KPMA.Data.Models;
 using System.Linq;
 
-namespace TEST.Managers
+namespace KPMA.Managers
 {
-    public interface IGridManager<T>
+    public interface IGridManager<T, GridFindModel>
     {
         User CurrentUser { get; }
         IQueryable<T> GetGridList(int? keyId = null);
@@ -14,6 +14,8 @@ namespace TEST.Managers
         System.Threading.Tasks.Task<T> SaveGridRowModelAsync(T model);
         System.Threading.Tasks.Task DeleteGridRowModelAsync(int id);
         void ChangeModelSaveGridRowModel(T model);
+        ResponseModel<T> GetGridResponseModel(RequestModel<GridFindModel> requestModel);
+        //System.Threading.Tasks.Task<ResponseModel<T>> GetGridResponseModelAsync(RequestModel requestModel);
     }
 }
 

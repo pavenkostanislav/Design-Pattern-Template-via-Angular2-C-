@@ -8,5 +8,6 @@ namespace TEST.Enums
         @default,
         @new,
         copy,
+        find,
     }
 }

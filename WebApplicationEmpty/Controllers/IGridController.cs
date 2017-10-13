@@ -1,5 +1,5 @@
 ﻿
-namespace TEST.Controllers
+namespace KPMA.Managers
 {
     public interface IGridController<T>
     {

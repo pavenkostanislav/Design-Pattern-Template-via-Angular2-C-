@@ -1,0 +1,68 @@
+﻿.dd-container {
+    position: relative;
+	margin-left: -3px;
+	margin-right: -3px;
+}
+.dd-control {
+	padding-left: 3px;
+	padding-right: 3px;
+	margin-right: 40px;
+	overflow: hidden;
+	text-decoration: none;
+    white-space: nowrap;
+}
+.dd-btn {
+	cursor:pointer;
+	position:absolute;
+}
+.dd-btn.btn-show {
+	right: 4px;
+}
+.dd-btn.btn-clear {
+	right: 24px;
+}
+.dd-findform {
+	border: 1px solid #ccc;
+	border-radius: 4px;
+	padding: 5px;
+	position: relative;
+	background-color: #fff;
+	z-index: 10000;
+	margin-top:3px;
+}
+.dd-findform input {
+	width:100%;
+}
+.dd-items {
+	max-height: 200px;
+	overflow-x: hidden;
+	overflow-y: auto;
+	padding-left:0;
+	padding-right:0;	
+}
+.dd-group {
+	display: block;
+}
+.dd-item {
+	cursor:pointer;
+	display: list-item;
+	list-style: outside none none;
+}
+.dd-group .dd-item {
+	padding-left: 10px;
+}
+.dd-item.hover {
+	background-color: #d9edf7;
+}
+.dd-control.dd-empty {
+	margin-right: 22px;
+}
+.dd-control.dd-disabled {
+	margin-right: 0;
+}
+
+
+
+
+
+

@@ -72,8 +72,10 @@
     <Compile Include="Controllers\GridController.cs" />
     <Compile Include="Controllers\IGridController.cs" />
     <Compile Include="Data\MyDbConfig.cs" />
-    <Compile Include="Data\Models\Chat.cs" />
-    <Compile Include="Data\Migrations\MyModelSnapshot.cs" />
+    <Compile Include="Managers\GridTools.cs" />
+    <Compile Include="Managers\IClearVirtualPropertiesModel.cs" />
+    <Compile Include="Models\Chat.cs" />
+    <Compile Include="Migrations\MyModelSnapshot.cs" />
     <Compile Include="DependencyInjection\MyServiceCollectionExtensions.cs" />
     <Compile Include="Enums\ModeEnum.cs" />
     <Compile Include="Managers\ChatManager.cs" />
@@ -81,24 +83,37 @@
     <Compile Include="Managers\IGridManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Content Include="ClientApp\app\controls\dropdown\dropdown.scss" />
+  </ItemGroup>
   <ItemGroup>
     <TypeScriptCompile Include="ClientApp\app\components\chat\chat.ts" />
-    <TypeScriptCompile Include="ClientApp\app\controls\grid\grid.ts" />
+    <TypeScriptCompile Include="ClientApp\app\controls\datetimepicker\datetimepicker.control.ts" />
+    <TypeScriptCompile Include="ClientApp\app\controls\dropdown\dropdown.control.spec.ts" />
+    <TypeScriptCompile Include="ClientApp\app\controls\dropdown\dropdown.control.ts" />
+    <TypeScriptCompile Include="ClientApp\app\controls\grid\grid.control.ts" />
+    <TypeScriptCompile Include="ClientApp\app\controls\paging\paging.control.spec.ts" />
+    <TypeScriptCompile Include="ClientApp\app\controls\paging\paging.control.ts" />
+    <TypeScriptCompile Include="ClientApp\app\controls\shadowbox\shadowbox.control.ts" />
     <TypeScriptCompile Include="ClientApp\app\services\grid.service.ts" />
-    <TypeScriptCompile Include="ClientApp\app\views\chat\test.routes.ts" />
-    <TypeScriptCompile Include="ClientApp\app\views\chat\test.ts" />
+    <TypeScriptCompile Include="ClientApp\app\views\chat\chat.routes.ts" />
+    <TypeScriptCompile Include="ClientApp\app\views\chat\chat.ts" />
     <TypeScriptCompile Include="ClientApp\app\views\grid\test.ts" />
     <TypeScriptCompile Include="ClientApp\app\views\grid\test.routes.ts" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="ClientApp\app\components\chat\chat.html" />
+    <Content Include="ClientApp\app\controls\datetimepicker\datetimepicker.control.js" />
+    <Content Include="ClientApp\app\controls\dropdown\dropdown.html" />
     <Content Include="ClientApp\app\controls\grid\grid.control.html" />
-    <Content Include="ClientApp\app\views\chat\test.html" />
+    <Content Include="ClientApp\app\views\chat\chat.html" />
     <Content Include="ClientApp\app\views\grid\test.html" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{4A0DDDB5-7A95-4FBF-97CC-616D07737A77}" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="ClientApp\app\controls\datetimepicker\datetimepicker.control.js.map" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

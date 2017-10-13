@@ -1,15 +1,21 @@
-﻿using TEST.Data;
-using TEST.Data.Models;
+﻿using KPMA.Data;
+using KPMA.Data.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Linq;
+using System.Threading.Tasks;
 
-namespace TEST.Managers
+namespace KPMA.Managers
 {
-    public class GridManager<T> : IGridManager<T> where T : class, 
+    public class GridManager<T, GridFindModel> : IGridManager<T,GridFindModel> 
+                                                where T :   class, 
                                                             Data.Interfaces.IIdModel,
                                                             Data.Interfaces.IDisplayName,
-                                                            Data.Interfaces.IClearVirtualMethodsModel
+                                                            Data.Interfaces.IClearVirtualPropertiesModel
+                                                where GridFindModel : class,
+                                                            Data.Interfaces.IIdModel,
+                                                            Data.Interfaces.IDisplayName,
+                                                            Data.Interfaces.IClearVirtualPropertiesModel
     {
         public readonly CoreDbContext db;
 
@@ -25,6 +31,45 @@ namespace TEST.Managers
                 return db.CurrentUser;
             }
         }
+
+
+        public ResponseModel<T> GetGridResponseModel(RequestModel<GridFindModel> requestModel)
+        {
+            var list = this.GetGridList(requestModel.KeyId).ToList();
+
+            var currentPage = 0;
+            var totalRowCount = list.Count();
+
+            if (requestModel.CurrentPage > totalRowCount / requestModel.PageSize + 1)
+            {
+                currentPage = 0;
+            }
+            else
+            {
+                currentPage = requestModel.CurrentPage;
+            }
+
+            int skip = requestModel.PageSize * (requestModel.CurrentPage);
+
+            int take = requestModel.PageSize;
+
+            var listPage = list.Skip(skip).Take(take);
+
+            var responseModel = new ResponseModel<T>
+            {
+                TotalRowCount = totalRowCount,
+                CurrentPage = currentPage,
+                List = listPage.ToList()
+            };
+
+            return responseModel;
+        }
+
+
+        //public System.Threading.Tasks.Task<ResponseModel<T>> GetGridResponseModelAsync(RequestModel requestModel)
+        //{
+        //    throw new NotImplementedException();
+        //}
 
         virtual public IQueryable<T> GetGridList(int? keyId = null)
         {
@@ -73,12 +118,12 @@ namespace TEST.Managers
             T e;
             if (model.Id == 0)
             {
-                model.ClearVirtualMethods();
+                model.ClearVirtualProperties();
                 e = db.Set<T>().Add(model).Entity;
             }
             else
             {
-                model.ClearVirtualMethods();
+                model.ClearVirtualProperties();
                 e = db.Set<T>().Update(model).Entity;
             }
 
@@ -98,5 +143,19 @@ namespace TEST.Managers
             db.Set<T>().Remove(model);
             await db.SaveChangesAsync();
         }
+    }
+    public class ResponseModel<T>
+    {
+        public int TableId { get; set; }
+        public int TotalRowCount { get; set; }
+        public int CurrentPage { get; set; }
+        public System.Collections.Generic.IList<T> List { get; set; }
+    }
+    public class RequestModel<GridFindModel>
+    {
+        public int CurrentPage { get; set; }
+        public int PageSize { get; set; }
+        public int? KeyId { get; set; }
+        public GridFindModel FindModel { get; set; }
     }
 }

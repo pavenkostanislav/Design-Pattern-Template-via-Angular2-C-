@@ -6,8 +6,8 @@ namespace TEST.Extensions.DependencyInjection
     {
         public static IServiceCollection AddMyReplace(this IServiceCollection services)
         {
-            services.AddScoped<IGridManager<Data.Models.Chat>, ChatManager>();
-			return services;
+            services.AddScoped<IGridManager<Chat, ChatFindModel>, ChatManager>();
+            return services;
         }
 
     }
