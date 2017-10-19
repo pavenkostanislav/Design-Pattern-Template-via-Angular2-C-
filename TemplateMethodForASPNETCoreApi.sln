@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "TemplateMethodForASPNETCoreApi", "TemplateMethodForASPNETCoreApi\TemplateMethodForASPNETCoreApi.xproj", "{F61499E2-19AD-4D65-B03E-C6704AB7E3DB}"
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "TEST", "TemplateMethodForASPNETCoreApi\TEST.xproj", "{F61499E2-19AD-4D65-B03E-C6704AB7E3DB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -1,9 +1,10 @@
-﻿using TEST.Managers;
-using TEST.Tools;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Linq;
+using TEST.Models;
+using TEST.Managers;
+using TEST.Tools;
 
 namespace TEST.Controllers
 {
@@ -21,14 +22,14 @@ namespace TEST.Controllers
                 var ret = await objManager.GetGridListAsync(authorId);
                 return Json(ret.Select(m => new Models.ChatViewModel
                 {
-                    TableId = this.tableId.Id,
+                    TableId = this.tableName,
                     Id = m.Id,
                     AttachmentCount = 0,
                     AuthorId = m.AuthorId,
                     EmployeeId = 0,
                     EmployeePhotoFileName = string.Empty,
                     PhotoSrc = string.Empty,
-                    AuthorName = m.Author?.DisplayName,
+                    AuthorName = "DisplayName",
                     Message = m.Message,
                     Rating = m.Rating,
                     RatedUsers = m.RatedUsers,

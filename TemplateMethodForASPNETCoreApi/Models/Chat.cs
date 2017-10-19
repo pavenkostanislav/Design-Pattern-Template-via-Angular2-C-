@@ -1,15 +1,12 @@
 ﻿using TEST.Interfaces;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace TEST.Models
 {
-    [Table("Chat", Schema = "kpi")]
-    public class Chat : IIdModel, IClearVirtualPropertiesModel, IDisplayName
+    [Table("Chat", Schema = "dbo")]
+    public class Chat : IIdModel, IDisplayName, IClearVirtualPropertiesModel
     {
         [Key]
         public int Id { get; set; }
@@ -48,13 +45,9 @@ namespace TEST.Models
         public string LastUpdatedBy { get; set; }
         public DateTime LastUpdatedDate { get; set; }
 
-        //[ForeignKey("AuthorId")]
-        //public User Author { get; set; }
-
-
         public void ClearVirtualProperties()
         {
-            //this.Author = null;
+
         }
     }
     public class ChatViewModel : Chat

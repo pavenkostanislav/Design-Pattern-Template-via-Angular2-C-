@@ -13,7 +13,6 @@
     "Microsoft.AspNetCore.Server.IISIntegration": "1.1.0",
     "Microsoft.AspNetCore.Server.Kestrel": "1.1.0",
     "Microsoft.AspNetCore.StaticFiles": "1.1.0",
-    "Microsoft.EntityFrameworkCore": "1.1.0",
     "Microsoft.EntityFrameworkCore.SqlServer": "1.1.0",
     "Microsoft.EntityFrameworkCore.SqlServer.Design": "1.1.0",
     "Microsoft.EntityFrameworkCore.Tools": "1.1.0-preview4-final",
@@ -95,5 +94,5 @@
 		"postpublish": [
 			"dotnet publish-iis --publish-folder %publish:OutputPath% --framework %publish:FullTargetFramework%"
 		]
-	},
+	}
 }

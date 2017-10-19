@@ -1,5 +1,4 @@
-﻿using TEST.Data;
-using TEST.Managers;
+﻿using TEST.Managers;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Linq;
@@ -7,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace TEST.Managers
 {
-    public class GridManager<T, GridFindModel> : IGridManager<T,GridFindModel> 
-                                                where T :   class, 
+    public class GridManager<GridTableModel, GridFindModel> : IGridManager<GridTableModel,GridFindModel> 
+                                                where GridTableModel :   class, 
                                                             Interfaces.IIdModel,
                                                             Interfaces.IDisplayName,
                                                             Interfaces.IClearVirtualPropertiesModel
@@ -25,7 +24,7 @@ namespace TEST.Managers
         }
 
 
-        public ResponseModel<T> GetGridResponseModel(RequestModel<GridFindModel> requestModel)
+        public ResponseModel<GridTableModel> GetGridResponseModel(RequestModel<GridFindModel> requestModel)
         {
             var list = this.GetGridList(requestModel.KeyId, requestModel.FindModel).ToList();
 
@@ -47,7 +46,7 @@ namespace TEST.Managers
 
             var listPage = list.Skip(skip).Take(take);
 
-            var responseModel = new ResponseModel<T>
+            var responseModel = new ResponseModel<GridTableModel>
             {
                 TotalRowCount = totalRowCount,
                 CurrentPage = currentPage,
@@ -63,15 +62,15 @@ namespace TEST.Managers
         //    throw new NotImplementedException();
         //}
 
-        virtual public IQueryable<T> GetGridList(int? keyId = default(int?), GridFindModel findModel = default(GridFindModel))
+        virtual public IQueryable<GridTableModel> GetGridList(int? keyId = default(int?), GridFindModel findModel = default(GridFindModel))
         {
             return this.GetGridAllList();
         }
 
-        virtual public IQueryable<T> GetGridAllList(System.Linq.Expressions.Expression<Func<T, bool>> predicate = null)
+        virtual public IQueryable<GridTableModel> GetGridAllList(System.Linq.Expressions.Expression<Func<GridTableModel, bool>> predicate = null)
         {
-            var query = db.Set<T>().AsQueryable();
-            foreach (var property in db.Model.FindEntityType(typeof(T)).GetNavigations())
+            var query = db.Set<GridTableModel>().AsQueryable();
+            foreach (var property in db.Model.FindEntityType(typeof(GridTableModel)).GetNavigations())
             {
                 query = query.Include(property.Name);
             }
@@ -82,19 +81,19 @@ namespace TEST.Managers
             return query;
         }
 
-        virtual public System.Threading.Tasks.Task<System.Collections.Generic.List<T>> GetGridAllListAsync(System.Linq.Expressions.Expression<Func<T, bool>> predicate)
+        virtual public System.Threading.Tasks.Task<System.Collections.Generic.List<GridTableModel>> GetGridAllListAsync(System.Linq.Expressions.Expression<Func<GridTableModel, bool>> predicate)
         {
             return this.GetGridAllList(predicate).ToListAsync();
         }
 
-        virtual public System.Threading.Tasks.Task<System.Collections.Generic.List<T>> GetGridListAsync(int? keyId = null)
+        virtual public System.Threading.Tasks.Task<System.Collections.Generic.List<GridTableModel>> GetGridListAsync(int? keyId = null)
         {
             return this.GetGridList(keyId).ToListAsync();
         }
 
-        virtual public IQueryable<T> GetGridSelectList(int? keyId, string term)
+        virtual public IQueryable<GridTableModel> GetGridSelectList(int? keyId, string term)
         {
-            var list = db.Set<T>().AsQueryable();
+            var list = db.Set<GridTableModel>().AsQueryable();
 
             if (!string.IsNullOrWhiteSpace(term))
             {
@@ -104,38 +103,38 @@ namespace TEST.Managers
             return list;
         }
 
-        virtual public System.Threading.Tasks.Task<System.Collections.Generic.List<ViewModels.SelectItemViewModel>> GetGridSelectListAsync(int? keyId, string term)
+        virtual public System.Threading.Tasks.Task<System.Collections.Generic.List<SelectItemViewModel>> GetGridSelectListAsync(int? keyId, string term)
         {
             return this.GetGridSelectList(keyId, term)
-                .Select(u => new ViewModels.SelectItemViewModel { id = u.Id, text = u.DisplayName })
+                .Select(u => new SelectItemViewModel { id = u.Id, text = u.DisplayName })
                 .OrderBy(m => m.text)
                 .ToListAsync();
         }
 
-        virtual public System.Threading.Tasks.Task<T> GetGridRowModelAsync(int id)
+        virtual public System.Threading.Tasks.Task<GridTableModel> GetGridRowModelAsync(int id)
         {
-            return db.Set<T>().FindAsync(id);
+            return db.Set<GridTableModel>().FindAsync(id);
         }
 
-        virtual public void ChangeModelSaveGridRowModel(T model)
+        virtual public void ChangeModelSaveGridRowModel(GridTableModel model)
         {
             //throw new NotImplementedException();
         }
 
-        virtual public async System.Threading.Tasks.Task<T> SaveGridRowModelAsync(T model)
+        virtual public async System.Threading.Tasks.Task<GridTableModel> SaveGridRowModelAsync(GridTableModel model)
         {
             this.ChangeModelSaveGridRowModel(model);
 
-            T e;
+            GridTableModel e;
             if (model.Id == 0)
             {
                 model.ClearVirtualProperties();
-                e = db.Set<T>().Add(model).Entity;
+                e = db.Set<GridTableModel>().Add(model).Entity;
             }
             else
             {
                 model.ClearVirtualProperties();
-                e = db.Set<T>().Update(model).Entity;
+                e = db.Set<GridTableModel>().Update(model).Entity;
             }
 
             await db.SaveChangesAsync();
@@ -145,13 +144,13 @@ namespace TEST.Managers
 
         virtual public async System.Threading.Tasks.Task DeleteGridRowModelAsync(int id)
         {
-            var model = await db.Set<T>().FindAsync(id);
+            var model = await db.Set<GridTableModel>().FindAsync(id);
             if (model == null)
             {
                 throw new Exception($"Запись не найдена. ({id})");
             }
 
-            db.Set<T>().Remove(model);
+            db.Set<GridTableModel>().Remove(model);
             await db.SaveChangesAsync();
         }
     }

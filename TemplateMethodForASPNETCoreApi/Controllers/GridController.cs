@@ -1,7 +1,9 @@
-﻿using TEST.Managers;
-using TEST.Tools;
+﻿
 using Microsoft.AspNetCore.Mvc;
 using System;
+using TEST.Managers;
+using TEST.Models;
+using TEST.Tools;
 
 namespace TEST.Controllers
 {
@@ -22,20 +24,16 @@ namespace TEST.Controllers
                                                                                     new()
     {
         protected readonly IGridManager<GridTableModel, GridFindModel> objManager;
-
-        public readonly Interfaces.IIdModel tableId;
+        public readonly int tableName;
 
         public GridController(  IGridManager<GridTableModel, GridFindModel> objManager )
         {
             this.objManager = objManager;
-
-
-            tableId = 0;
-
+            tableName = 0;
         }
 
         [Microsoft.AspNetCore.Mvc.HttpPost("list")]
-        public async System.Threading.Tasks.Task<Microsoft.AspNetCore.Mvc.IActionResult> GetGridRequestModelAsync([FromBody] TEST.Managers.RequestModel<GridFindModel> requestModel)
+        public IActionResult GetGridRequestModel([FromBody] TEST.Managers.RequestModel<GridFindModel> requestModel)
         {
             try
             {
@@ -46,12 +44,12 @@ namespace TEST.Controllers
                 //}
 
                 var ret = objManager.GetGridResponseModel(requestModel);
-                
+
                 var responseViewModel = new ResponseModel<GridViewModel>();
-                responseViewModel.TableId = this.tableId.Id;
+                responseViewModel.TableId = this.tableName;
                 responseViewModel.CurrentPage = ret.CurrentPage;
                 responseViewModel.TotalRowCount = ret.TotalRowCount;
-                responseViewModel.List = GridTools.ConvertList<GridTableModel,GridViewModel>(ret.List);
+                responseViewModel.List = GridTools.ConvertList<GridTableModel, GridViewModel>(ret.List);
                 return Json(responseViewModel);
 
             }
@@ -228,7 +226,7 @@ namespace TEST.Controllers
                 var model = await objManager.GetGridRowModelAsync(id);
                 if (model != null)
                 {
-                    return Json(new ViewModels.SelectItemViewModel { id = model.Id, text = model.DisplayName });
+                    return Json(new SelectItemViewModel { id = model.Id, text = model.DisplayName });
                 }
                 else
                 {
