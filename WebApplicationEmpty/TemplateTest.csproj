@@ -72,8 +72,8 @@
     <Compile Include="Controllers\GridController.cs" />
     <Compile Include="Controllers\IGridController.cs" />
     <Compile Include="Data\MyDbConfig.cs" />
-    <Compile Include="Managers\GridTools.cs" />
-    <Compile Include="Managers\IClearVirtualPropertiesModel.cs" />
+    <Compile Include="Tools\GridTools.cs" />
+    <Compile Include="Interfaces\IClearVirtualPropertiesModel.cs" />
     <Compile Include="Models\Chat.cs" />
     <Compile Include="Migrations\MyModelSnapshot.cs" />
     <Compile Include="DependencyInjection\MyServiceCollectionExtensions.cs" />

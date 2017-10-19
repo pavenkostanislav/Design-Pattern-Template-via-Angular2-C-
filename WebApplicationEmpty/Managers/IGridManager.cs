@@ -6,7 +6,9 @@ namespace KPMA.Managers
     public interface IGridManager<T, GridFindModel>
     {
         User CurrentUser { get; }
-        IQueryable<T> GetGridList(int? keyId = null);
+        IQueryable<T> GetGridList(int? keyId = default(int?), GridFindModel findModel = default(GridFindModel));
+        IQueryable<T> GetGridAllList(System.Linq.Expressions.Expression<System.Func<T, bool>> predicate);
+        System.Threading.Tasks.Task<System.Collections.Generic.List<T>> GetGridAllListAsync(System.Linq.Expressions.Expression<System.Func<T, bool>> predicate);
         System.Threading.Tasks.Task<System.Collections.Generic.List<T>> GetGridListAsync(int? keyId = null);
         IQueryable<T> GetGridSelectList(int? keyId, string term);
         System.Threading.Tasks.Task<System.Collections.Generic.List<ViewModels.SelectItemViewModel>> GetGridSelectListAsync(int? keyId, string term);

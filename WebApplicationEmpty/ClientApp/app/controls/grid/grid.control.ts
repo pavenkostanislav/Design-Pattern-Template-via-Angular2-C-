@@ -28,17 +28,17 @@ export class GridRowList implements OnInit, OnChanges {
 
     @Input() canAdd: boolean = true;
     @Input() canRead: boolean = true;
+    @Input() canReadInfo: boolean = true;
     @Input() canDelete: boolean = true;
     @Input() canEdit: boolean = true;
     @Input() canCopy: boolean = false;
     @Input() canAttach: boolean = false;
-
-
-    isShowSearch: boolean = false;
-    pageSize = 15;
-    private countButton = 5;
-    private countPage = 10;
-    requestModel: GridRequestModel = new GridRequestModel();
+    @Input() canFilter: boolean = false;
+	isShowFilter: boolean = false;
+	///page
+    countButton = 5;
+	countPage = 10;
+	requestModel: GridRequestModel = new GridRequestModel();
     responceModel: GridResponseModel = new GridResponseModel();
 
     test: string;
@@ -56,7 +56,7 @@ export class GridRowList implements OnInit, OnChanges {
     attacment: any = { metaObjectId: 0, objectId: 0 };
     editRowModel: any;
     newRowModel: any;
-    selectedRow: any;
+    selectedRow: any = {id : 0, createdBy : '', createdDate : '00.00.0000', lastUpdatedBy : '', lastUpdatedDate : '00.00.0000'};
     selectedIndex: number = 0;
     gridSize: GridSize = GridSize.lg;
 
@@ -74,19 +74,23 @@ export class GridRowList implements OnInit, OnChanges {
 		this.app.GridSize.subscribe (
             (res: any) => { this.gridSize = res; }
         );
+        if (this.controllerName) {
+			this.doRefresh();
+        }
     }
-
-    ngOnChanges (changes: SimpleChanges) {
+	ngOnChanges (changes: SimpleChanges) {
         if (this.controllerName) {
 			this.doRefresh();
         }
     }
 	onClickRefresh () {
+		this.doRefreshRequestModel();
+    }
+	onClickClear () {
 		this.doRefresh();
     }
 	doRefresh () {
-
-        if (!this.gridSrv.controllerName) {
+		if (!this.gridSrv.controllerName) {
             this.gridSrv.controllerName = this.controllerName;
         }
 
@@ -96,8 +100,6 @@ export class GridRowList implements OnInit, OnChanges {
         this.freeze = true;
 		this.gridSrv.getGridRowModel (0, '4').subscribe (
 			(res: any) => {
-				this.requestModel.pageSize = this.pageSize;
-				this.requestModel.currentPage = 0;
 				this.requestModel.keyId = this.keyValue;
 				this.requestModel.findModel = res;
 				this.doRefreshRequestModel();
@@ -147,13 +149,16 @@ export class GridRowList implements OnInit, OnChanges {
         this.router.navigateByUrl('/' + urlroot, { replaceUrl: true });
     }
 
-    onSaveAttachment(item: any) {
+    onClickOpenModalAttachment(item: any) {
         if (item && item.id && this.responceModel.tableId) {
             this.attacment.metaObjectId = this.responceModel.tableId;
             this.attacment.objectId = item.id;
-            $('#GridModalAttachment').modal('show');
+			$('#AttachmentModal').modal('show');
         }
     }
+	onClickOpenModalReadInfo(item: any) {
+		$('#InfoModal').modal('show');
+	}
 
     onClickAddNew(itemId: number, mode: string = '1') {
         if (this.urlEditPage) {
@@ -202,15 +207,8 @@ export class GridRowList implements OnInit, OnChanges {
         this.isAddNew = false;
     }
 
-	onClickSearch(cmd: string) {
-		switch (cmd) {
-			case 'show':
-				this.isShowSearch = true;
-				break;
-			case 'hide':
-				this.isShowSearch = false;
-				break;
-		}
+	onClickSearch() {
+		this.isShowFilter = !this.isShowFilter;
 	}
 
     onDeleteRow(item: any) {
@@ -221,7 +219,7 @@ export class GridRowList implements OnInit, OnChanges {
                         this.gridSrv.deleteGridRowModel(item.id).subscribe(
                             (res: any) => {
                                 this.freeze = false;
-                                this.doRefresh();
+								this.doRefreshRequestModel();
                             },
                             (err: any) => {
                                 this.freeze = false;
@@ -262,7 +260,7 @@ export class GridRowList implements OnInit, OnChanges {
         this.gridSrv.saveGridRowModel(this.newRowModel).subscribe(
             (res: any) => {
                 this.freeze = false;
-                this.doRefresh();
+                this.doRefreshRequestModel();
                 this.onCancelNewRow();
             },
             (err: any) => {

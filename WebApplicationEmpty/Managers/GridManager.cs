@@ -35,7 +35,7 @@ namespace KPMA.Managers
 
         public ResponseModel<T> GetGridResponseModel(RequestModel<GridFindModel> requestModel)
         {
-            var list = this.GetGridList(requestModel.KeyId).ToList();
+            var list = this.GetGridList(requestModel.KeyId, requestModel.FindModel).ToList();
 
             var currentPage = 0;
             var totalRowCount = list.Count();
@@ -71,9 +71,28 @@ namespace KPMA.Managers
         //    throw new NotImplementedException();
         //}
 
-        virtual public IQueryable<T> GetGridList(int? keyId = null)
+        virtual public IQueryable<T> GetGridList(int? keyId = default(int?), GridFindModel findModel = default(GridFindModel))
         {
-            return db.Set<T>().AsQueryable();
+            return this.GetGridAllList();
+        }
+
+        virtual public IQueryable<T> GetGridAllList(System.Linq.Expressions.Expression<Func<T, bool>> predicate = null)
+        {
+            var query = db.Set<T>().AsQueryable();
+            foreach (var property in db.Model.FindEntityType(typeof(T)).GetNavigations())
+            {
+                query = query.Include(property.Name);
+            }
+            if (predicate != null)
+            {
+                query = query.Where(predicate);
+            }
+            return query;
+        }
+
+        virtual public System.Threading.Tasks.Task<System.Collections.Generic.List<T>> GetGridAllListAsync(System.Linq.Expressions.Expression<Func<T, bool>> predicate)
+        {
+            return this.GetGridAllList(predicate).ToListAsync();
         }
 
         virtual public System.Threading.Tasks.Task<System.Collections.Generic.List<T>> GetGridListAsync(int? keyId = null)
