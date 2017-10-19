@@ -1,10 +1,10 @@
 {
   "dependencies": {
-    "Microsoft.EntityFrameworkCore": "2.0.0",
     "Microsoft.AspNetCore.Mvc": "2.0.0",
     "Microsoft.AspNetCore.Routing": "2.0.0",
     "Microsoft.AspNetCore.Server.IISIntegration": "2.0.0",
     "Microsoft.AspNetCore.Server.Kestrel": "2.0.0",
+    "Microsoft.EntityFrameworkCore": "2.0.0",
     "Microsoft.Extensions.Configuration.EnvironmentVariables": "2.0.0",
     "Microsoft.Extensions.Configuration.FileExtensions": "2.0.0",
     "Microsoft.Extensions.Configuration.Json": "2.0.0",
@@ -24,7 +24,7 @@
   },
 
   "frameworks": {
-    "netcoreapp1.0": {
+    "netcoreapp2.0": {
       "imports": [
         "dotnet5.6",
         "portable-net45+win8"
