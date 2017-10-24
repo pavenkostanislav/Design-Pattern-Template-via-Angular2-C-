@@ -171,19 +171,19 @@ namespace KPMA.Controllers
 
 ```
 <grid [controllerName]="'TableEx'"
-	  [name]="'Название заголовка'"
-	  [urlEditPage]=""
-	  [canRead]="true"
-	  [canAdd]="true"
-	  [canEdit]="true"
-	  [canDelete]="true"
-	  [canCopy]="true"
-	  [canAttach]="true"
-	  [isViewOnly]="isViewOnly"
-	  [keyValue]="idFromViewPage"
-	  [keyName]="'languageId'"
-	  [listColumn]="[ {name:'Язык', key:'languageId', keyName:'languageName', type:'dropdown', itemType:'Language', minTerm:0, allowClear:true},
-					  {name:'Текстовое наименование', key:'DisplayName', type:'text'},
-					  {name:'Дата', key:'date', type:'date'}]"    >
+  [name]="'Название заголовка'"
+  [urlEditPage]=""
+  [canRead]="true"
+  [canAdd]="true"
+  [canEdit]="true"
+  [canDelete]="true"
+  [canCopy]="true"
+  [canAttach]="true"
+  [isViewOnly]="isViewOnly"
+  [keyValue]="idFromViewPage"
+  [keyName]="'languageId'"
+  [listColumn]="[ {name:'Язык', key:'languageId', keyName:'languageName', type:'dropdown', itemType:'Language', minTerm:0, allowClear:true},
+			  {name:'Текстовое наименование', key:'DisplayName', type:'text'},
+			  {name:'Дата', key:'date', type:'date'}]"    >
 </grid>
 ```
