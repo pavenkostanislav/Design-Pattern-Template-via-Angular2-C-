@@ -1,30 +1,42 @@
 # Типовой подход по разработке стандартного решения для сайтов
 
-#Цели и задачи к реализации типового подхода
-#UI
-Отображение списка учётом связанности данных
-Разделение на страницы
-Экономия времени загрузки
-Добавление новых данных учитывая обязательность заполнения
-Редактирование
-Удаление
-Быстрее получать новые модули
-#back-end
-Project ASP.NET Core 2.0
-Front-end(UI): Angular2+ 
-Grid.Control/Grid.Service
-Back-end: WebApiController
-TableModel/ViewModel/FindModel
-Data.Interfaces.IIdModel
-Data.Interfaces.IDisplayName
-Data.Interfaces.IClearVirtualMethodsModelViewModel
-IGridManager/GridManager (generit, async)
-IGridController/GridController (generit, async)
-Db MS SQL
-dbo.Table
-Возможность расширения
-# Как использовать
+Краткое описание применения
 
+## Цели и задачи к реализации типового подхода
+
+требования к разработке с возможностями расширения
+
+### UI
+
+* Отображение списка учётом связанности данных
+* Разделение на страницы
+* Экономия времени загрузки
+* Добавление новых данных учитывая обязательность заполнения
+* Редактирование
+* Удаление
+* Быстрее получать новые модули
+
+### back-end
+
+* Project ASP.NET Core
+* Front-end(UI): Angular2+ 
+* Grid.Control/Grid.Service
+* Back-end: WebApiController
+* TableModel/ViewModel/FindModel
+* Data.Interfaces.IIdModel
+* Data.Interfaces.IDisplayName
+* Data.Interfaces.IClearVirtualMethodsModelViewModel
+* IGridManager/GridManager (generit, async)
+* IGridController/GridController (generit, async)
+
+### db MS SQL
+
+* dbo.Table
+
+
+## Описание примера модели
+
+```
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -88,6 +100,12 @@ namespace KPMA.Data.Models
         public DateTime DateEnd { get; set; }
     }
 }
+```
+
+
+## ASP.NET Core Manager
+
+```
 namespace KPMA.Managers
 {
     public class TableExManager : GridManager<Data.Models.TableEx, Data.Models.TableExFindModel>
@@ -108,6 +126,12 @@ namespace KPMA.Managers
         }
     }
 }
+```
+
+
+## ASP.NET Core Controller
+
+```
 namespace KPMA.Controllers
 {
     public class TableExController : GridController<Data.Models.TableEx, Data.Models.TableExViewModel, Data.Models.TableExFindModel>
@@ -126,6 +150,11 @@ namespace KPMA.Controllers
         { }
     }
 }
+```
+
+## Angular 2 HTML
+
+```
 <grid [controllerName]="'TableEx'"
 	  [name]="'Название заголовка'"
     [urlEditPage]=""
@@ -142,3 +171,4 @@ namespace KPMA.Controllers
 					  {name:'Текстовое наименование', key:'DisplayName', type:'text'},
 					  {name:'Дата', key:'date', type:'date'}]"    >
 </grid>
+```
