@@ -183,7 +183,7 @@ namespace KPMA.Controllers
   [keyValue]="idFromViewPage"
   [keyName]="'languageId'"
   [listColumn]="[ {name:'Язык', key:'languageId', keyName:'languageName', type:'dropdown', itemType:'Language', minTerm:0, allowClear:true},
-			  {name:'Текстовое наименование', key:'DisplayName', type:'text'},
-			  {name:'Дата', key:'date', type:'date'}]"    >
+		  {name:'Текстовое наименование', key:'DisplayName', type:'text'},
+		  {name:'Дата', key:'date', type:'date'}]"    >
 </grid>
 ```
