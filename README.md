@@ -1,7 +1,7 @@
 # Типовой подход по разработке стандартного решения для сайтов
 
-Цели и задачи к реализации типового подхода
-UI
+#Цели и задачи к реализации типового подхода
+#UI
 Отображение списка учётом связанности данных
 Разделение на страницы
 Экономия времени загрузки
@@ -9,9 +9,7 @@ UI
 Редактирование
 Удаление
 Быстрее получать новые модули
-
-back-end
-
+#back-end
 Project ASP.NET Core 2.0
 Front-end(UI): Angular2+ 
 Grid.Control/Grid.Service
@@ -25,7 +23,6 @@ IGridController/GridController (generit, async)
 Db MS SQL
 dbo.Table
 Возможность расширения
-
 # Как использовать
 
 using System;
@@ -35,7 +32,6 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
-
 namespace KPMA.Data.Models
 {
     [Table("TableEx", Schema = "dbo")]
