@@ -132,10 +132,7 @@ namespace KPMA.Managers
         {
             if (!keyId.HasValue) { return null; }
 
-            var list = db.Set<Data.Models.TableEx>()
-                .Include(m => m.Language)
-                .Where(m => m.LanguageId == keyId.Value)
-                .AsQueryable();
+            var list = db.GetGridAllList(m => m.LanguageId == keyId.Value);
 
             return list;
         }
