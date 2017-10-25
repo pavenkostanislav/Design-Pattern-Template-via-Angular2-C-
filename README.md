@@ -62,9 +62,9 @@ using Microsoft.EntityFrameworkCore;
 namespace TEST.Models
 {
     [Table("TableEx", Schema = "dbo")]
-    public class TableEx :	KPMA.Data.Interfaces.IIdModel, 
-							KPMA.Data.Interfaces.IClearVirtualMethodsModel, 
-							KPMA.Data.Interfaces.IDisplayName
+    public class TableEx :	TEST.Interfaces.IIdModel, 
+				TEST.Interfaces.IClearVirtualMethodsModel, 
+				TEST.Interfaces.IDisplayName
     {
         /// <summary>
         ///  Первичный ключ
