@@ -151,17 +151,7 @@ namespace KPMA.Controllers
 {
     public class TableExController : GridController<Data.Models.TableEx, Data.Models.TableExViewModel, Data.Models.TableExFindModel>
     {
-        public TableExController(   Managers.IGridManager<Data.Models.TableEx, Data.Models.TableExFindModel> objManager,
-                                    Managers.ICoreManager coreManager,
-                                    Managers.IAttachmentManager attManager,
-                                    Managers.IMetaObjectManager moManager,
-                                    Managers.IConstantManager constManager,
-                                    Managers.IEmployeeManager employeeManager) : base(  objManager, 
-                                                                                        coreManager, 
-                                                                                        attManager, 
-                                                                                        moManager, 
-                                                                                        constManager, 
-                                                                                        employeeManager)
+        public TableExController(IGridManager<Chat, ChatFindModel> objManager) : base(objManager)
         { }
     }
 }
