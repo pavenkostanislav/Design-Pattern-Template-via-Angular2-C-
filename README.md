@@ -151,7 +151,7 @@ namespace KPMA.Controllers
 {
     public class TableExController : GridController<Data.Models.TableEx, Data.Models.TableExViewModel, Data.Models.TableExFindModel>
     {
-        public TableExController(IGridManager<Chat, ChatFindModel> objManager) : base(objManager)
+        public TableExController(IGridManager<Data.Models.TableEx, Data.Models.TableExFindModel> objManager) : base(objManager)
         { }
     }
 }
