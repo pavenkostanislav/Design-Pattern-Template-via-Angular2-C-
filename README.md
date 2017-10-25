@@ -59,7 +59,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
-namespace KPMA.Data.Models
+namespace TEST.Models
 {
     [Table("TableEx", Schema = "dbo")]
     public class TableEx :	KPMA.Data.Interfaces.IIdModel, 
@@ -121,7 +121,7 @@ namespace KPMA.Data.Models
 ## ASP.NET Core Manager
 
 ```
-namespace KPMA.Managers
+namespace TEST.Managers
 {
     public class TableExManager : GridManager<Data.Models.TableEx, Data.Models.TableExFindModel>
     {
@@ -145,7 +145,7 @@ namespace KPMA.Managers
 ## ASP.NET Core Controller
 
 ```
-namespace KPMA.Controllers
+namespace TEST.Controllers
 {
     public class TableExController : GridController<Data.Models.TableEx, Data.Models.TableExViewModel, Data.Models.TableExFindModel>
     {
