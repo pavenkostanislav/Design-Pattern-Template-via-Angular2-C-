@@ -130,11 +130,12 @@ namespace KPMA.Managers
         }
         override public IQueryable<Data.Models.TableEx> GetGridList(int? keyId)
         {
-            if (!keyId.HasValue) { return null; }
-
-            var list = db.GetGridAllList(m => m.LanguageId == keyId.Value);
-
-            return list;
+            if (!keyId.HasValue) { 
+	    	return db.GetGridAllList();
+	    }
+	    else {
+	    	return db.GetGridAllList(m => m.LanguageId == keyId.Value);
+	    }
         }
     }
 }
