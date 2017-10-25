@@ -6,7 +6,7 @@
 
 ### back-end
 
-* Скачиваем библиотеки и добавляем [в свой созданный проект ASP.NET Core 1.0](https://www.microsoft.com/net/core#windowscmd) - ссылка на базовый проект
+* Скачиваем библиотеки и добавляем [в свой созданный проект ASP.NET Core](https://www.microsoft.com/net/core#windowscmd) - ссылка на базовый проект
 * Проеряем корректность написания namespace
 * компилируем
 
