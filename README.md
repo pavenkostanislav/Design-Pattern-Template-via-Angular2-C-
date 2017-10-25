@@ -128,7 +128,7 @@ namespace KPMA.Managers
         public TableExManager(Data.CoreDbContext db) : base(db)
         {
         }
-        override public IQueryable<Data.Models.TableEx> GetGridList(int? keyId)
+        override public IQueryable<Data.Models.TableEx> GetGridList(int? keyId, Data.Models.TableExFindModel findModel)
         {
             if (!keyId.HasValue) { 
 	    	return db.GetGridAllList();
