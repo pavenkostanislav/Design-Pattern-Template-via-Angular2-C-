@@ -38,9 +38,9 @@
 * Grid.Control/Grid.Service
 * Back-end: WebApiController
 * TableModel/ViewModel/FindModel
-* Data.Interfaces.IIdModel
-* Data.Interfaces.IDisplayName
-* Data.Interfaces.IClearVirtualMethodsModelViewModel
+* TEST.Interfaces.IIdModel
+* TEST.Interfaces.IDisplayName
+* TEST.Interfaces.IClearVirtualMethodsModelViewModel
 * IGridManager/GridManager (generit, async)
 * IGridController/GridController (generit, async)
 
@@ -123,12 +123,12 @@ namespace TEST.Models
 ```
 namespace TEST.Managers
 {
-    public class TableExManager : GridManager<Data.Models.TableEx, Data.Models.TableExFindModel>
+    public class TableExManager : GridManager<TEST.Models.TableEx, TEST.Models.TableExFindModel>
     {
-        public TableExManager(Data.CoreDbContext db) : base(db)
+        public TableExManager(DbContext db) : base(db)
         {
         }
-        override public IQueryable<Data.Models.TableEx> GetGridList(int? keyId, Data.Models.TableExFindModel findModel)
+        override public IQueryable<TEST.Models.TableEx> GetGridList(int? keyId, TEST.Models.TableExFindModel findModel)
         {
             if (!keyId.HasValue) { 
 	    	return db.GetGridAllList();
@@ -149,7 +149,7 @@ namespace TEST.Controllers
 {
     public class TableExController : GridController<Data.Models.TableEx, Data.Models.TableExViewModel, Data.Models.TableExFindModel>
     {
-        public TableExController(IGridManager<Data.Models.TableEx, Data.Models.TableExFindModel> objManager) : base(objManager)
+        public TableExController(IGridManager<TEST.Models.TableEx, TEST.Models.TableExFindModel> objManager) : base(objManager)
         { }
     }
 }
