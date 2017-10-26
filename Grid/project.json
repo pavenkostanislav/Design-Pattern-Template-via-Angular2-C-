@@ -1,0 +1,27 @@
+﻿{
+  "title": "Generic Grid library",
+  "version": "1.0.1-beta-1",
+
+  "dependencies": {
+    "Microsoft.AspNetCore.Identity": "1.1.0",
+    "Microsoft.AspNetCore.Identity.EntityFrameworkCore": "1.1.0",
+    "Microsoft.AspNetCore.Mvc": "1.1.1",
+    "Microsoft.EntityFrameworkCore": "1.1.0",
+    "NETStandard.Library": "1.6.1",
+    "System.Reflection.TypeExtensions": "4.3.0"
+  },
+
+  "frameworks": {
+    "netstandard1.6": {
+      "imports": "dnxcore50"
+    }
+  },
+
+  "buildOptions": {
+    "define": [ "DEBUG" ]
+  },
+
+  "scripts": {
+    "postpack": "echo %project:Name%"
+  }
+}
