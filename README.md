@@ -38,9 +38,9 @@
 * Grid.Control/Grid.Service
 * Back-end: WebApiController
 * TableModel/ViewModel/FindModel
-* TEST.Interfaces.IIdModel
-* TEST.Interfaces.IDisplayName
-* TEST.Interfaces.IClearVirtualMethodsModelViewModel
+* Grid.Interfaces.IIdModel
+* Grid.Interfaces.IDisplayName
+* Grid.Interfaces.IClearVirtualMethodsModelViewModel
 * IGridManager/GridManager (generit, async)
 * IGridController/GridController (generit, async)
 
@@ -59,12 +59,12 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
-namespace TEST.Models
+namespace Grid.Models
 {
     [Table("TableEx", Schema = "dbo")]
-    public class TableEx :	TEST.Interfaces.IIdModel, 
-				TEST.Interfaces.IClearVirtualMethodsModel, 
-				TEST.Interfaces.IDisplayName
+    public class TableEx :	Grid.Interfaces.IIdModel, 
+				Grid.Interfaces.IClearVirtualMethodsModel, 
+				Grid.Interfaces.IDisplayName
     {
         /// <summary>
         ///  Первичный ключ
@@ -108,7 +108,7 @@ namespace TEST.Models
         /// <summary>
         ///  Начало ограничения периода свойство "Дата"
         /// </summary>
-        public DateTime DateStart { get; set; }
+        public DateTime DaGridart { get; set; }
         /// <summary>
         ///  Окончание ограничения периода свойство "Дата"
         /// </summary>
@@ -121,14 +121,14 @@ namespace TEST.Models
 ## ASP.NET Core Manager
 
 ```
-namespace TEST.Managers
+namespace Grid.Managers
 {
-    public class TableExManager : GridManager<TEST.Models.TableEx, TEST.Models.TableExFindModel>
+    public class TableExManager : GridManager<Grid.Models.TableEx, Grid.Models.TableExFindModel>
     {
         public TableExManager(DbContext db) : base(db)
         {
         }
-        override public IQueryable<TEST.Models.TableEx> GetGridList(int? keyId, TEST.Models.TableExFindModel findModel)
+        override public IQueryable<Grid.Models.TableEx> GetGridList(int? keyId, Grid.Models.TableExFindModel findModel)
         {
             if (!keyId.HasValue) { 
 	    	return db.GetGridAllList();
@@ -145,11 +145,11 @@ namespace TEST.Managers
 ## ASP.NET Core Controller
 
 ```
-namespace TEST.Controllers
+namespace Grid.Controllers
 {
     public class TableExController : GridController<Data.Models.TableEx, Data.Models.TableExViewModel, Data.Models.TableExFindModel>
     {
-        public TableExController(IGridManager<TEST.Models.TableEx, TEST.Models.TableExFindModel> objManager) : base(objManager)
+        public TableExController(IGridManager<Grid.Models.TableEx, Grid.Models.TableExFindModel> objManager) : base(objManager)
         { }
     }
 }
