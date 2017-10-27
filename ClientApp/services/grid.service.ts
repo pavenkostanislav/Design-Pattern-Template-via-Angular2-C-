@@ -72,7 +72,7 @@ export class GridService {
 
 export class GridRequestModel {
     public currentPage: number = 0;
-    public pageSize: number = 5;
+    public pageSize: number = 15;
     public keyId: number;
 	public findModel: any;
 

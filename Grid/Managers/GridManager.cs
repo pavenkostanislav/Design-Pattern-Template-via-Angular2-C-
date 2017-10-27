@@ -1,20 +1,20 @@
-﻿using KPMA.Models;
+﻿using Grid.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace KPMA.Managers
+namespace Grid.Managers
 {
     public class GridManager<GridTableModel, GridFindModel> : IGridManager<GridTableModel,GridFindModel> 
                                                 where GridTableModel :   class,
                                                             Grid.Interfaces.IIdModel,
                                                             Grid.Interfaces.IDisplayName,
-                                                            KPMA.Interfaces.IClearVirtualPropertiesModel
+                                                            Grid.Interfaces.IClearVirtualPropertiesModel
                                                 where GridFindModel : class,
                                                             Grid.Interfaces.IIdModel,
                                                             Grid.Interfaces.IDisplayName,
-                                                            KPMA.Interfaces.IClearVirtualPropertiesModel
+                                                            Grid.Interfaces.IClearVirtualPropertiesModel
     {
         public readonly DbContext db;
 
@@ -75,7 +75,7 @@ namespace KPMA.Managers
             return query;
         }
 
-        virtual public System.Threading.Tasks.Task<System.Collections.Generic.List<GridTableModel>> GetGridAllListAsync(System.Linq.Expressions.Expression<Func<GridTableModel, bool>> predicate)
+        virtual public System.Threading.Tasks.Task<System.Collections.Generic.List<GridTableModel>> GetGridAllListAsync(System.Linq.Expressions.Expression<Func<GridTableModel, bool>> predicate = null)
         {
             return this.GetGridAllList(predicate).ToListAsync();
         }

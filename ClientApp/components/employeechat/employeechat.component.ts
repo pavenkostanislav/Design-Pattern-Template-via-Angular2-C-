@@ -1,15 +1,16 @@
-﻿import { Component, OnInit, OnChanges, Input, SimpleChanges } from '@angular/core';
+﻿import { Component, OnInit, OnChanges, Input, SimpleChanges, AfterViewInit } from '@angular/core';
 import { ActivatedRoute, Params, Data, Router } from '@angular/router';
 import { DomSanitizer } from '@angular/platform-browser';
 import { Location } from '@angular/common';
 import { NgForm } from '@angular/forms';
 import { Subscription } from 'rxjs/Rx';
 
+import { App, GridSize } from '../../app.component';
 import { GridService } from '../../services/grid.service';
 
 @Component({
-    selector: 'chat',
-    templateUrl: 'chat.html',
+    selector: 'employee-chat',
+    templateUrl: 'employeechat.html',
 	providers: [GridService],
 	styles: [`
 		.text-bottom{
@@ -104,18 +105,16 @@ import { GridService } from '../../services/grid.service';
 		}
 	`]
 })
-export class ChatList implements OnInit, OnChanges {
+export class EmployeeChatList implements OnInit, OnChanges, AfterViewInit {
 
     @Input() isViewOnly = true;
     private logShow = false;
 
     selected: any = 0;
 	freeze = false;
-    GridSize;//размеры из бутстрапа
+	GridSize = GridSize;
 
-    current: any;
-    currentEmp: any;
-    permissions: any;
+    currentUser: any = { id: 1, name: 'Хрюня'};
     listRow: any[] = [];
     newRowModel: any = { 'message': '' };
     //photo
@@ -124,38 +123,42 @@ export class ChatList implements OnInit, OnChanges {
     attachmentMetaObjectId: number;
 	attchmentObjectId: number;
 
-    constructor(private gridSrv: GridService) { }
+    constructor(private app: App,
+        private gridSrv: GridService,
+		private sanitizer: DomSanitizer) { }
 
     ngOnInit() {
-        this.logShow = (window.location.hostname == `localhost`);
-        if (this.logShow) {
-            console.log(`ChatList.ngOnInit`);
-        }
-        
-        if (this.current) {
-			this.photoSrc = ''; // Указать путь к файлу
-		}
     }
     ngOnChanges(changes: SimpleChanges) {
-		this.gridSrv.controllerName = 'employeechat';
+		this.gridSrv.controllerName = 'EmployeeChat';
         this.onGenerateNewRow();
         this.onRefreshGrid();
     }
+    ngAfterViewInit(): void {
+        this.onRefresh_loop();
+	}
+
+    onRefresh_loop() {
+        setInterval(() => {
+            this.onRefreshGrid();
+        }, 60 * 1000);
+	 }
     onRefreshGrid() {
-        this.freeze = true;
-        this.gridSrv.getGridList(this.current ? this.current.id : 0).subscribe(
+        if (this.logShow) {
+            console.log(`EmployeeChatList.onRefreshGrid`);
+        }
+        this.gridSrv.getGridList(this.currentUser ? this.currentUser.id : 0).subscribe(
             (result: any[]) => {
-                this.freeze = false;
                 this.listRow = result;
                 result.forEach((item: any) => {
                     if (item.employeePhotoFileName) {
-                        item.photoSrc = '';//Указать путь к файлу
+                        item.photoSrc = 'http://www.youloveit.ru/uploads/gallery/main/936/youloveit_ru_zveropoi15.png';
 					}
                 });
             },
             (err: any) => {
                 this.freeze = false;
-                console.log(err);
+                this.app.showError(err);
             }
         );
     }
@@ -175,28 +178,29 @@ export class ChatList implements OnInit, OnChanges {
             },
             (err: any) => {
                 this.freeze = false;
-                console.log(err);
+                this.app.showError(err);
             }
         );
     }
     onSaveNewRow() {
         this.freeze = true;
-		if (this.current.id > 0) {
-			this.newRowModel['authorId'] = this.current.id;
+		if (this.currentUser.id > 0) {
+			this.newRowModel['authorId'] = this.currentUser.id;
 			this.gridSrv.saveGridRowModel(this.newRowModel).subscribe(
 				(res: any) => {
 					this.freeze = false;
 					this.onRefreshGrid();
+					this.onGenerateNewRow();
 				},
 				(err: any) => {
 					this.freeze = false;
-					console.log(err);
+					this.app.showError(err);
 				}
 			);
 		}
     }
     onDownloadPhoto() {
-		if (this.current) {
+		if (this.currentUser) {
 			return this.photoSrc;
 		}
 		else {
@@ -204,19 +208,21 @@ export class ChatList implements OnInit, OnChanges {
 		}
     }
     onDeleteRow(item: any) {
-        if (!confirm("Удалить запись?")) {
-            return;
-        }
-
         if (item) {
-            this.gridSrv.deleteGridRowModel(item.id).subscribe(
+            this.app.showQuestion(`Удалить выбранную строку?`).subscribe(
                 (res: any) => {
-                    this.freeze = false;
-                    this.onRefreshGrid();
-                },
-                (err: any) => {
-                    this.freeze = false;
-                    console.log(err);
+                    if (res) {
+                        this.gridSrv.deleteGridRowModel(item.id).subscribe(
+                            (res: any) => {
+                                this.freeze = false;
+                                this.onRefreshGrid();
+                            },
+                            (err: any) => {
+                                this.freeze = false;
+                                this.app.showError(err);
+                            }
+                        );
+                    }
                 }
             );
         }
@@ -225,8 +231,8 @@ export class ChatList implements OnInit, OnChanges {
         if (!editRowModel) {
             return;
         }
-        if (editRowModel.ratedUsers && editRowModel.ratedUsers.indexOf(this.current.name) !== -1) {
-            console.log('Уже лайкнули!');
+        if (editRowModel.ratedUsers && editRowModel.ratedUsers.indexOf(this.currentUser.name) !== -1) {
+            this.app.showError('Уже оценили!');
             return;
 		}
         switch (cmd) {
@@ -238,17 +244,17 @@ export class ChatList implements OnInit, OnChanges {
 			break;
 		}
 		if ( editRowModel.ratedUsers ) {
-			editRowModel.ratedUsers += ';' + this.current.name;
+			editRowModel.ratedUsers += ';' + this.currentUser.name;
 		}
 		else {
-			editRowModel.ratedUsers = this.current.name;
+			editRowModel.ratedUsers = this.currentUser.name;
 		}
         this.gridSrv.saveGridRowModel(editRowModel).subscribe(
 			(res: any) => {
 				this.onRefreshGrid();
 			},
 			(err: any) => {
-				console.log(err);
+				this.app.showError(err);
 			}
 		);
     }

@@ -1,0 +1,35 @@
+﻿<div class="container-fluid body-content">
+    <router-outlet></router-outlet>
+</div>
+
+<div class="modal fade" id="errorModal" tabindex="-1" role="dialog" aria-labelledby="errorModal-label">
+    <div class="modal-dialog" role="document">
+        <div draggable class="modal-content alert alert-danger">
+            <div class="modal-header">
+                <h4 class="modal-title" id="errorModal-label">Ошибка</h4>
+            </div>
+            <div class="modal-body">
+                <p id="errorText"></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Закрыть</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="messageModal" tabindex="-1" role="dialog" aria-labelledby="messageModal-label">
+    <div class="modal-dialog" role="document">
+        <div draggable id="messageContent" class="modal-content alert">
+            <div class="modal-header">
+                <h4 class="modal-title" id="messageModal-label"></h4>
+            </div>
+            <div class="modal-body">
+                <p id="messageText"></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Закрыть</button>
+            </div>
+        </div>
+    </div>
+</div>
+

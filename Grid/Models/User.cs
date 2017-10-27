@@ -1,7 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace KPMA.Models
+namespace Grid.Models
 {
     [System.ComponentModel.DataAnnotations.Schema.Table("User", Schema = "dbo")]
     public class User

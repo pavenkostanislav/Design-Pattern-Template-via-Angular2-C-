@@ -1,9 +1,9 @@
-﻿using KPMA.Managers;
-using KPMA.Tools;
+﻿using Grid.Managers;
+using Grid.Tools;
 using Microsoft.AspNetCore.Mvc;
 using System;
 
-namespace KPMA.Controllers
+namespace Grid.Controllers
 {
     [Route("api/[controller]")]
     [Microsoft.AspNetCore.Authorization.Authorize]
@@ -12,7 +12,7 @@ namespace KPMA.Controllers
                                                             where GridTableModel :  class,
                                                                                     Grid.Interfaces.IIdModel,
                                                                                     Grid.Interfaces.IDisplayName,
-                                                                                    Interfaces.IClearVirtualPropertiesModel,
+                                                                                    Grid.Interfaces.IClearVirtualPropertiesModel,
                                                                                     new()
 
                                                             where GridViewModel :   GridTableModel,
@@ -31,7 +31,7 @@ namespace KPMA.Controllers
         }
 
         [Microsoft.AspNetCore.Mvc.HttpPost("list")]
-        public Microsoft.AspNetCore.Mvc.IActionResult GetGridRequestModel([FromBody] KPMA.Models.RequestModel<GridFindModel> requestModel)
+        public Microsoft.AspNetCore.Mvc.IActionResult GetGridRequestModel([FromBody] Grid.Models.RequestModel<GridFindModel> requestModel)
         {
             try
             {

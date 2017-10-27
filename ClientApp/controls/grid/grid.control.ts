@@ -7,7 +7,6 @@ import { Subscription } from 'rxjs/Rx';
 
 import { App, GridSize } from '../../app.component';
 import { GridService, GridRequestModel, GridResponseModel } from '../../services/grid.service';
-import { UserService, UserViewModel, Permissions } from '../../services/user.service';
 
 
 @Component({
@@ -49,8 +48,6 @@ export class GridRowList implements OnInit, OnChanges {
     freeze = true;
     GridSize = GridSize;
 
-    currentUser: UserViewModel = new UserViewModel();
-    permissions: Permissions = new Permissions();
 
     listRow: any[] = [];
     attacment: any = { metaObjectId: 0, objectId: 0 };
@@ -69,9 +66,7 @@ export class GridRowList implements OnInit, OnChanges {
         if (this.logShow) {
             console.log(`GridEdit.ngOnInit`);
         }
-        this.currentUser = this.app.currentUser;
-        this.permissions = this.app.permissions;
-		this.app.GridSize.subscribe (
+        this.app.GridSize.subscribe(
             (res: any) => { this.gridSize = res; }
         );
         if (this.controllerName) {
@@ -109,17 +104,6 @@ export class GridRowList implements OnInit, OnChanges {
 				this.app.showError(err);
 			}
 		);
-
-        //this.gridSrv.getGridList(this.keyValue).subscribe(
-        //    (res: any) => {
-        //        this.freeze = false;
-        //        this.listRow = res;
-        //    },
-        //    (err: any) => {
-        //        this.freeze = false;
-        //        this.app.showError(err);
-        //    }
-        //);
     }
 	doRefreshRequestModel() {
 		if (this.requestModel && this.requestModel.findModel) {

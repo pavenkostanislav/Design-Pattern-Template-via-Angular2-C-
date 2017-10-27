@@ -1,4 +1,4 @@
-﻿namespace KPMA.Models
+﻿namespace Grid.Models
 {
     public class SelectItemViewModel
     {

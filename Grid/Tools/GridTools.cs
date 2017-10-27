@@ -2,12 +2,12 @@
 using System.Linq;
 using System.Reflection;
 
-namespace KPMA.Tools
+namespace Grid.Tools
 {
     public static class GridTools
     {
         public static System.Collections.Generic.IList<To> ConvertList<From, To>(System.Collections.Generic.IList<From> source)
-            where From : Interfaces.IClearVirtualPropertiesModel
+            where From : Grid.Interfaces.IClearVirtualPropertiesModel
             where To : Grid.Interfaces.IIdModel, new()
         {
             var target = new System.Collections.Generic.List<To>();

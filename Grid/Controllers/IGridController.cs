@@ -1,4 +1,4 @@
-﻿namespace KPMA.Managers
+﻿namespace Grid.Managers
 {
     public interface IGridController<T>
     {

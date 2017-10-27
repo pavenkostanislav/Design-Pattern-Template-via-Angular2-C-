@@ -5,11 +5,11 @@
         </div>
         <div class="form-group">
             <div shadowbox [show]="freeze" class="media chat-panel" >
-                <div class="chat-msg-parent {{current.name == exp.authorName ? 'chat-msg-right' : 'chat-msg-left'}}" *ngFor="let exp of listRow" (click)="selected = exp" [class.list-group-item-danger]="exp == selected">
-                    <div class="media-left" *ngIf="current.name != exp.authorName">
+                <div class="chat-msg-parent {{currentUser.name == exp.authorName ? 'chat-msg-right' : 'chat-msg-left'}}" *ngFor="let exp of listRow" (click)="selected = exp" [class.list-group-item-danger]="exp == selected">
+                    <div class="media-left" *ngIf="currentUser.name != exp.authorName">
                         <img class="img-circle media-object" [src]="exp.photoSrc" alt="{{exp.authorName}}" style="width: 5rem; height: 5rem" />
                     </div>
-                    <div class="media-body chat-msg {{current.name == exp.authorName ? 'chat-msg-right' : 'chat-msg-left'}}">
+                    <div class="media-body chat-msg {{currentUser.name == exp.authorName ? 'chat-msg-right' : 'chat-msg-left'}}">
                         <h5 class="media-heading text-info"><strong>{{exp.authorName}}</strong></h5>
                         <p>
                             {{exp.message}}
@@ -20,12 +20,12 @@
                         </div>
                         <a (click)="onClickAttachment(exp)" class="btn btn-outline-default hidden-xs" title="Добавить / загрузить вложения."><i class="fa fa-paperclip"></i>{{exp.attachmentCount ? '&nbsp;|&nbsp;'+exp.attachmentCount : ''}}</a>
 						
-						<a (click)="onDeleteRow(exp)" class="btn btn-outline-danger hidden-xs" [class.disabled]="!permissions.canDelete || isViewOnly || current.name != exp.authorName" title="Удалить выбранную строку">
+						<a (click)="onDeleteRow(exp)" class="btn btn-outline-danger hidden-xs" [class.disabled]="!permissions.canDelete || isViewOnly || currentUser.name != exp.authorName" title="Удалить выбранную строку">
 							<i class="fa fa-trash"></i>
 						</a>
 						<span style="font-style: italic; font-size: xx-small; color: gray;"><span class="hidden-xs">Отправлено </span>{{exp.createdDate}}</span>
                     </div>
-                    <div class="media-right media-bottom" *ngIf="current.name == exp.authorName">
+                    <div class="media-right media-bottom" *ngIf="currentUser.name == exp.authorName">
                         <img class="img-circle media-object" [src]="exp.photoSrc" alt="{{exp.authorName}}" style="width: 5rem; height: 5rem" />
                     </div>
                 </div>
@@ -50,22 +50,6 @@
 					<i class="fa fa-paper-plane-o"></i>&nbsp;<br />Отправить
 				</a>
 			</div>
-        </div>
-    </div>
-</div>
-
-<div id="ModalAttach" class="modal fade" data-keyboard="false">
-    <div class="modal-dialog modal-reference">
-        <div draggable class="modal-content alert alert-info">
-            <form #editForm="ngForm">
-				<div class="modal-header cursor-move">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                    <h4 class="modal-title">Вложения</h4>
-                </div>
-                <div class="modal-body">
-                    <attachment-list [metaObjectId]="attachmentMetaObjectId" [objectId]="attchmentObjectId"></attachment-list>
-                </div>
-            </form>
         </div>
     </div>
 </div>
