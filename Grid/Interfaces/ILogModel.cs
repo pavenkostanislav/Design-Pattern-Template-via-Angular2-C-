@@ -2,7 +2,7 @@
 
 namespace Grid.Interfaces
 {
-    internal interface ILogModel
+    public interface ILogModel
     {
         string CreatedBy { get; set; }
         DateTime CreatedDate { get; set; }
