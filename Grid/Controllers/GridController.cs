@@ -7,42 +7,22 @@ namespace Grid.Controllers
 {
     [Route("api/[controller]")]
     [Microsoft.AspNetCore.Authorization.Authorize]
-    public class GridController<GridTableModel,GridViewModel,GridFindModel> : Controller
-
-                                                            where GridTableModel :  class,
-                                                                                    Grid.Interfaces.IIdModel,
-                                                                                    Grid.Interfaces.IDisplayName,
-                                                                                    Grid.Interfaces.IClearVirtualPropertiesModel,
-                                                                                    new()
-
-                                                            where GridViewModel :   GridTableModel,
-                                                                                    new()
-
-                                                            where GridFindModel :   GridTableModel,
-                                                                                    new()
+    public class GridController<GridTableModel, GridViewModel, GridFindModel> : Controller, IGridController<GridTableModel, GridViewModel, GridFindModel>
     {
-        protected readonly IGridManager<GridTableModel, GridFindModel> objManager;
-        public readonly int tableName;
+        protected readonly IGridManager<GridTableModel, GridViewModel, GridFindModel> objManager;
 
-        public GridController(  IGridManager<GridTableModel, GridFindModel> objManager  )
+        public GridController(  IGridManager<GridTableModel, GridViewModel, GridFindModel> objManager )
         {
             this.objManager = objManager;
-            tableName = 0;
+            
         }
 
         [Microsoft.AspNetCore.Mvc.HttpPost("list")]
-        public Microsoft.AspNetCore.Mvc.IActionResult GetGridRequestModel([FromBody] Grid.Models.RequestModel<GridFindModel> requestModel)
+        virtual public async System.Threading.Tasks.Task<Microsoft.AspNetCore.Mvc.IActionResult> GetGridRequestModelAsync([FromBody] Grid.Models.RequestModel<GridFindModel> requestModel)
         {
             try
             {
-                var ret = objManager.GetGridResponseModel(requestModel);
-                
-                var responseViewModel = new Models.ResponseModel<GridViewModel>();
-                responseViewModel.TableId = this.tableName;
-                responseViewModel.CurrentPage = ret.CurrentPage;
-                responseViewModel.TotalRowCount = ret.TotalRowCount;
-                responseViewModel.List = GridTools.ConvertList<GridTableModel,GridViewModel>(ret.List);
-                return Json(responseViewModel);
+                return Json(await this.objManager.GetGridResponseModelAsync(requestModel));
 
             }
             catch (Exception ex)
@@ -56,9 +36,7 @@ namespace Grid.Controllers
         {
             try
             {
-                var list = await objManager.GetGridListAsync(keyId);
-                var viewModelList = GridTools.ConvertList<GridTableModel, GridViewModel>(list);
-                return Json(viewModelList);
+                return Json(await this.objManager.GetGridListViewModelAsync(keyId));
 
             }
             catch (Exception ex)
@@ -67,60 +45,52 @@ namespace Grid.Controllers
             }
         }
 
-        [Microsoft.AspNetCore.Mvc.HttpGet("{id:int}/{mode?}")]
-        virtual public async System.Threading.Tasks.Task<Microsoft.AspNetCore.Mvc.IActionResult> GetGridRowModelAsync(int id, Grid.Enums.Cmd? mode)
+        [Microsoft.AspNetCore.Mvc.HttpGet("{id:int}")]
+        virtual public async System.Threading.Tasks.Task<Microsoft.AspNetCore.Mvc.IActionResult> GetGridModelAsync(int id)
         {
             try
             {
-                if (mode == null)
-                {
-                    mode = Grid.Enums.Cmd.@default;
-                }
+                return Json(await this.objManager.GetGridRowViewModelAsync(id));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
 
-                GridTableModel model = default(GridTableModel);
-
-                switch (mode)
-                {
-                    case Grid.Enums.Cmd.viewonly:
-                    case Grid.Enums.Cmd.@default:
-                        {
-                            model = await objManager.GetGridRowModelAsync(id);
-
-                            if (model == null)
-                            {
-                                throw new Exception($"Ошибка получения записи из базы ({id})");
-                            }
-
-                        }
-                        break;
-                    case Grid.Enums.Cmd.@new:
-
-                        model = new GridTableModel();
-                        break;
-                    case Grid.Enums.Cmd.copy:
-                        {
-                            var _copy = await objManager.GetGridRowModelAsync(id);
-                            if (_copy == null)
-                            {
-                                throw new Exception($"Ошибка получения записи из базы ({id})");
-                            }
-
-                            model = _copy;
-
-                            model.Id = 0;
-
-                        }
-                        break;
-                    case Grid.Enums.Cmd.find:
-
-                        var findModel = new GridFindModel();
-                        return Json(findModel);
-                    default:
-                        throw new Exception($"Ошибка получения записи Chat ({id})");
-                }
-
+        [Microsoft.AspNetCore.Mvc.HttpGet("{id:int}/new")]
+        virtual public Microsoft.AspNetCore.Mvc.IActionResult GetGridNewModel(int id)
+        {
+            try
+            {
+                var model = this.objManager.GetGridRowNewModel();
                 return Json(model);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
 
+        [Microsoft.AspNetCore.Mvc.HttpGet("{id:int}/copy")]
+        virtual public async System.Threading.Tasks.Task<Microsoft.AspNetCore.Mvc.IActionResult> GetGridCopyModelAsync(int id)
+        {
+            try
+            {
+                return Json(await this.objManager.GetGridRowCopyModelAsync(id));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [Microsoft.AspNetCore.Mvc.HttpGet("{id:int}/find")]
+        virtual public Microsoft.AspNetCore.Mvc.IActionResult GetGridFindModel(int id)
+        {
+            try
+            {
+                return Json(this.objManager.GetGridRowFindModel());
             }
             catch (Exception ex)
             {
@@ -135,11 +105,11 @@ namespace Grid.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    return Json(await objManager.SaveGridRowModelAsync(model));
+                    return Json(await this.objManager.SaveGridRowModelAsync(model));
                 }
                 else
                 {
-                    throw new Exception($"Ошибка");
+                    throw new Exception($"Ошибка валидация модели в контроллере");
                 }
             }
             catch (Exception ex)
@@ -153,8 +123,7 @@ namespace Grid.Controllers
         {
             try
             {
-
-                await objManager.DeleteGridRowModelAsync(id);
+                await this.objManager.DeleteGridRowModelAsync(id);
                 return Ok();
             }
             catch (Exception ex)
@@ -162,46 +131,31 @@ namespace Grid.Controllers
                 return BadRequest(ex.Message);
             }
         }
-
-
-
+ 
         #region Select
 
         [HttpGet("select/{parentId:int?}/{term?}")]
-        public async System.Threading.Tasks.Task<Microsoft.AspNetCore.Mvc.IActionResult> SelectGridFindAsync(int? parentId, string term)
+        virtual public async System.Threading.Tasks.Task<Microsoft.AspNetCore.Mvc.IActionResult> SelectGridFindAsync(int? parentId, string term)
         {
             try
             {
-                var list = await objManager.GetGridSelectListAsync(parentId, term);
-                return Json(list);
-
+                return Json(await this.objManager.GetGridSelectListAsync(parentId, term));
             }
             catch (Exception ex)
             {
-
                 return BadRequest(ex.Message);
             }
         }
 
         [HttpGet("select/{id:int}")]
-        public async System.Threading.Tasks.Task<Microsoft.AspNetCore.Mvc.IActionResult> GetSelectGridRowModelAsync(int id)
+        virtual public async System.Threading.Tasks.Task<Microsoft.AspNetCore.Mvc.IActionResult> GetSelectGridRowModelAsync(int id)
         {
             try
             {
-                var model = await objManager.GetGridRowModelAsync(id);
-                if (model != null)
-                {
-                    return Json(new Models.SelectItemViewModel { id = model.Id, text = model.DisplayName });
-                }
-                else
-                {
-                    return null;
-                }
-
+                return Json(await this.objManager.GetSelectItemViewModelAsync(id));
             }
             catch (Exception ex)
             {
-
                 return BadRequest(ex.Message);
             }
         }

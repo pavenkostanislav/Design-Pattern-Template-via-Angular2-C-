@@ -1,6 +1,6 @@
 ﻿{
-  "title": "Generic Grid library",
-  "version": "1.0.1-beta-1",
+  "title": "KPMA Core Grid library",
+  "version": "1.0.2",
 
   "dependencies": {
     "Microsoft.AspNetCore.Identity": "1.1.0",
@@ -8,7 +8,8 @@
     "Microsoft.AspNetCore.Mvc": "1.1.1",
     "Microsoft.EntityFrameworkCore": "1.1.0",
     "NETStandard.Library": "1.6.1",
-    "System.Reflection.TypeExtensions": "4.3.0"
+    "System.Reflection.TypeExtensions": "4.3.0",
+    "UAC.Core": "1.0.3-beta38"
   },
 
   "frameworks": {

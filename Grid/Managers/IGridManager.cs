@@ -3,19 +3,30 @@ using System.Linq;
 
 namespace Grid.Managers
 {
-    public interface IGridManager<GridTableModel, GridFindModel>
+    public interface IGridManager<GridTableModel, GridViewModel, GridFindModel>
     {
+        string TableName { get; }
         IQueryable<GridTableModel> GetGridList(int? keyId = default(int?), GridFindModel findModel = default(GridFindModel));
-        IQueryable<GridTableModel> GetGridAllList(System.Linq.Expressions.Expression<System.Func<GridTableModel, bool>> predicate);
-        System.Threading.Tasks.Task<System.Collections.Generic.List<GridTableModel>> GetGridAllListAsync(System.Linq.Expressions.Expression<System.Func<GridTableModel, bool>> predicate = null);
-        System.Threading.Tasks.Task<System.Collections.Generic.List<GridTableModel>> GetGridListAsync(int? keyId = null);
+        System.Threading.Tasks.Task<System.Collections.Generic.List<GridTableModel>> GetGridListAsync(int? keyId = default(int?), GridFindModel findModel = default(GridFindModel));
+        IQueryable<GridTableModel> GetGridListWithOneLevelIncludes(System.Linq.Expressions.Expression<System.Func<GridTableModel, bool>> predicate);
+        IQueryable<GridTableModel> QueryableFilter(IQueryable<GridTableModel> list, GridFindModel findModel);
+
+        System.Threading.Tasks.Task<System.Collections.Generic.List<GridTableModel>> GetGridListWithOneLevelIncludesAsync(System.Linq.Expressions.Expression<System.Func<GridTableModel, bool>> predicate);
+
         IQueryable<GridTableModel> GetGridSelectList(int? keyId, string term);
-        System.Threading.Tasks.Task<System.Collections.Generic.List<SelectItemViewModel>> GetGridSelectListAsync(int? keyId, string term);
+        System.Threading.Tasks.Task<System.Collections.Generic.List<Grid.Models.SelectItemViewModel>> GetGridSelectListAsync(int? keyId, string term);
+        System.Threading.Tasks.Task<System.Collections.Generic.IList<GridViewModel>> GetGridListViewModelAsync(int? keyId = default(int?), GridFindModel findModel = default(GridFindModel));
+        GridTableModel GetGridRowNewModel();
+        GridFindModel GetGridRowFindModel();
         System.Threading.Tasks.Task<GridTableModel> GetGridRowModelAsync(int id);
-        System.Threading.Tasks.Task<GridTableModel> SaveGridRowModelAsync(GridTableModel model);
+        System.Threading.Tasks.Task<GridTableModel> GetGridRowCopyModelAsync(int id);
+        System.Threading.Tasks.Task<GridViewModel> GetGridRowViewModelAsync(int id);
+        System.Threading.Tasks.Task<Grid.Models.SelectItemViewModel> GetSelectItemViewModelAsync(int id);
+        System.Threading.Tasks.Task<GridViewModel> SaveGridRowModelAsync(GridTableModel model);
+
         System.Threading.Tasks.Task DeleteGridRowModelAsync(int id);
-        void ChangeModelSaveGridRowModel(GridTableModel model);
-        ResponseModel<GridTableModel> GetGridResponseModel(RequestModel<GridFindModel> requestModel);
+
+        System.Threading.Tasks.Task<ResponseModel<GridViewModel>> GetGridResponseModelAsync(RequestModel<GridFindModel> requestModel = null);
     }
 }
 
