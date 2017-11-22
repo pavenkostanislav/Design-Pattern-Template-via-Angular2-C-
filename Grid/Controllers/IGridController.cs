@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 
-namespace Grid.Managers
+namespace Grid.Controllers
 {
     public interface IGridController<GridTableModel, GridViewModel, GridFindModel>
     {
@@ -24,6 +24,8 @@ namespace Grid.Managers
 
         [Microsoft.AspNetCore.Mvc.HttpPost()]
         System.Threading.Tasks.Task<Microsoft.AspNetCore.Mvc.IActionResult> SaveGridRowModelAsync([FromBody] GridTableModel model);
+        [Microsoft.AspNetCore.Mvc.HttpPost("savelist")]
+        System.Threading.Tasks.Task<Microsoft.AspNetCore.Mvc.IActionResult> SaveGridListAsync([FromBody] System.Collections.Generic.IList<GridTableModel> listmodel);
 
         [HttpDelete("{id:int}")]
         System.Threading.Tasks.Task<Microsoft.AspNetCore.Mvc.IActionResult> DeleteGridRowModelAsync(int id);

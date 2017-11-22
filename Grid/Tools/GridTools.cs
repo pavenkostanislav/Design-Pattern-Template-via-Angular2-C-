@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using System;
 using System.Linq;
 using System.Reflection;
 
@@ -8,21 +7,21 @@ namespace Grid.Tools
     public static class GridTools
     {
         public static System.Collections.Generic.IList<To> ConvertList<From, To>(System.Collections.Generic.IList<From>  source = null)
-            where From : Interfaces.IClearVirtualPropertiesModel
+            where From : Grid.Interfaces.IClearVirtualPropertiesModel
             where To : Grid.Interfaces.IIdModel, new()
         {
             if (source == null) { return null; }
             var target = new System.Collections.Generic.List<To>();
             foreach (var item in source)
             {
-                To itemView = ConvertTo<From, To>(item);
+                To itemView = Convert<From, To>(item);
                 target.Add(itemView);
             }
             return target;
         }
 
-        public static To ConvertTo<From, To>(From source)
-            where From : Interfaces.IClearVirtualPropertiesModel
+        public static To Convert<From, To>(From source)
+            where From : Grid.Interfaces.IClearVirtualPropertiesModel
             where To : Grid.Interfaces.IIdModel, new()
         {
             var itemView = (To)System.Activator.CreateInstance(typeof(To), source);
@@ -51,26 +50,13 @@ namespace Grid.Tools
             return query;
         }
 
-        public static string ToUpperFirstChar(this string param)
+        public static string ToUpperFirstIndexStringBuilder(this string str)
         {
-            var str2 = new System.Text.StringBuilder(param);
-            int x = param[0];//получаем код ASCI
+            var _stringBuilder = new System.Text.StringBuilder(str);
+            int x = str[0];//получаем код ASCI
             int X = x - 32;//Разница между маленькой буквой и большой 32 символа.У заглавных букв код ASCI меньше
-            str2.Replace((char)x, (char)X, 0, 1);//casting на int преобразует его в символ по таблице ASCI
-            param = str2.ToString();
-            return param;
-        }
-
-        public static int GetCarouselCurrentPage(int CurrentPage, int PageSize, int TotalCount)
-        {
-            if (CurrentPage <= 0 || TotalCount <= 0 || PageSize <= 0 || CurrentPage > TotalCount / (PageSize + 1))
-            {
-                return 0;
-            }
-            else
-            {
-                return CurrentPage;
-            }
+            _stringBuilder.Replace((char)x, (char)X, 0, 1);//casting на int преобразует его в символ по таблице ASCI
+            return _stringBuilder.ToString();
         }
 
 
@@ -97,7 +83,7 @@ namespace Grid.Tools
                 var propertyInfo = typeof(ViewEntity).GetProperty(param);
                 if (propertyInfo == null)
                 {
-                    param = param.ToUpperFirstChar();
+                    param = param.ToUpperFirstIndexStringBuilder();
                     propertyInfo = typeof(ViewEntity).GetProperty(param);
                 }
                 if (i == 0)

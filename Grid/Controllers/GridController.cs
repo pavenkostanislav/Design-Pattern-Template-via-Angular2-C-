@@ -1,5 +1,4 @@
 ﻿using Grid.Managers;
-using Grid.Tools;
 using Microsoft.AspNetCore.Mvc;
 using System;
 
@@ -14,7 +13,6 @@ namespace Grid.Controllers
         public GridController(  IGridManager<GridTableModel, GridViewModel, GridFindModel> objManager )
         {
             this.objManager = objManager;
-            
         }
 
         [Microsoft.AspNetCore.Mvc.HttpPost("list")]
@@ -23,7 +21,6 @@ namespace Grid.Controllers
             try
             {
                 return Json(await this.objManager.GetGridResponseModelAsync(requestModel));
-
             }
             catch (Exception ex)
             {
@@ -37,7 +34,6 @@ namespace Grid.Controllers
             try
             {
                 return Json(await this.objManager.GetGridListViewModelAsync(keyId));
-
             }
             catch (Exception ex)
             {
@@ -118,6 +114,26 @@ namespace Grid.Controllers
             }
         }
 
+        [Microsoft.AspNetCore.Mvc.HttpPost("savelist")]
+        virtual public async System.Threading.Tasks.Task<Microsoft.AspNetCore.Mvc.IActionResult> SaveGridListAsync([FromBody] System.Collections.Generic.IList<GridTableModel> listmodel)
+        {
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    return Json(await this.objManager.SaveGridListAsync(listmodel));
+                }
+                else
+                {
+                    throw new Exception($"Ошибка валидация модели в контроллере");
+                }
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
         [HttpDelete("{id:int}")]
         virtual public async System.Threading.Tasks.Task<Microsoft.AspNetCore.Mvc.IActionResult> DeleteGridRowModelAsync(int id)
         {
@@ -134,12 +150,12 @@ namespace Grid.Controllers
  
         #region Select
 
-        [HttpGet("select/{parentId:int?}/{term?}")]
-        virtual public async System.Threading.Tasks.Task<Microsoft.AspNetCore.Mvc.IActionResult> SelectGridFindAsync(int? parentId, string term)
+        [HttpGet("select/{keyId:int?}/{term?}")]
+        virtual public async System.Threading.Tasks.Task<Microsoft.AspNetCore.Mvc.IActionResult> SelectGridFindAsync(int? keyId, string term)
         {
             try
             {
-                return Json(await this.objManager.GetGridSelectListAsync(parentId, term));
+                return Json(await this.objManager.GetGridSelectListAsync(keyId, term));
             }
             catch (Exception ex)
             {

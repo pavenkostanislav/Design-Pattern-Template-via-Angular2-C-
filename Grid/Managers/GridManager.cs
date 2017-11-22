@@ -3,7 +3,6 @@ using Grid.Tools;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Linq;
-using System.Reflection;
 using System.Threading.Tasks;
 
 namespace Grid.Managers
@@ -22,6 +21,7 @@ namespace Grid.Managers
                                                             Grid.Interfaces.IDisplayName,
                                                             Grid.Interfaces.IClearVirtualPropertiesModel,
                                                             new()
+
                                                 where GridFindModel : class,
                                                             Grid.Interfaces.IIdModel,
                                                             Grid.Interfaces.IDisplayName,
@@ -30,7 +30,6 @@ namespace Grid.Managers
                                                             new()
     {
         public readonly DbContext db;
-
         private readonly string _TableName;
         public string TableName
         {
@@ -46,7 +45,7 @@ namespace Grid.Managers
             this._TableName = (this.GetGridRowNewModel()).GetType().Name;
         }
 
-        #region GetGridList
+        #region List
 
         /// <summary>
         /// Async: get task list classes with 1) includes first level (2) filtered (3) sorted
@@ -63,15 +62,17 @@ namespace Grid.Managers
         /// Param CurrentPage: GridTools.GetCarouselCurrentPage(requestModel.PageSize, requestModel.CurrentPage, list.Count()) 
         /// Param List: myQueryable.Skip(requestModel.PageSize * requestModel.CurrentPage).Take(requestModel.PageSize).ToList()
         /// </returns>
-        virtual public async Task<ResponseModel<GridViewModel>> GetGridResponseModelAsync(RequestModel<GridFindModel> requestModel = null)
+        virtual public async Task<Grid.Models.ResponseModel<GridViewModel>> GetGridResponseModelAsync(RequestModel<GridFindModel> requestModel = null)
         {
             if(requestModel == null)
             {
-                return new ResponseModel<GridViewModel>
+                requestModel = new RequestModel<GridFindModel>
                 {
-                    TotalRowCount = 0,
-                    CurrentPage = 1,
-                    List = null
+                    CurrentPage = 0,
+                    PageSize = 0,
+                    KeyId = null,
+                    OrderNamesList = new System.Collections.Generic.List<string>(),
+                    FindModel = new GridFindModel()
                 };
             }
 
@@ -87,7 +88,6 @@ namespace Grid.Managers
             return new ResponseModel<GridViewModel>
             {
                 TotalRowCount = list.Count(),
-                CurrentPage = GridTools.GetCarouselCurrentPage(requestModel.PageSize, requestModel.CurrentPage, list.Count()),
                 List = myQueryable.Skip(requestModel.PageSize * requestModel.CurrentPage).Take(requestModel.PageSize).ToList()
             };
         }
@@ -99,7 +99,7 @@ namespace Grid.Managers
         /// </summary>
         /// <param name="predicate">lambda-expressions: input-parameters: your class parameter, operator: true/false</param>
         /// <returns>Get list classes includes first level with filtered</returns>
-        virtual public IQueryable<GridTableModel> GetGridList(int? keyId = default(int?), GridFindModel findModel = default(GridFindModel))
+        virtual public IQueryable<GridTableModel> GetGridList(int? keyId = null, GridFindModel findModel = null)
         {
             var list = this.GetGridListWithOneLevelIncludes();
 
@@ -172,7 +172,7 @@ namespace Grid.Managers
         /// <param name="findModel"></param>
         /// <returns>Async: get task list classes with includes first level</returns>
 
-        virtual public System.Threading.Tasks.Task<System.Collections.Generic.List<GridTableModel>> GetGridListAsync(int? keyId = default(int?), GridFindModel findModel = default(GridFindModel))
+        virtual public System.Threading.Tasks.Task<System.Collections.Generic.List<GridTableModel>> GetGridListAsync(int? keyId = null, GridFindModel findModel = null)
         {
             return this.GetGridList(keyId, findModel).ToListAsync();
         }
@@ -209,18 +209,33 @@ namespace Grid.Managers
         /// </summary>
         /// <param name="predicate">lambda-expressions: input-parameters: your class parameter, operator: true/false</param>
         /// <returns>Get list classes includes first level</returns>
-        virtual public System.Threading.Tasks.Task<System.Collections.Generic.List<GridTableModel>> GetGridListWithOneLevelIncludesAsync(System.Linq.Expressions.Expression<Func<GridTableModel, bool>> predicate)
+        virtual public System.Threading.Tasks.Task<System.Collections.Generic.List<GridTableModel>> GetGridListWithOneLevelIncludesAsync(System.Linq.Expressions.Expression<Func<GridTableModel, bool>> predicate = null)
         {
             return this.GetGridListWithOneLevelIncludes(predicate).ToListAsync();
         }
 
-        virtual public async System.Threading.Tasks.Task<System.Collections.Generic.IList<GridViewModel>> GetGridListViewModelAsync(int? keyId = default(int?), GridFindModel findModel = default(GridFindModel))
+        virtual public async System.Threading.Tasks.Task<System.Collections.Generic.IList<GridViewModel>> GetGridListViewModelAsync(int? keyId = null, GridFindModel findModel = null)
         {
             var list = await this.GetGridListAsync(keyId, findModel);
             var viewModelList = GridTools.ConvertList<GridTableModel, GridViewModel>(list);
             return viewModelList;
         }
+        /// <summary>
+        /// Can saved list classes implement IList GridTableModel 
+        /// </summary>
+        /// <param name="ilist">list classes implement IList GridTableModel</param>
+        /// <returns></returns>
 
+        virtual public async System.Threading.Tasks.Task<System.Collections.Generic.IList<GridViewModel>> SaveGridListAsync(System.Collections.Generic.IList<GridTableModel> ilist)
+        {
+            var list = new System.Collections.Generic.List<GridTableModel>();
+            foreach (var item in ilist)
+            {
+                list.Add(await SaveModelInContextAsync(item));
+            }
+            await db.SaveChangesAsync();
+            return Tools.GridTools.ConvertList<GridTableModel, GridViewModel>(list);
+        }
         #endregion
 
         #region Model
@@ -232,9 +247,22 @@ namespace Grid.Managers
         {
             return new GridFindModel();
         }
-        virtual public System.Threading.Tasks.Task<GridTableModel> GetGridRowModelAsync(int id)
+        virtual public async System.Threading.Tasks.Task<GridTableModel> GetGridRowModelAsync(int id, bool withOneLevelIncludes = false)
         {
-            return db.Set<GridTableModel>().FindAsync(id);
+            GridTableModel model;
+            if (withOneLevelIncludes)
+            {
+                model = await this.GetGridListWithOneLevelIncludes(m => m.Id == id).FirstOrDefaultAsync();
+            }
+            else
+            {
+                model = await db.Set<GridTableModel>().FindAsync(id);
+            }
+            if (model == null)
+            {
+                throw new Exception($"Ошибка получения записи из базы ({id})");
+            }
+            return model;
         }
         virtual public async System.Threading.Tasks.Task<GridTableModel> GetGridRowCopyModelAsync(int id)
         {
@@ -245,31 +273,41 @@ namespace Grid.Managers
 
         virtual public async System.Threading.Tasks.Task<GridViewModel> SaveGridRowModelAsync(GridTableModel model)
         {
-            GridTableModel ResultModel;
+            GridTableModel ResultModel = await SaveModelInContextAsync(model);
+            await db.SaveChangesAsync();
+
+            return Tools.GridTools.Convert<GridTableModel, GridViewModel>(ResultModel);
+        }
+
+        virtual public async Task<GridTableModel> SaveModelInContextAsync(GridTableModel model)
+        {
+            model.DisplayName = null;
+
             if (model.Id == 0)
             {
                 model.ClearVirtualProperties();
-                ResultModel = (await db.Set<GridTableModel>().AddAsync(model)).Entity;
+                model = (await db.Set<GridTableModel>().AddAsync(model)).Entity;
             }
             else
             {
-                model.ClearVirtualProperties();
-                ResultModel = db.Set<GridTableModel>().Update(model).Entity;
+                if (model.Id > 0)
+                {
+                    model.ClearVirtualProperties();
+                    model = db.Set<GridTableModel>().Update(model).Entity;
+                }
+                else
+                {
+                    throw new Exception($"Данные не сохранены! Ошибка сохранения записи {model.Id}");
+                }
             }
 
-            await db.SaveChangesAsync();
-
-            return Tools.GridTools.ConvertTo<GridTableModel, GridViewModel>(ResultModel);
+            return model;
         }
 
         virtual public async System.Threading.Tasks.Task<GridViewModel> GetGridRowViewModelAsync(int id)
         {
-            var model = await this.GetGridRowModelAsync(id);
-            if (model == null)
-            {
-                throw new Exception($"Ошибка получения записи из базы ({id})");
-            }
-            return Tools.GridTools.ConvertTo<GridTableModel, GridViewModel>(model);
+            var model = await this.GetGridRowModelAsync(id, true);
+            return Tools.GridTools.Convert<GridTableModel, GridViewModel>(model);
         }
 
         /// <summary>
