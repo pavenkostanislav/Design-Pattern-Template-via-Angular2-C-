@@ -569,7 +569,28 @@ namespace Grid.Test.Tests.Tools
                 actualList.ForEach((item) => {
                     Assert.True(item.id > 0);
                     Assert.NotEmpty(item.text);
-                    Assert.Null(item.sort);
+                });
+            }
+        }
+
+        [Theory(DisplayName = "Grid.Managers.GridManager.GetGridSelectListAsync Not null sort")]
+        [InlineData("Краказябра")]
+        [InlineData("table test text 1")]
+        [InlineData("table")]
+        [InlineData(null)]
+        public async System.Threading.Tasks.Task GridManagerGetGridSelectListAsync_NotNullSort(string term)
+        {
+            using (var context = new TestContext.TestDbContext(TestTools.CreateNewContextOptions()))
+            {
+                context.CreateTestEmployees(5).CreateTestUsers(5).CreateTableModels(5);
+                var randKeyId = TestTools.rInt(1024, -1024);
+                var manager = new Managers.GridManager<TableModel, ViewModel, FindModel>(context);
+                var model = context.Set<TableModel>().Last();
+
+                var actualList = (await manager.GetGridSelectListAsync(randKeyId, term)).ToList();
+                Assert.NotNull(actualList);
+                actualList.ForEach((item) => {
+                    Assert.True(item.sort >= 0);
                 });
             }
         }
