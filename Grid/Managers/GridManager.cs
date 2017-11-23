@@ -64,16 +64,17 @@ namespace Grid.Managers
         /// </returns>
         virtual public async Task<Grid.Models.ResponseModel<GridViewModel>> GetGridResponseModelAsync(RequestModel<GridFindModel> requestModel = null)
         {
-            if(requestModel == null)
+            if (requestModel == null)
             {
-                requestModel = new RequestModel<GridFindModel>
+                return new ResponseModel<GridViewModel>
                 {
-                    CurrentPage = 0,
-                    PageSize = 0,
-                    KeyId = null,
-                    OrderNamesList = new System.Collections.Generic.List<string>(),
-                    FindModel = new GridFindModel()
+                    TotalRowCount = 0,
+                    List = (System.Collections.Generic.IList<GridViewModel>)null
                 };
+            }
+            if (requestModel.FindModel == null)
+            {
+                requestModel.FindModel = this.GetGridRowFindModel();
             }
 
             var list = await this.GetGridListViewModelAsync(requestModel.KeyId, requestModel.FindModel);

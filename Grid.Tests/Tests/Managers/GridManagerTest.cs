@@ -51,7 +51,7 @@ namespace Grid.Test.Tests.Tools
             {
                 context.CreateTestEmployees(number).CreateTestUsers(number).CreateTableModels(number);
                 var manager = new Managers.GridManager<TableModel, ViewModel, FindModel>(context);
-                var model = context.Set<TableModel>().Skip(number-1).Take(1).FirstOrDefault();
+                var model = context.Set<TableModel>().Skip(number - 1).Take(1).FirstOrDefault();
 
                 var tableModel = await manager.GetGridRowModelAsync(model.Id);
                 Assert.IsType<TableModel>(tableModel);
@@ -102,7 +102,7 @@ namespace Grid.Test.Tests.Tools
                 var model = context.Set<TableModel>().Skip(number - 1).Take(1).FirstOrDefault();
 
                 var tableModel = await manager.GetGridRowModelAsync(model.Id, true);
-                Assert.NotEqual(0,tableModel.Id);
+                Assert.NotEqual(0, tableModel.Id);
             }
         }
         [Theory(DisplayName = "Grid.Managers.GridManager.GetGridRowModelAsync [withOneLevelIncludes=true] is includes")]
@@ -160,7 +160,7 @@ namespace Grid.Test.Tests.Tools
                 var model = context.Set<TableModel>().Skip(number - 1).Take(1).FirstOrDefault();
 
                 var tableModel = await manager.GetGridRowCopyModelAsync(model.Id);
-                Assert.Equal(0,tableModel.Id);
+                Assert.Equal(0, tableModel.Id);
             }
         }
         [Theory(DisplayName = "Grid.Managers.GridManager.GetGridRowCopyModelAsync Exception")]
@@ -322,7 +322,7 @@ namespace Grid.Test.Tests.Tools
 
                 var temp = context.Set<TableModel>().FirstOrDefault(m => m.Id == model.Id);
 
-                var actualexception = await Test.Tools.TestTools.ThrowsAsync<DbUpdateConcurrencyException> (async () => await manager.SaveGridRowModelAsync(model));
+                var actualexception = await Test.Tools.TestTools.ThrowsAsync<DbUpdateConcurrencyException>(async () => await manager.SaveGridRowModelAsync(model));
 
                 Assert.NotNull(actualexception.Message);
             }
@@ -365,7 +365,7 @@ namespace Grid.Test.Tests.Tools
                 var copymodel = await manager.GetGridRowCopyModelAsync(model.Id);
                 var actualmodel = await manager.SaveGridRowModelAsync(copymodel);
 
-                Assert.True(actualmodel.Id>0);
+                Assert.True(actualmodel.Id > 0);
                 Assert.NotEqual(model.Id, actualmodel.Id);
             }
         }
@@ -402,7 +402,7 @@ namespace Grid.Test.Tests.Tools
                 Assert.Equal(newmodel.UserId, actualmodel.UserId);
             }
         }
-        
+
         [Theory(DisplayName = "Grid.Managers.GridManager.GetSelectItemViewModelAsync Is type")]
         [InlineData(2)]
         [InlineData(64)]
@@ -430,7 +430,7 @@ namespace Grid.Test.Tests.Tools
                 context.CreateTestEmployees(number).CreateTestUsers(number).CreateTableModels(number);
                 var manager = new Managers.GridManager<TableModel, ViewModel, FindModel>(context);
                 var model = context.Set<TableModel>().Skip(number - 1).Take(1).FirstOrDefault();
-        
+
                 var tableModel = await manager.GetSelectItemViewModelAsync(model.Id);
                 Assert.NotEqual(0, tableModel.id);
                 Assert.Equal(model.Id, tableModel.id);
@@ -464,12 +464,12 @@ namespace Grid.Test.Tests.Tools
             using (var context = new TestContext.TestDbContext(TestTools.CreateNewContextOptions()))
             {
                 context.CreateTestEmployees(5).CreateTestUsers(5).CreateTableModels(5);
-                var randKeyId = TestTools.rInt(1024,-1024);
+                var randKeyId = TestTools.rInt(1024, -1024);
                 var manager = new Managers.GridManager<TableModel, ViewModel, FindModel>(context);
                 var model = context.Set<TableModel>().Last();
 
                 var actualList = manager.GetGridSelectList(randKeyId, term);
-                if(term == null)
+                if (term == null)
                     Assert.IsType<Microsoft.EntityFrameworkCore.Internal.InternalDbSet<TableModel>>(actualList);
                 else
                     Assert.IsType<Microsoft.EntityFrameworkCore.Query.Internal.EntityQueryable<TableModel>>(actualList);
@@ -486,7 +486,7 @@ namespace Grid.Test.Tests.Tools
             using (var context = new TestContext.TestDbContext(TestTools.CreateNewContextOptions()))
             {
                 context.CreateTestEmployees(5).CreateTestUsers(5).CreateTableModels(5);
-                var randKeyId = TestTools.rInt(1024,-1024);
+                var randKeyId = TestTools.rInt(1024, -1024);
                 var manager = new Managers.GridManager<TableModel, ViewModel, FindModel>(context);
                 var model = context.Set<TableModel>().Last();
 
@@ -509,7 +509,7 @@ namespace Grid.Test.Tests.Tools
             using (var context = new TestContext.TestDbContext(TestTools.CreateNewContextOptions()))
             {
                 context.CreateTestEmployees(5).CreateTestUsers(5).CreateTableModels(5);
-                var randKeyId = TestTools.rInt(1024,-1024);
+                var randKeyId = TestTools.rInt(1024, -1024);
                 var manager = new Managers.GridManager<TableModel, ViewModel, FindModel>(context);
                 var model = context.Set<TableModel>().Last();
 
@@ -523,7 +523,7 @@ namespace Grid.Test.Tests.Tools
         {
             using (var context = new TestContext.TestDbContext(TestTools.CreateNewContextOptions()))
             {
-                var randKeyId = TestTools.rInt(1024,-1024);
+                var randKeyId = TestTools.rInt(1024, -1024);
                 var manager = new Managers.GridManager<TableModel, ViewModel, FindModel>(context);
 
                 var actualList = manager.GetGridSelectList(randKeyId, null).ToList();
@@ -541,7 +541,7 @@ namespace Grid.Test.Tests.Tools
             using (var context = new TestContext.TestDbContext(TestTools.CreateNewContextOptions()))
             {
                 context.CreateTestEmployees(5).CreateTestUsers(5).CreateTableModels(5);
-                var randKeyId = TestTools.rInt(1024,-1024);
+                var randKeyId = TestTools.rInt(1024, -1024);
                 var manager = new Managers.GridManager<TableModel, ViewModel, FindModel>(context);
                 var model = context.Set<TableModel>().Last();
 
@@ -560,7 +560,7 @@ namespace Grid.Test.Tests.Tools
             using (var context = new TestContext.TestDbContext(TestTools.CreateNewContextOptions()))
             {
                 context.CreateTestEmployees(5).CreateTestUsers(5).CreateTableModels(5);
-                var randKeyId = TestTools.rInt(1024,-1024);
+                var randKeyId = TestTools.rInt(1024, -1024);
                 var manager = new Managers.GridManager<TableModel, ViewModel, FindModel>(context);
                 var model = context.Set<TableModel>().Last();
 
@@ -605,7 +605,7 @@ namespace Grid.Test.Tests.Tools
             using (var context = new TestContext.TestDbContext(TestTools.CreateNewContextOptions()))
             {
                 context.CreateTestEmployees(5).CreateTestUsers(5).CreateTableModels(5);
-                var randKeyId = TestTools.rInt(1024,-1024);
+                var randKeyId = TestTools.rInt(1024, -1024);
                 var manager = new Managers.GridManager<TableModel, ViewModel, FindModel>(context);
                 var model = context.Set<TableModel>().Last();
 
@@ -619,7 +619,7 @@ namespace Grid.Test.Tests.Tools
         {
             using (var context = new TestContext.TestDbContext(TestTools.CreateNewContextOptions()))
             {
-                var randKeyId = TestTools.rInt(1024,-1024);
+                var randKeyId = TestTools.rInt(1024, -1024);
                 var manager = new Managers.GridManager<TableModel, ViewModel, FindModel>(context);
 
                 var actualList = await manager.GetGridSelectListAsync(randKeyId, null);
@@ -810,14 +810,7 @@ namespace Grid.Test.Tests.Tools
                 });
             }
         }
-
-
-
-
-
-
-
-
+        
         [Fact(DisplayName = "Grid.Managers.GridManager.GetGridList Is type")]
         public void GridManagerGetGridList_IsType()
         {
@@ -910,20 +903,6 @@ namespace Grid.Test.Tests.Tools
             }
         }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
         [Fact(DisplayName = "Grid.Managers.GridManager.GetGridListAsync Is type")]
         public async System.Threading.Tasks.Task GridManagerGetGridListAsync_IsType()
         {
@@ -1015,19 +994,6 @@ namespace Grid.Test.Tests.Tools
                 });
             }
         }
-
-
-
-
-
-
-
-
-
-
-
-
-
 
         [Fact(DisplayName = "Grid.Managers.GridManager.GetGridListViewModelAsync Is type")]
         public async System.Threading.Tasks.Task GridManagerGetGridListViewModelAsync_IsType()
@@ -1126,20 +1092,7 @@ namespace Grid.Test.Tests.Tools
             }
         }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-        [Fact(DisplayName = "Grid.Managers.GridManager.GetGridResponseModelAsync Is type")]
+        [Fact(DisplayName = "Grid.Managers.GridManager.GetGridResponseModelAsync is type")]
         public async System.Threading.Tasks.Task GridManagerGetGridResponseModelAsync_IsType()
         {
             using (var context = new TestContext.TestDbContext(TestTools.CreateNewContextOptions()))
@@ -1153,25 +1106,8 @@ namespace Grid.Test.Tests.Tools
             }
         }
 
-        [Fact(DisplayName = "Grid.Managers.GridManager.GetGridResponseModelAsync is null")]
-        public async System.Threading.Tasks.Task GridManagerGetGridResponseModelAsync_IsNull()
-        {
-            using (var context = new TestContext.TestDbContext(TestTools.CreateNewContextOptions()))
-            {
-                context.CreateTestEmployees(5).CreateTestUsers(5).CreateTableModels(5);
-                var manager = new Managers.GridManager<TableModel, ViewModel, FindModel>(context);
-                var model = context.Set<TableModel>().Last();
-
-                var actualResponseModel = await manager.GetGridResponseModelAsync(null);
-                Assert.NotNull(actualResponseModel);
-                Assert.Equal(6,actualResponseModel.TotalRowCount);
-                Assert.True(actualResponseModel.List.Count == 0);
-                Assert.IsType<System.Collections.Generic.List<ViewModel>>(actualResponseModel.List);
-            }
-        }
-
-        [Fact(DisplayName = "Grid.Managers.GridManager.GetGridResponseModelAsync is empty")]
-        public async System.Threading.Tasks.Task GridManagerGetGridResponseModelAsync_IsEmpty()
+        [Fact(DisplayName = "Grid.Managers.GridManager.GetGridResponseModelAsync totalRowCount = 0")]
+        public async System.Threading.Tasks.Task GridManagerGetGridResponseModelAsync_TotalRowCount0()
         {
             using (var context = new TestContext.TestDbContext(TestTools.CreateNewContextOptions()))
             {
@@ -1180,50 +1116,23 @@ namespace Grid.Test.Tests.Tools
                 var model = context.Set<TableModel>().Last();
 
                 var actualResponseModel = await manager.GetGridResponseModelAsync();
-                Assert.NotNull(actualResponseModel);
-                Assert.Equal(6, actualResponseModel.TotalRowCount);
-                Assert.True(actualResponseModel.List.Count == 0);
-                Assert.IsType<System.Collections.Generic.List<ViewModel>>(actualResponseModel.List);
+                Assert.Equal(0, actualResponseModel.TotalRowCount);
             }
         }
 
-        [Theory(DisplayName = "Grid.Managers.GridManager.GetGridResponseModelAsync ")]
-        [InlineData(0, 0, null, null, null)]
-        [InlineData(6, 6, null, null, null)]
-        public async System.Threading.Tasks.Task GridManagerGetGridResponseModelAsync_IsNull(int currentPage, int pageSize, int? keyId, System.Collections.Generic.List<string> orderNamesList, FindModel findModel)
+        [Fact(DisplayName = "Grid.Managers.GridManager.GetGridResponseModelAsync run null")]
+        public async System.Threading.Tasks.Task GridManagerGetGridResponseModelAsync_RunNull()
         {
             using (var context = new TestContext.TestDbContext(TestTools.CreateNewContextOptions()))
             {
                 context.CreateTestEmployees(5).CreateTestUsers(5).CreateTableModels(5);
                 var manager = new Managers.GridManager<TableModel, ViewModel, FindModel>(context);
-                var model = context.Set<TableModel>().Last();
-
-                var requestModel = new Models.RequestModel<FindModel> { CurrentPage = currentPage, PageSize = pageSize, KeyId = keyId, OrderNamesList = orderNamesList, FindModel = findModel};
-
-
-                var actualResponseModel = await manager.GetGridResponseModelAsync(requestModel);
-                Assert.NotNull(actualResponseModel);
-                Assert.Equal(6, actualResponseModel.TotalRowCount);
-                Assert.Equal(0, actualResponseModel.List.Count);
-                Assert.IsType<System.Collections.Generic.List<ViewModel>>(actualResponseModel.List);
-            }
-        }
-
-        [Fact(DisplayName = "Grid.Managers.GridManager.GetGridResponseModelAsync Count >= 0")]
-        public async System.Threading.Tasks.Task GridManagerGetGridResponseModelAsync_PositiveCount()
-        {
-            using (var context = new TestContext.TestDbContext(TestTools.CreateNewContextOptions()))
-            {
-                context.CreateTestEmployees(5).CreateTestUsers(5).CreateTableModels(5);
-                var manager = new Managers.GridManager<TableModel, ViewModel, FindModel>(context);
-                var model = context.Set<TableModel>().Last();
-
                 var actualResponseModel = await manager.GetGridResponseModelAsync();
-                Assert.True(actualResponseModel.List.Count >= 0);
+                Assert.NotNull(actualResponseModel);
             }
         }
 
-        [Fact(DisplayName = "Grid.Managers.GridManager.GetGridResponseModelAsync The table is not has rows")]
+        [Fact(DisplayName = "Grid.Managers.GridManager.GetGridResponseModelAsync the table is not has rows")]
         public async System.Threading.Tasks.Task GridManagerGetGridResponseModelAsync_TableisNotHasRows()
         {
             using (var context = new TestContext.TestDbContext(TestTools.CreateNewContextOptions()))
@@ -1234,17 +1143,26 @@ namespace Grid.Test.Tests.Tools
                 Assert.NotNull(actualResponseModel);
             }
         }
-        [Fact(DisplayName = "Grid.Managers.GridManager.GetGridResponseModelAsync with fields name & includes is null")]
-        public async System.Threading.Tasks.Task GridManagerGetGridResponseModelAsync_WithFieldsNameAndIncludesIsNull()
+
+        [Theory(DisplayName = "Grid.Managers.GridManager.GetGridResponseModelAsync run without orderby & findmodel")]
+        [InlineData(0, 0, null)]
+        [InlineData(0, 25, null)]
+        [InlineData(1, 25, null)]
+        [InlineData(1, 25, 256)]
+        [InlineData(1, 25, -256)]
+        [InlineData(512, 25, 512)]
+        [InlineData(-512, 25, -512)]
+        [InlineData(-512, 25, -512)]
+        public async System.Threading.Tasks.Task GridManagerGetGridResponseModelAsync_RunWithoutOrderbyAndFindmodel(int currentPage, int pageSize, int? keyId)
         {
             using (var context = new TestContext.TestDbContext(TestTools.CreateNewContextOptions()))
             {
 
                 context.CreateTestEmployees(5).CreateTestUsers(5).CreateTableModels(5);
                 var manager = new Managers.GridManager<TableModel, ViewModel, FindModel>(context);
-                var model = context.Set<TableModel>().Last();
 
-                var actualResponseModel = await manager.GetGridResponseModelAsync();
+                var requestModel = new Models.RequestModel<FindModel> { CurrentPage = currentPage, PageSize = pageSize, KeyId = keyId };
+                var actualResponseModel = await manager.GetGridResponseModelAsync(requestModel);
 
                 var excpectedlist = context.Set<TableModel>()
                                         .Include(m => m.User)
@@ -1268,5 +1186,1334 @@ namespace Grid.Test.Tests.Tools
                 }
             }
         }
+
+        [Fact(DisplayName = "Grid.Managers.GridManager.QueryableFilter can be null")]
+        public void GridManagerQueryableFilter_IsNull()
+        {
+            using (var context = new TestContext.TestDbContext(TestTools.CreateNewContextOptions()))
+            {
+                context.CreateTestEmployees(5).CreateTestUsers(5).CreateTableModels(5);
+                var manager = new Managers.GridManager<TableModel, ViewModel, FindModel>(context);
+
+                var excpectQueryable = context.Set<TableModel>().AsQueryable();
+                var actualQueryable = manager.QueryableFilter(excpectQueryable, null);
+
+                Assert.Equal(excpectQueryable, actualQueryable);
+                Assert.Equal(excpectQueryable.ToList(), actualQueryable.ToList());
+            }
+        }
+        [Theory(DisplayName = "Grid.Managers.GridManager.QueryableFilter filtered id")]
+        [InlineData(0)]
+        [InlineData(2)]
+        [InlineData(256)]
+        [InlineData(-512)]
+        public void GridManagerQueryableFilter_filteredById(int Id)
+        {
+            using (var context = new TestContext.TestDbContext(TestTools.CreateNewContextOptions()))
+            {
+                context.CreateTestEmployees(Id).CreateTestUsers(Id).CreateTableModels(Id);
+                var manager = new Managers.GridManager<TableModel, ViewModel, FindModel>(context);
+                var fm = new FindModel { Id = Id };
+
+                var excpectQueryable = context.Set<TableModel>().AsQueryable();
+                if (Id != default(int))
+                {
+                    excpectQueryable = excpectQueryable.Where(m => m.Id == Id);
+                }
+                var actualQueryable = manager.QueryableFilter(excpectQueryable, fm);
+
+                Assert.Equal(excpectQueryable, actualQueryable);
+                Assert.Equal(excpectQueryable.ToList(), actualQueryable.ToList());
+            }
+        }
+        
+        [Theory(DisplayName = "Grid.Managers.GridManager.QueryableFilter filtered CreatedBy")]
+        [InlineData(null)]
+        [InlineData("")]
+        [InlineData(" ")]
+        [InlineData("name")]
+        [InlineData("Test name")]
+        [InlineData("Test")]
+        public void GridManagerQueryableFilter_filteredByCreatedBy(string CreatedBy)
+        {
+            using (var context = new TestContext.TestDbContext(TestTools.CreateNewContextOptions()))
+            {
+                context.CreateTestEmployees(5).CreateTestUsers(5).CreateTableModels(5);
+                var manager = new Managers.GridManager<TableModel, ViewModel, FindModel>(context);
+                var fm = new FindModel { CreatedBy = CreatedBy };
+        
+                var excpectQueryable = context.Set<TableModel>().AsQueryable();
+                if (!string.IsNullOrEmpty(CreatedBy))
+                {
+                    excpectQueryable = excpectQueryable.Where(m => m.CreatedBy.Contains(CreatedBy));
+                }
+                var actualQueryable = manager.QueryableFilter(excpectQueryable, fm);
+        
+                Assert.Equal(excpectQueryable, actualQueryable);
+                Assert.Equal(excpectQueryable.ToList(), actualQueryable.ToList());
+            }
+        }
+
+        [Theory(DisplayName = "Grid.Managers.GridManager.QueryableFilter filtered LastUpdatedBy")]
+        [InlineData(null)]
+        [InlineData("")]
+        [InlineData(" ")]
+        [InlineData("name")]
+        [InlineData("Test name")]
+        [InlineData("Test")]
+        public void GridManagerQueryableFilter_filteredByLastUpdatedBy(string LastUpdatedBy)
+        {
+            using (var context = new TestContext.TestDbContext(TestTools.CreateNewContextOptions()))
+            {
+                context.CreateTestEmployees(5).CreateTestUsers(5).CreateTableModels(5);
+                var manager = new Managers.GridManager<TableModel, ViewModel, FindModel>(context);
+                var fm = new FindModel { LastUpdatedBy = LastUpdatedBy };
+
+                var excpectQueryable = context.Set<TableModel>().AsQueryable();
+                if (!string.IsNullOrEmpty(LastUpdatedBy))
+                {
+                    excpectQueryable = excpectQueryable.Where(m => m.LastUpdatedBy.Contains(LastUpdatedBy));
+                }
+                var actualQueryable = manager.QueryableFilter(excpectQueryable, fm);
+
+                Assert.Equal(excpectQueryable, actualQueryable);
+                Assert.Equal(excpectQueryable.ToList(), actualQueryable.ToList());
+            }
+        }
+
+        [Fact(DisplayName = "Grid.Managers.GridManager.QueryableFilter filtered CreatedDateStart is null")]
+        public void GridManagerQueryableFilter_filteredByCreatedDateStartIsNull()
+        {
+            using (var context = new TestContext.TestDbContext(TestTools.CreateNewContextOptions()))
+            {
+                context.CreateTestEmployees(5).CreateTestUsers(5).CreateTableModels(5);
+                var manager = new Managers.GridManager<TableModel, ViewModel, FindModel>(context);
+                var CreatedDateStart = (DateTime?)null;
+                var fm = new FindModel { CreatedDateStart = CreatedDateStart };
+
+                var excpectQueryable = context.Set<TableModel>().AsQueryable();
+
+                if (CreatedDateStart.HasValue)
+                {
+                    excpectQueryable = excpectQueryable.Where(m => m.CreatedDate >= CreatedDateStart);
+                }
+                var actualQueryable = manager.QueryableFilter(excpectQueryable, fm);
+
+                Assert.Equal(excpectQueryable, actualQueryable);
+                Assert.Equal(excpectQueryable.ToList(), actualQueryable.ToList());
+            }
+        }
+
+        [Theory(DisplayName = "Grid.Managers.GridManager.QueryableFilter filtered CreatedDateStart")]
+        [InlineData(2017, 11, 23)]
+        public void GridManagerQueryableFilter_filteredByCreatedDateStart(int? year, int? mounth, int? day)
+        {
+            using (var context = new TestContext.TestDbContext(TestTools.CreateNewContextOptions()))
+            {
+                context.CreateTestEmployees(5).CreateTestUsers(5).CreateTableModels(5);
+                var manager = new Managers.GridManager<TableModel, ViewModel, FindModel>(context);
+                DateTime? CreatedDateStart = new DateTime(year.Value, mounth.Value, day.Value);
+                var fm = new FindModel { CreatedDateStart = CreatedDateStart };
+
+                var excpectQueryable = context.Set<TableModel>().AsQueryable();
+
+                if (CreatedDateStart.HasValue)
+                {
+                    excpectQueryable = excpectQueryable.Where(m => m.CreatedDate >= CreatedDateStart);
+                }
+                var actualQueryable = manager.QueryableFilter(excpectQueryable, fm);
+
+                Assert.Equal(excpectQueryable, actualQueryable);
+                Assert.Equal(excpectQueryable.ToList(), actualQueryable.ToList());
+            }
+        }
+
+        [Fact(DisplayName = "Grid.Managers.GridManager.QueryableFilter filtered CreatedDateStart first row")]
+        public void GridManagerQueryableFilter_filteredByCreatedDateStartFirstRow()
+        {
+            using (var context = new TestContext.TestDbContext(TestTools.CreateNewContextOptions()))
+            {
+                context.CreateTestEmployees(5).CreateTestUsers(5).CreateTableModels(5);
+                var manager = new Managers.GridManager<TableModel, ViewModel, FindModel>(context);
+                var CreatedDateStart = context.Set<TableModel>()?.FirstOrDefault()?.CreatedDate;
+                var fm = new FindModel { CreatedDateStart = CreatedDateStart };
+
+                var excpectQueryable = context.Set<TableModel>().AsQueryable();
+
+                if (CreatedDateStart.HasValue)
+                {
+                    excpectQueryable = excpectQueryable.Where(m => m.CreatedDate >= CreatedDateStart);
+                }
+                var actualQueryable = manager.QueryableFilter(excpectQueryable, fm);
+
+                Assert.Equal(excpectQueryable, actualQueryable);
+                Assert.Equal(excpectQueryable.ToList(), actualQueryable.ToList());
+            }
+        }
+
+        [Fact(DisplayName = "Grid.Managers.GridManager.QueryableFilter filtered LastUpdatedDateStart is null")]
+        public void GridManagerQueryableFilter_filteredByLastUpdatedDateStartIsNull()
+        {
+            using (var context = new TestContext.TestDbContext(TestTools.CreateNewContextOptions()))
+            {
+                context.CreateTestEmployees(5).CreateTestUsers(5).CreateTableModels(5);
+                var manager = new Managers.GridManager<TableModel, ViewModel, FindModel>(context);
+                var LastUpdatedDateStart = (DateTime?)null;
+                var fm = new FindModel { LastUpdatedDateStart = LastUpdatedDateStart };
+
+                var excpectQueryable = context.Set<TableModel>().AsQueryable();
+
+                if (LastUpdatedDateStart.HasValue)
+                {
+                    excpectQueryable = excpectQueryable.Where(m => m.LastUpdatedDate >= LastUpdatedDateStart);
+                }
+                var actualQueryable = manager.QueryableFilter(excpectQueryable, fm);
+
+                Assert.Equal(excpectQueryable, actualQueryable);
+                Assert.Equal(excpectQueryable.ToList(), actualQueryable.ToList());
+            }
+        }
+
+        [Theory(DisplayName = "Grid.Managers.GridManager.QueryableFilter filtered LastUpdatedDateStart")]
+        [InlineData(2017, 11, 23)]
+        public void GridManagerQueryableFilter_filteredByLastUpdatedDateStart(int? year, int? mounth, int? day)
+        {
+            using (var context = new TestContext.TestDbContext(TestTools.CreateNewContextOptions()))
+            {
+                context.CreateTestEmployees(5).CreateTestUsers(5).CreateTableModels(5);
+                var manager = new Managers.GridManager<TableModel, ViewModel, FindModel>(context);
+                DateTime? LastUpdatedDateStart = new DateTime(year.Value, mounth.Value, day.Value);
+                var fm = new FindModel { LastUpdatedDateStart = LastUpdatedDateStart };
+
+                var excpectQueryable = context.Set<TableModel>().AsQueryable();
+
+                if (LastUpdatedDateStart.HasValue)
+                {
+                    excpectQueryable = excpectQueryable.Where(m => m.LastUpdatedDate >= LastUpdatedDateStart);
+                }
+                var actualQueryable = manager.QueryableFilter(excpectQueryable, fm);
+
+                Assert.Equal(excpectQueryable, actualQueryable);
+                Assert.Equal(excpectQueryable.ToList(), actualQueryable.ToList());
+            }
+        }
+
+        [Fact(DisplayName = "Grid.Managers.GridManager.QueryableFilter filtered LastUpdatedDateStart first row")]
+        public void GridManagerQueryableFilter_filteredByLastUpdatedDateStartFirstRow()
+        {
+            using (var context = new TestContext.TestDbContext(TestTools.CreateNewContextOptions()))
+            {
+                context.CreateTestEmployees(5).CreateTestUsers(5).CreateTableModels(5);
+                var manager = new Managers.GridManager<TableModel, ViewModel, FindModel>(context);
+                var LastUpdatedDateStart = context.Set<TableModel>()?.FirstOrDefault()?.LastUpdatedDate;
+                var fm = new FindModel { LastUpdatedDateStart = LastUpdatedDateStart };
+
+                var excpectQueryable = context.Set<TableModel>().AsQueryable();
+
+                if (LastUpdatedDateStart.HasValue)
+                {
+                    excpectQueryable = excpectQueryable.Where(m => m.LastUpdatedDate >= LastUpdatedDateStart);
+                }
+                var actualQueryable = manager.QueryableFilter(excpectQueryable, fm);
+
+                Assert.Equal(excpectQueryable, actualQueryable);
+                Assert.Equal(excpectQueryable.ToList(), actualQueryable.ToList());
+            }
+        }
+
+        [Fact(DisplayName = "Grid.Managers.GridManager.QueryableFilter filtered CreatedDateEnd is null")]
+        public void GridManagerQueryableFilter_filteredByCreatedDateEndIsNull()
+        {
+            using (var context = new TestContext.TestDbContext(TestTools.CreateNewContextOptions()))
+            {
+                context.CreateTestEmployees(5).CreateTestUsers(5).CreateTableModels(5);
+                var manager = new Managers.GridManager<TableModel, ViewModel, FindModel>(context);
+                var CreatedDateEnd = (DateTime?)null;
+                var fm = new FindModel { CreatedDateEnd = CreatedDateEnd };
+
+                var excpectQueryable = context.Set<TableModel>().AsQueryable();
+
+                if (CreatedDateEnd.HasValue)
+                {
+                    excpectQueryable = excpectQueryable.Where(m => m.CreatedDate <= CreatedDateEnd);
+                }
+                var actualQueryable = manager.QueryableFilter(excpectQueryable, fm);
+
+                Assert.Equal(excpectQueryable, actualQueryable);
+                Assert.Equal(excpectQueryable.ToList(), actualQueryable.ToList());
+            }
+        }
+
+        [Theory(DisplayName = "Grid.Managers.GridManager.QueryableFilter filtered CreatedDateEnd")]
+        [InlineData(2017, 11, 23)]
+        public void GridManagerQueryableFilter_filteredByCreatedDateEnd(int? year, int? mounth, int? day)
+        {
+            using (var context = new TestContext.TestDbContext(TestTools.CreateNewContextOptions()))
+            {
+                context.CreateTestEmployees(5).CreateTestUsers(5).CreateTableModels(5);
+                var manager = new Managers.GridManager<TableModel, ViewModel, FindModel>(context);
+                DateTime? CreatedDateEnd = new DateTime(year.Value, mounth.Value, day.Value);
+                var fm = new FindModel { CreatedDateEnd = CreatedDateEnd };
+
+                var excpectQueryable = context.Set<TableModel>().AsQueryable();
+
+                if (CreatedDateEnd.HasValue)
+                {
+                    excpectQueryable = excpectQueryable.Where(m => m.CreatedDate <= CreatedDateEnd);
+                }
+                var actualQueryable = manager.QueryableFilter(excpectQueryable, fm);
+
+                Assert.Equal(excpectQueryable, actualQueryable);
+                Assert.Equal(excpectQueryable.ToList(), actualQueryable.ToList());
+            }
+        }
+
+        [Fact(DisplayName = "Grid.Managers.GridManager.QueryableFilter filtered CreatedDateEnd first row")]
+        public void GridManagerQueryableFilter_filteredByCreatedDateEndFirstRow()
+        {
+            using (var context = new TestContext.TestDbContext(TestTools.CreateNewContextOptions()))
+            {
+                context.CreateTestEmployees(5).CreateTestUsers(5).CreateTableModels(5);
+                var manager = new Managers.GridManager<TableModel, ViewModel, FindModel>(context);
+                var CreatedDateEnd = context.Set<TableModel>()?.FirstOrDefault()?.CreatedDate;
+                var fm = new FindModel { CreatedDateEnd = CreatedDateEnd };
+
+                var excpectQueryable = context.Set<TableModel>().AsQueryable();
+
+                if (CreatedDateEnd.HasValue)
+                {
+                    excpectQueryable = excpectQueryable.Where(m => m.CreatedDate <= CreatedDateEnd);
+                }
+                var actualQueryable = manager.QueryableFilter(excpectQueryable, fm);
+
+                Assert.Equal(excpectQueryable, actualQueryable);
+                Assert.Equal(excpectQueryable.ToList(), actualQueryable.ToList());
+            }
+        }
+
+        [Fact(DisplayName = "Grid.Managers.GridManager.QueryableFilter filtered LastUpdatedDateEnd is null")]
+        public void GridManagerQueryableFilter_filteredByLastUpdatedDateEndIsNull()
+        {
+            using (var context = new TestContext.TestDbContext(TestTools.CreateNewContextOptions()))
+            {
+                context.CreateTestEmployees(5).CreateTestUsers(5).CreateTableModels(5);
+                var manager = new Managers.GridManager<TableModel, ViewModel, FindModel>(context);
+                var LastUpdatedDateEnd = (DateTime?)null;
+                var fm = new FindModel { LastUpdatedDateEnd = LastUpdatedDateEnd };
+
+                var excpectQueryable = context.Set<TableModel>().AsQueryable();
+
+                if (LastUpdatedDateEnd.HasValue)
+                {
+                    excpectQueryable = excpectQueryable.Where(m => m.LastUpdatedDate <= LastUpdatedDateEnd);
+                }
+                var actualQueryable = manager.QueryableFilter(excpectQueryable, fm);
+
+                Assert.Equal(excpectQueryable, actualQueryable);
+                Assert.Equal(excpectQueryable.ToList(), actualQueryable.ToList());
+            }
+        }
+
+        [Theory(DisplayName = "Grid.Managers.GridManager.QueryableFilter filtered LastUpdatedDateEnd")]
+        [InlineData(2017, 11, 23)]
+        public void GridManagerQueryableFilter_filteredByLastUpdatedDateEnd(int? year, int? mounth, int? day)
+        {
+            using (var context = new TestContext.TestDbContext(TestTools.CreateNewContextOptions()))
+            {
+                context.CreateTestEmployees(5).CreateTestUsers(5).CreateTableModels(5);
+                var manager = new Managers.GridManager<TableModel, ViewModel, FindModel>(context);
+                DateTime? LastUpdatedDateEnd = new DateTime(year.Value, mounth.Value, day.Value);
+                var fm = new FindModel { LastUpdatedDateEnd = LastUpdatedDateEnd };
+
+                var excpectQueryable = context.Set<TableModel>().AsQueryable();
+
+                if (LastUpdatedDateEnd.HasValue)
+                {
+                    excpectQueryable = excpectQueryable.Where(m => m.LastUpdatedDate <= LastUpdatedDateEnd);
+                }
+                var actualQueryable = manager.QueryableFilter(excpectQueryable, fm);
+
+                Assert.Equal(excpectQueryable, actualQueryable);
+                Assert.Equal(excpectQueryable.ToList(), actualQueryable.ToList());
+            }
+        }
+
+        [Fact(DisplayName = "Grid.Managers.GridManager.QueryableFilter filtered LastUpdatedDateEnd first row")]
+        public void GridManagerQueryableFilter_filteredByLastUpdatedDateEndFirstRow()
+        {
+            using (var context = new TestContext.TestDbContext(TestTools.CreateNewContextOptions()))
+            {
+                context.CreateTestEmployees(5).CreateTestUsers(5).CreateTableModels(5);
+                var manager = new Managers.GridManager<TableModel, ViewModel, FindModel>(context);
+                var LastUpdatedDateEnd = context.Set<TableModel>()?.FirstOrDefault()?.LastUpdatedDate;
+                var fm = new FindModel { LastUpdatedDateEnd = LastUpdatedDateEnd };
+
+                var excpectQueryable = context.Set<TableModel>().AsQueryable();
+
+                if (LastUpdatedDateEnd.HasValue)
+                {
+                    excpectQueryable = excpectQueryable.Where(m => m.LastUpdatedDate <= LastUpdatedDateEnd);
+                }
+                var actualQueryable = manager.QueryableFilter(excpectQueryable, fm);
+
+                Assert.Equal(excpectQueryable, actualQueryable);
+                Assert.Equal(excpectQueryable.ToList(), actualQueryable.ToList());
+            }
+        }
+
+        [Fact(DisplayName = "Grid.Managers.GridManager.GetGridList can be null")]
+        public void GridManagerGetGridList_IsNull()
+        {
+            using (var context = new TestContext.TestDbContext(TestTools.CreateNewContextOptions()))
+            {
+                context.CreateTestEmployees(5).CreateTestUsers(5).CreateTableModels(5);
+                var manager = new Managers.GridManager<TableModel, ViewModel, FindModel>(context);
+
+                var excpectQueryable = manager.GetGridListWithOneLevelIncludes();
+                var actualQueryable = manager.GetGridList(null, null);
+                
+                Assert.Equal(excpectQueryable.Count(), actualQueryable.Count());
+            }
+        }
+        [Theory(DisplayName = "Grid.Managers.GridManager.GetGridList filtered id")]
+        [InlineData(0)]
+        [InlineData(2)]
+        [InlineData(256)]
+        [InlineData(-512)]
+        public void GridManagerGetGridList_filteredById(int Id)
+        {
+            using (var context = new TestContext.TestDbContext(TestTools.CreateNewContextOptions()))
+            {
+                context.CreateTestEmployees(Id).CreateTestUsers(Id).CreateTableModels(Id);
+                var manager = new Managers.GridManager<TableModel, ViewModel, FindModel>(context);
+                var fm = new FindModel { Id = Id };
+
+                var excpectQueryable = manager.GetGridListWithOneLevelIncludes();
+                if (Id != default(int))
+                {
+                    excpectQueryable = excpectQueryable.Where(m => m.Id == Id);
+                }
+                var actualQueryable = manager.GetGridList(null, fm);
+                
+                Assert.Equal(excpectQueryable.Count(), actualQueryable.Count());
+            }
+        }
+
+        [Theory(DisplayName = "Grid.Managers.GridManager.GetGridList filtered CreatedBy")]
+        [InlineData(null)]
+        [InlineData("")]
+        [InlineData(" ")]
+        [InlineData("name")]
+        [InlineData("Test name")]
+        [InlineData("Test")]
+        public void GridManagerGetGridList_filteredByCreatedBy(string CreatedBy)
+        {
+            using (var context = new TestContext.TestDbContext(TestTools.CreateNewContextOptions()))
+            {
+                context.CreateTestEmployees(5).CreateTestUsers(5).CreateTableModels(5);
+                var manager = new Managers.GridManager<TableModel, ViewModel, FindModel>(context);
+                var fm = new FindModel { CreatedBy = CreatedBy };
+
+                var excpectQueryable = manager.GetGridListWithOneLevelIncludes();
+                if (!string.IsNullOrEmpty(CreatedBy))
+                {
+                    excpectQueryable = excpectQueryable.Where(m => m.CreatedBy.Contains(CreatedBy));
+                }
+                var actualQueryable = manager.GetGridList(null, fm);
+
+                
+                Assert.Equal(excpectQueryable.Count(), actualQueryable.Count());
+            }
+        }
+
+        [Theory(DisplayName = "Grid.Managers.GridManager.GetGridList filtered LastUpdatedBy")]
+        [InlineData(null)]
+        [InlineData("")]
+        [InlineData(" ")]
+        [InlineData("name")]
+        [InlineData("Test name")]
+        [InlineData("Test")]
+        public void GridManagerGetGridList_filteredByLastUpdatedBy(string LastUpdatedBy)
+        {
+            using (var context = new TestContext.TestDbContext(TestTools.CreateNewContextOptions()))
+            {
+                context.CreateTestEmployees(5).CreateTestUsers(5).CreateTableModels(5);
+                var manager = new Managers.GridManager<TableModel, ViewModel, FindModel>(context);
+                var fm = new FindModel { LastUpdatedBy = LastUpdatedBy };
+
+                var excpectQueryable = manager.GetGridListWithOneLevelIncludes();
+                if (!string.IsNullOrEmpty(LastUpdatedBy))
+                {
+                    excpectQueryable = excpectQueryable.Where(m => m.LastUpdatedBy.Contains(LastUpdatedBy));
+                }
+                var actualQueryable = manager.GetGridList(null, fm);
+
+                
+                Assert.Equal(excpectQueryable.Count(), actualQueryable.Count());
+            }
+        }
+
+        [Fact(DisplayName = "Grid.Managers.GridManager.GetGridList filtered CreatedDateStart is null")]
+        public void GridManagerGetGridList_filteredByCreatedDateStartIsNull()
+        {
+            using (var context = new TestContext.TestDbContext(TestTools.CreateNewContextOptions()))
+            {
+                context.CreateTestEmployees(5).CreateTestUsers(5).CreateTableModels(5);
+                var manager = new Managers.GridManager<TableModel, ViewModel, FindModel>(context);
+                var CreatedDateStart = (DateTime?)null;
+                var fm = new FindModel { CreatedDateStart = CreatedDateStart };
+
+                var excpectQueryable = manager.GetGridListWithOneLevelIncludes();
+
+                if (CreatedDateStart.HasValue)
+                {
+                    excpectQueryable = excpectQueryable.Where(m => m.CreatedDate >= CreatedDateStart);
+                }
+                var actualQueryable = manager.GetGridList(null, fm);
+
+                
+                Assert.Equal(excpectQueryable.Count(), actualQueryable.Count());
+            }
+        }
+
+        [Theory(DisplayName = "Grid.Managers.GridManager.GetGridList filtered CreatedDateStart")]
+        [InlineData(2017, 11, 23)]
+        public void GridManagerGetGridList_filteredByCreatedDateStart(int? year, int? mounth, int? day)
+        {
+            using (var context = new TestContext.TestDbContext(TestTools.CreateNewContextOptions()))
+            {
+                context.CreateTestEmployees(5).CreateTestUsers(5).CreateTableModels(5);
+                var manager = new Managers.GridManager<TableModel, ViewModel, FindModel>(context);
+                DateTime? CreatedDateStart = new DateTime(year.Value, mounth.Value, day.Value);
+                var fm = new FindModel { CreatedDateStart = CreatedDateStart };
+
+                var excpectQueryable = manager.GetGridListWithOneLevelIncludes();
+
+                if (CreatedDateStart.HasValue)
+                {
+                    excpectQueryable = excpectQueryable.Where(m => m.CreatedDate >= CreatedDateStart);
+                }
+                var actualQueryable = manager.GetGridList(null, fm);
+
+                
+                Assert.Equal(excpectQueryable.Count(), actualQueryable.Count());
+            }
+        }
+
+        [Fact(DisplayName = "Grid.Managers.GridManager.GetGridList filtered CreatedDateStart first row")]
+        public void GridManagerGetGridList_filteredByCreatedDateStartFirstRow()
+        {
+            using (var context = new TestContext.TestDbContext(TestTools.CreateNewContextOptions()))
+            {
+                context.CreateTestEmployees(5).CreateTestUsers(5).CreateTableModels(5);
+                var manager = new Managers.GridManager<TableModel, ViewModel, FindModel>(context);
+                var CreatedDateStart = context.Set<TableModel>()?.FirstOrDefault()?.CreatedDate;
+                var fm = new FindModel { CreatedDateStart = CreatedDateStart };
+
+                var excpectQueryable = manager.GetGridListWithOneLevelIncludes();
+
+                if (CreatedDateStart.HasValue)
+                {
+                    excpectQueryable = excpectQueryable.Where(m => m.CreatedDate >= CreatedDateStart);
+                }
+                var actualQueryable = manager.GetGridList(null, fm);
+
+                
+                Assert.Equal(excpectQueryable.Count(), actualQueryable.Count());
+            }
+        }
+
+        [Fact(DisplayName = "Grid.Managers.GridManager.GetGridList filtered LastUpdatedDateStart is null")]
+        public void GridManagerGetGridList_filteredByLastUpdatedDateStartIsNull()
+        {
+            using (var context = new TestContext.TestDbContext(TestTools.CreateNewContextOptions()))
+            {
+                context.CreateTestEmployees(5).CreateTestUsers(5).CreateTableModels(5);
+                var manager = new Managers.GridManager<TableModel, ViewModel, FindModel>(context);
+                var LastUpdatedDateStart = (DateTime?)null;
+                var fm = new FindModel { LastUpdatedDateStart = LastUpdatedDateStart };
+
+                var excpectQueryable = manager.GetGridListWithOneLevelIncludes();
+
+                if (LastUpdatedDateStart.HasValue)
+                {
+                    excpectQueryable = excpectQueryable.Where(m => m.LastUpdatedDate >= LastUpdatedDateStart);
+                }
+                var actualQueryable = manager.GetGridList(null, fm);
+
+                
+                Assert.Equal(excpectQueryable.Count(), actualQueryable.Count());
+            }
+        }
+
+        [Theory(DisplayName = "Grid.Managers.GridManager.GetGridList filtered LastUpdatedDateStart")]
+        [InlineData(2017, 11, 23)]
+        public void GridManagerGetGridList_filteredByLastUpdatedDateStart(int? year, int? mounth, int? day)
+        {
+            using (var context = new TestContext.TestDbContext(TestTools.CreateNewContextOptions()))
+            {
+                context.CreateTestEmployees(5).CreateTestUsers(5).CreateTableModels(5);
+                var manager = new Managers.GridManager<TableModel, ViewModel, FindModel>(context);
+                DateTime? LastUpdatedDateStart = new DateTime(year.Value, mounth.Value, day.Value);
+                var fm = new FindModel { LastUpdatedDateStart = LastUpdatedDateStart };
+
+                var excpectQueryable = manager.GetGridListWithOneLevelIncludes();
+
+                if (LastUpdatedDateStart.HasValue)
+                {
+                    excpectQueryable = excpectQueryable.Where(m => m.LastUpdatedDate >= LastUpdatedDateStart);
+                }
+                var actualQueryable = manager.GetGridList(null, fm);
+
+                
+                Assert.Equal(excpectQueryable.Count(), actualQueryable.Count());
+            }
+        }
+
+        [Fact(DisplayName = "Grid.Managers.GridManager.GetGridList filtered LastUpdatedDateStart first row")]
+        public void GridManagerGetGridList_filteredByLastUpdatedDateStartFirstRow()
+        {
+            using (var context = new TestContext.TestDbContext(TestTools.CreateNewContextOptions()))
+            {
+                context.CreateTestEmployees(5).CreateTestUsers(5).CreateTableModels(5);
+                var manager = new Managers.GridManager<TableModel, ViewModel, FindModel>(context);
+                var LastUpdatedDateStart = context.Set<TableModel>()?.FirstOrDefault()?.LastUpdatedDate;
+                var fm = new FindModel { LastUpdatedDateStart = LastUpdatedDateStart };
+
+                var excpectQueryable = manager.GetGridListWithOneLevelIncludes();
+
+                if (LastUpdatedDateStart.HasValue)
+                {
+                    excpectQueryable = excpectQueryable.Where(m => m.LastUpdatedDate >= LastUpdatedDateStart);
+                }
+                var actualQueryable = manager.GetGridList(null, fm);
+
+                
+                Assert.Equal(excpectQueryable.Count(), actualQueryable.Count());
+            }
+        }
+        [Fact(DisplayName = "Grid.Managers.GridManager.GetGridList filtered CreatedDateEnd is null")]
+        public void GridManagerGetGridList_filteredByCreatedDateEndIsNull()
+        {
+            using (var context = new TestContext.TestDbContext(TestTools.CreateNewContextOptions()))
+            {
+                context.CreateTestEmployees(5).CreateTestUsers(5).CreateTableModels(5);
+                var manager = new Managers.GridManager<TableModel, ViewModel, FindModel>(context);
+                var CreatedDateEnd = (DateTime?)null;
+                var fm = new FindModel { CreatedDateEnd = CreatedDateEnd };
+
+                var excpectQueryable = manager.GetGridListWithOneLevelIncludes();
+
+                if (CreatedDateEnd.HasValue)
+                {
+                    excpectQueryable = excpectQueryable.Where(m => m.CreatedDate <= CreatedDateEnd);
+                }
+                var actualQueryable = manager.GetGridList(null, fm);
+
+                
+                Assert.Equal(excpectQueryable.Count(), actualQueryable.Count());
+            }
+        }
+
+        [Theory(DisplayName = "Grid.Managers.GridManager.GetGridList filtered CreatedDateEnd")]
+        [InlineData(2017, 11, 23)]
+        public void GridManagerGetGridList_filteredByCreatedDateEnd(int? year, int? mounth, int? day)
+        {
+            using (var context = new TestContext.TestDbContext(TestTools.CreateNewContextOptions()))
+            {
+                context.CreateTestEmployees(5).CreateTestUsers(5).CreateTableModels(5);
+                var manager = new Managers.GridManager<TableModel, ViewModel, FindModel>(context);
+                DateTime? CreatedDateEnd = new DateTime(year.Value, mounth.Value, day.Value);
+                var fm = new FindModel { CreatedDateEnd = CreatedDateEnd };
+
+                var excpectQueryable = manager.GetGridListWithOneLevelIncludes();
+
+                if (CreatedDateEnd.HasValue)
+                {
+                    excpectQueryable = excpectQueryable.Where(m => m.CreatedDate <= CreatedDateEnd);
+                }
+                var actualQueryable = manager.GetGridList(null, fm);
+
+                
+                Assert.Equal(excpectQueryable.Count(), actualQueryable.Count());
+            }
+        }
+
+        [Fact(DisplayName = "Grid.Managers.GridManager.GetGridList filtered CreatedDateEnd first row")]
+        public void GridManagerGetGridList_filteredByCreatedDateEndFirstRow()
+        {
+            using (var context = new TestContext.TestDbContext(TestTools.CreateNewContextOptions()))
+            {
+                context.CreateTestEmployees(5).CreateTestUsers(5).CreateTableModels(5);
+                var manager = new Managers.GridManager<TableModel, ViewModel, FindModel>(context);
+                var CreatedDateEnd = context.Set<TableModel>()?.FirstOrDefault()?.CreatedDate;
+                var fm = new FindModel { CreatedDateEnd = CreatedDateEnd };
+
+                var excpectQueryable = manager.GetGridListWithOneLevelIncludes();
+
+                if (CreatedDateEnd.HasValue)
+                {
+                    excpectQueryable = excpectQueryable.Where(m => m.CreatedDate <= CreatedDateEnd);
+                }
+                var actualQueryable = manager.GetGridList(null, fm);
+
+                
+                Assert.Equal(excpectQueryable.Count(), actualQueryable.Count());
+            }
+        }
+
+        [Fact(DisplayName = "Grid.Managers.GridManager.GetGridList filtered LastUpdatedDateEnd is null")]
+        public void GridManagerGetGridList_filteredByLastUpdatedDateEndIsNull()
+        {
+            using (var context = new TestContext.TestDbContext(TestTools.CreateNewContextOptions()))
+            {
+                context.CreateTestEmployees(5).CreateTestUsers(5).CreateTableModels(5);
+                var manager = new Managers.GridManager<TableModel, ViewModel, FindModel>(context);
+                var LastUpdatedDateEnd = (DateTime?)null;
+                var fm = new FindModel { LastUpdatedDateEnd = LastUpdatedDateEnd };
+
+                var excpectQueryable = manager.GetGridListWithOneLevelIncludes();
+
+                if (LastUpdatedDateEnd.HasValue)
+                {
+                    excpectQueryable = excpectQueryable.Where(m => m.LastUpdatedDate <= LastUpdatedDateEnd);
+                }
+                var actualQueryable = manager.GetGridList(null, fm);
+
+                
+                Assert.Equal(excpectQueryable.Count(), actualQueryable.Count());
+            }
+        }
+
+        [Theory(DisplayName = "Grid.Managers.GridManager.GetGridList filtered LastUpdatedDateEnd")]
+        [InlineData(2017, 11, 23)]
+        public void GridManagerGetGridList_filteredByLastUpdatedDateEnd(int? year, int? mounth, int? day)
+        {
+            using (var context = new TestContext.TestDbContext(TestTools.CreateNewContextOptions()))
+            {
+                context.CreateTestEmployees(5).CreateTestUsers(5).CreateTableModels(5);
+                var manager = new Managers.GridManager<TableModel, ViewModel, FindModel>(context);
+                DateTime? LastUpdatedDateEnd = new DateTime(year.Value, mounth.Value, day.Value);
+                var fm = new FindModel { LastUpdatedDateEnd = LastUpdatedDateEnd };
+
+                var excpectQueryable = manager.GetGridListWithOneLevelIncludes();
+
+                if (LastUpdatedDateEnd.HasValue)
+                {
+                    excpectQueryable = excpectQueryable.Where(m => m.LastUpdatedDate <= LastUpdatedDateEnd);
+                }
+                var actualQueryable = manager.GetGridList(null, fm);
+
+                
+                Assert.Equal(excpectQueryable.Count(), actualQueryable.Count());
+            }
+        }
+
+        [Fact(DisplayName = "Grid.Managers.GridManager.GetGridList filtered LastUpdatedDateEnd first row")]
+        public void GridManagerGetGridList_filteredByLastUpdatedDateEndFirstRow()
+        {
+            using (var context = new TestContext.TestDbContext(TestTools.CreateNewContextOptions()))
+            {
+                context.CreateTestEmployees(5).CreateTestUsers(5).CreateTableModels(5);
+                var manager = new Managers.GridManager<TableModel, ViewModel, FindModel>(context);
+                var LastUpdatedDateEnd = context.Set<TableModel>()?.FirstOrDefault()?.LastUpdatedDate;
+                var fm = new FindModel { LastUpdatedDateEnd = LastUpdatedDateEnd };
+
+                var excpectQueryable = manager.GetGridListWithOneLevelIncludes();
+
+                if (LastUpdatedDateEnd.HasValue)
+                {
+                    excpectQueryable = excpectQueryable.Where(m => m.LastUpdatedDate <= LastUpdatedDateEnd);
+                }
+                var actualQueryable = manager.GetGridList(null, fm);
+
+                
+                Assert.Equal(excpectQueryable.Count(), actualQueryable.Count());
+            }
+        }
+
+        [Fact(DisplayName = "Grid.Managers.GridManager.GetGridResponseModelAsync list filter can be null")]
+        public async System.Threading.Tasks.Task GridManagerGetGridResponseModelAsync_IsNull()
+        {
+            using (var context = new TestContext.TestDbContext(TestTools.CreateNewContextOptions()))
+            {
+                context.CreateTestEmployees(5).CreateTestUsers(5).CreateTableModels(5);
+                var manager = new Managers.GridManager<TableModel, ViewModel, FindModel>(context);
+
+                var excpectQueryable = manager.GetGridListWithOneLevelIncludes();
+                var actualQueryable = await manager.GetGridResponseModelAsync(null);
+
+                Assert.Null(actualQueryable.List);
+            }
+        }
+        [Theory(DisplayName = "Grid.Managers.GridManager.GetGridResponseModelAsync list filtered id")]
+        [InlineData(0)]
+        [InlineData(2)]
+        [InlineData(256)]
+        [InlineData(-512)]
+        public async System.Threading.Tasks.Task GridManagerGetGridResponseModelAsync_filteredById(int Id)
+        {
+            using (var context = new TestContext.TestDbContext(TestTools.CreateNewContextOptions()))
+            {
+                context.CreateTestEmployees(Id).CreateTestUsers(Id).CreateTableModels(Id);
+                var manager = new Managers.GridManager<TableModel, ViewModel, FindModel>(context);
+                var fm = new FindModel { Id = Id };
+        
+                var excpectQueryable = manager.GetGridListWithOneLevelIncludes();
+                if (Id != default(int))
+                {
+                    excpectQueryable = excpectQueryable.Where(m => m.Id == Id);
+                }
+                var requestModel = new Models.RequestModel<FindModel>
+                {
+                    CurrentPage = 0,
+                    PageSize = 25,
+                    FindModel = fm
+                };
+                var actualQueryable = await manager.GetGridResponseModelAsync(requestModel);
+                var excpectedCount = excpectQueryable.Skip(requestModel.PageSize * requestModel.CurrentPage).Take(requestModel.PageSize).Count();
+                Assert.Equal(excpectedCount, actualQueryable.List.Count());
+            }
+        }
+        
+        [Theory(DisplayName = "Grid.Managers.GridManager.GetGridResponseModelAsync list filtered CreatedBy")]
+        [InlineData(null)]
+        [InlineData("")]
+        [InlineData(" ")]
+        [InlineData("name")]
+        [InlineData("Test name")]
+        [InlineData("Test")]
+        public async System.Threading.Tasks.Task GridManagerGetGridResponseModelAsync_filteredByCreatedBy(string CreatedBy)
+        {
+            using (var context = new TestContext.TestDbContext(TestTools.CreateNewContextOptions()))
+            {
+                context.CreateTestEmployees(5).CreateTestUsers(5).CreateTableModels(5);
+                var manager = new Managers.GridManager<TableModel, ViewModel, FindModel>(context);
+                var fm = new FindModel { CreatedBy = CreatedBy };
+        
+                var excpectQueryable = manager.GetGridListWithOneLevelIncludes();
+                if (!string.IsNullOrEmpty(CreatedBy))
+                {
+                    excpectQueryable = excpectQueryable.Where(m => m.CreatedBy.Contains(CreatedBy));
+                }
+                var requestModel = new Models.RequestModel<FindModel>
+                {
+                    CurrentPage = 0,
+                    PageSize = 25,
+                    FindModel = fm
+                };
+                var actualQueryable = await manager.GetGridResponseModelAsync(requestModel);
+                var excpectedCount = excpectQueryable.Skip(requestModel.PageSize * requestModel.CurrentPage).Take(requestModel.PageSize).Count();
+                Assert.Equal(excpectedCount, actualQueryable.List.Count());
+            }
+        }
+        
+        [Theory(DisplayName = "Grid.Managers.GridManager.GetGridResponseModelAsync list filtered LastUpdatedBy")]
+        [InlineData(null)]
+        [InlineData("")]
+        [InlineData(" ")]
+        [InlineData("name")]
+        [InlineData("Test name")]
+        [InlineData("Test")]
+        public async System.Threading.Tasks.Task GridManagerGetGridResponseModelAsync_filteredByLastUpdatedBy(string LastUpdatedBy)
+        {
+            using (var context = new TestContext.TestDbContext(TestTools.CreateNewContextOptions()))
+            {
+                context.CreateTestEmployees(5).CreateTestUsers(5).CreateTableModels(5);
+                var manager = new Managers.GridManager<TableModel, ViewModel, FindModel>(context);
+                var fm = new FindModel { LastUpdatedBy = LastUpdatedBy };
+        
+                var excpectQueryable = manager.GetGridListWithOneLevelIncludes();
+                if (!string.IsNullOrEmpty(LastUpdatedBy))
+                {
+                    excpectQueryable = excpectQueryable.Where(m => m.LastUpdatedBy.Contains(LastUpdatedBy));
+                }
+                var requestModel = new Models.RequestModel<FindModel>
+                {
+                    CurrentPage = 0,
+                    PageSize = 25,
+                    FindModel = fm
+                };
+                var actualQueryable = await manager.GetGridResponseModelAsync(requestModel);
+                var excpectedCount = excpectQueryable.Skip(requestModel.PageSize * requestModel.CurrentPage).Take(requestModel.PageSize).Count();
+                Assert.Equal(excpectedCount, actualQueryable.List.Count());
+            }
+        }
+        
+        [Fact(DisplayName = "Grid.Managers.GridManager.GetGridResponseModelAsync list filtered CreatedDateStart is null")]
+        public async System.Threading.Tasks.Task GridManagerGetGridResponseModelAsync_filteredByCreatedDateStartIsNull()
+        {
+            using (var context = new TestContext.TestDbContext(TestTools.CreateNewContextOptions()))
+            {
+                context.CreateTestEmployees(5).CreateTestUsers(5).CreateTableModels(5);
+                var manager = new Managers.GridManager<TableModel, ViewModel, FindModel>(context);
+                var CreatedDateStart = (DateTime?)null;
+                var fm = new FindModel { CreatedDateStart = CreatedDateStart };
+        
+                var excpectQueryable = manager.GetGridListWithOneLevelIncludes();
+        
+                if (CreatedDateStart.HasValue)
+                {
+                    excpectQueryable = excpectQueryable.Where(m => m.CreatedDate >= CreatedDateStart);
+                }
+                var requestModel = new Models.RequestModel<FindModel>
+                {
+                    CurrentPage = 0,
+                    PageSize = 25,
+                    FindModel = fm
+                };
+                var actualQueryable = await manager.GetGridResponseModelAsync(requestModel);
+                var excpectedCount = excpectQueryable.Skip(requestModel.PageSize * requestModel.CurrentPage).Take(requestModel.PageSize).Count();
+                Assert.Equal(excpectedCount, actualQueryable.List.Count());
+            }
+        }
+        
+        [Theory(DisplayName = "Grid.Managers.GridManager.GetGridResponseModelAsync list filtered CreatedDateStart")]
+        [InlineData(2017, 11, 23)]
+        public async System.Threading.Tasks.Task GridManagerGetGridResponseModelAsync_filteredByCreatedDateStart(int? year, int? mounth, int? day)
+        {
+            using (var context = new TestContext.TestDbContext(TestTools.CreateNewContextOptions()))
+            {
+                context.CreateTestEmployees(5).CreateTestUsers(5).CreateTableModels(5);
+                var manager = new Managers.GridManager<TableModel, ViewModel, FindModel>(context);
+                DateTime? CreatedDateStart = new DateTime(year.Value, mounth.Value, day.Value);
+                var fm = new FindModel { CreatedDateStart = CreatedDateStart };
+        
+                var excpectQueryable = manager.GetGridListWithOneLevelIncludes();
+        
+                if (CreatedDateStart.HasValue)
+                {
+                    excpectQueryable = excpectQueryable.Where(m => m.CreatedDate >= CreatedDateStart);
+                }
+                var requestModel = new Models.RequestModel<FindModel>
+                {
+                    CurrentPage = 0,
+                    PageSize = 25,
+                    FindModel = fm
+                };
+                var actualQueryable = await manager.GetGridResponseModelAsync(requestModel);
+                var excpectedCount = excpectQueryable.Skip(requestModel.PageSize * requestModel.CurrentPage).Take(requestModel.PageSize).Count();
+                Assert.Equal(excpectedCount, actualQueryable.List.Count());
+            }
+        }
+        
+        [Fact(DisplayName = "Grid.Managers.GridManager.GetGridResponseModelAsync list filtered CreatedDateStart first row")]
+        public async System.Threading.Tasks.Task GridManagerGetGridResponseModelAsync_filteredByCreatedDateStartFirstRow()
+        {
+            using (var context = new TestContext.TestDbContext(TestTools.CreateNewContextOptions()))
+            {
+                context.CreateTestEmployees(5).CreateTestUsers(5).CreateTableModels(5);
+                var manager = new Managers.GridManager<TableModel, ViewModel, FindModel>(context);
+                var CreatedDateStart = context.Set<TableModel>()?.FirstOrDefault()?.CreatedDate;
+                var fm = new FindModel { CreatedDateStart = CreatedDateStart };
+        
+                var excpectQueryable = manager.GetGridListWithOneLevelIncludes();
+        
+                if (CreatedDateStart.HasValue)
+                {
+                    excpectQueryable = excpectQueryable.Where(m => m.CreatedDate >= CreatedDateStart);
+                }
+                var requestModel = new Models.RequestModel<FindModel>
+                {
+                    CurrentPage = 0,
+                    PageSize = 25,
+                    FindModel = fm
+                };
+                var actualQueryable = await manager.GetGridResponseModelAsync(requestModel);
+                var excpectedCount = excpectQueryable.Skip(requestModel.PageSize * requestModel.CurrentPage).Take(requestModel.PageSize).Count();
+                Assert.Equal(excpectedCount, actualQueryable.List.Count());
+            }
+        }
+        
+        [Fact(DisplayName = "Grid.Managers.GridManager.GetGridResponseModelAsync list filtered LastUpdatedDateStart is null")]
+        public async System.Threading.Tasks.Task GridManagerGetGridResponseModelAsync_filteredByLastUpdatedDateStartIsNull()
+        {
+            using (var context = new TestContext.TestDbContext(TestTools.CreateNewContextOptions()))
+            {
+                context.CreateTestEmployees(5).CreateTestUsers(5).CreateTableModels(5);
+                var manager = new Managers.GridManager<TableModel, ViewModel, FindModel>(context);
+                var LastUpdatedDateStart = (DateTime?)null;
+                var fm = new FindModel { LastUpdatedDateStart = LastUpdatedDateStart };
+        
+                var excpectQueryable = manager.GetGridListWithOneLevelIncludes();
+        
+                if (LastUpdatedDateStart.HasValue)
+                {
+                    excpectQueryable = excpectQueryable.Where(m => m.LastUpdatedDate >= LastUpdatedDateStart);
+                }
+                var requestModel = new Models.RequestModel<FindModel>
+                {
+                    CurrentPage = 0,
+                    PageSize = 25,
+                    FindModel = fm
+                };
+                var actualQueryable = await manager.GetGridResponseModelAsync(requestModel);
+                var excpectedCount = excpectQueryable.Skip(requestModel.PageSize * requestModel.CurrentPage).Take(requestModel.PageSize).Count();
+                Assert.Equal(excpectedCount, actualQueryable.List.Count());
+            }
+        }
+        
+        [Theory(DisplayName = "Grid.Managers.GridManager.GetGridResponseModelAsync list filtered LastUpdatedDateStart")]
+        [InlineData(2017, 11, 23)]
+        public async System.Threading.Tasks.Task GridManagerGetGridResponseModelAsync_filteredByLastUpdatedDateStart(int? year, int? mounth, int? day)
+        {
+            using (var context = new TestContext.TestDbContext(TestTools.CreateNewContextOptions()))
+            {
+                context.CreateTestEmployees(5).CreateTestUsers(5).CreateTableModels(5);
+                var manager = new Managers.GridManager<TableModel, ViewModel, FindModel>(context);
+                DateTime? LastUpdatedDateStart = new DateTime(year.Value, mounth.Value, day.Value);
+                var fm = new FindModel { LastUpdatedDateStart = LastUpdatedDateStart };
+        
+                var excpectQueryable = manager.GetGridListWithOneLevelIncludes();
+        
+                if (LastUpdatedDateStart.HasValue)
+                {
+                    excpectQueryable = excpectQueryable.Where(m => m.LastUpdatedDate >= LastUpdatedDateStart);
+                }
+                var requestModel = new Models.RequestModel<FindModel>
+                {
+                    CurrentPage = 0,
+                    PageSize = 25,
+                    FindModel = fm
+                };
+                var actualQueryable = await manager.GetGridResponseModelAsync(requestModel);
+                var excpectedCount = excpectQueryable.Skip(requestModel.PageSize * requestModel.CurrentPage).Take(requestModel.PageSize).Count();
+                Assert.Equal(excpectedCount, actualQueryable.List.Count());
+            }
+        }
+        
+        [Fact(DisplayName = "Grid.Managers.GridManager.GetGridResponseModelAsync list filtered LastUpdatedDateStart first row")]
+        public async System.Threading.Tasks.Task GridManagerGetGridResponseModelAsync_filteredByLastUpdatedDateStartFirstRow()
+        {
+            using (var context = new TestContext.TestDbContext(TestTools.CreateNewContextOptions()))
+            {
+                context.CreateTestEmployees(5).CreateTestUsers(5).CreateTableModels(5);
+                var manager = new Managers.GridManager<TableModel, ViewModel, FindModel>(context);
+                var LastUpdatedDateStart = context.Set<TableModel>()?.FirstOrDefault()?.LastUpdatedDate;
+                var fm = new FindModel { LastUpdatedDateStart = LastUpdatedDateStart };
+        
+                var excpectQueryable = manager.GetGridListWithOneLevelIncludes();
+        
+                if (LastUpdatedDateStart.HasValue)
+                {
+                    excpectQueryable = excpectQueryable.Where(m => m.LastUpdatedDate >= LastUpdatedDateStart);
+                }
+                var requestModel = new Models.RequestModel<FindModel>
+                {
+                    CurrentPage = 0,
+                    PageSize = 25,
+                    FindModel = fm
+                };
+                var actualQueryable = await manager.GetGridResponseModelAsync(requestModel);
+                var excpectedCount = excpectQueryable.Skip(requestModel.PageSize * requestModel.CurrentPage).Take(requestModel.PageSize).Count();
+                Assert.Equal(excpectedCount, actualQueryable.List.Count());
+            }
+        }
+        [Fact(DisplayName = "Grid.Managers.GridManager.GetGridResponseModelAsync list filtered CreatedDateEnd is null")]
+        public async System.Threading.Tasks.Task GridManagerGetGridResponseModelAsync_filteredByCreatedDateEndIsNull()
+        {
+            using (var context = new TestContext.TestDbContext(TestTools.CreateNewContextOptions()))
+            {
+                context.CreateTestEmployees(5).CreateTestUsers(5).CreateTableModels(5);
+                var manager = new Managers.GridManager<TableModel, ViewModel, FindModel>(context);
+                var CreatedDateEnd = (DateTime?)null;
+                var fm = new FindModel { CreatedDateEnd = CreatedDateEnd };
+        
+                var excpectQueryable = manager.GetGridListWithOneLevelIncludes();
+        
+                if (CreatedDateEnd.HasValue)
+                {
+                    excpectQueryable = excpectQueryable.Where(m => m.CreatedDate <= CreatedDateEnd);
+                }
+                var requestModel = new Models.RequestModel<FindModel>
+                {
+                    CurrentPage = 0,
+                    PageSize = 25,
+                    FindModel = fm
+                };
+                var actualQueryable = await manager.GetGridResponseModelAsync(requestModel);
+                var excpectedCount = excpectQueryable.Skip(requestModel.PageSize * requestModel.CurrentPage).Take(requestModel.PageSize).Count();
+                Assert.Equal(excpectedCount, actualQueryable.List.Count());
+            }
+        }
+        
+        [Theory(DisplayName = "Grid.Managers.GridManager.GetGridResponseModelAsync list filtered CreatedDateEnd")]
+        [InlineData(2017, 11, 23)]
+        public async System.Threading.Tasks.Task GridManagerGetGridResponseModelAsync_filteredByCreatedDateEnd(int? year, int? mounth, int? day)
+        {
+            using (var context = new TestContext.TestDbContext(TestTools.CreateNewContextOptions()))
+            {
+                context.CreateTestEmployees(5).CreateTestUsers(5).CreateTableModels(5);
+                var manager = new Managers.GridManager<TableModel, ViewModel, FindModel>(context);
+                DateTime? CreatedDateEnd = new DateTime(year.Value, mounth.Value, day.Value);
+                var fm = new FindModel { CreatedDateEnd = CreatedDateEnd };
+        
+                var excpectQueryable = manager.GetGridListWithOneLevelIncludes();
+        
+                if (CreatedDateEnd.HasValue)
+                {
+                    excpectQueryable = excpectQueryable.Where(m => m.CreatedDate <= CreatedDateEnd);
+                }
+                var requestModel = new Models.RequestModel<FindModel>
+                {
+                    CurrentPage = 0,
+                    PageSize = 25,
+                    FindModel = fm
+                };
+                var actualQueryable = await manager.GetGridResponseModelAsync(requestModel);
+                var excpectedCount = excpectQueryable.Skip(requestModel.PageSize * requestModel.CurrentPage).Take(requestModel.PageSize).Count();
+                Assert.Equal(excpectedCount, actualQueryable.List.Count());
+            }
+        }
+        
+        [Fact(DisplayName = "Grid.Managers.GridManager.GetGridResponseModelAsync list filtered CreatedDateEnd first row")]
+        public async System.Threading.Tasks.Task GridManagerGetGridResponseModelAsync_filteredByCreatedDateEndFirstRow()
+        {
+            using (var context = new TestContext.TestDbContext(TestTools.CreateNewContextOptions()))
+            {
+                context.CreateTestEmployees(5).CreateTestUsers(5).CreateTableModels(5);
+                var manager = new Managers.GridManager<TableModel, ViewModel, FindModel>(context);
+                var CreatedDateEnd = context.Set<TableModel>()?.FirstOrDefault()?.CreatedDate;
+                var fm = new FindModel { CreatedDateEnd = CreatedDateEnd };
+        
+                var excpectQueryable = manager.GetGridListWithOneLevelIncludes();
+        
+                if (CreatedDateEnd.HasValue)
+                {
+                    excpectQueryable = excpectQueryable.Where(m => m.CreatedDate <= CreatedDateEnd);
+                }
+                var requestModel = new Models.RequestModel<FindModel>
+                {
+                    CurrentPage = 0,
+                    PageSize = 25,
+                    FindModel = fm
+                };
+                var actualQueryable = await manager.GetGridResponseModelAsync(requestModel);
+                var excpectedCount = excpectQueryable.Skip(requestModel.PageSize * requestModel.CurrentPage).Take(requestModel.PageSize).Count();
+                Assert.Equal(excpectedCount, actualQueryable.List.Count());
+            }
+        }
+        
+        [Fact(DisplayName = "Grid.Managers.GridManager.GetGridResponseModelAsync list filtered LastUpdatedDateEnd is null")]
+        public async System.Threading.Tasks.Task GridManagerGetGridResponseModelAsync_filteredByLastUpdatedDateEndIsNull()
+        {
+            using (var context = new TestContext.TestDbContext(TestTools.CreateNewContextOptions()))
+            {
+                context.CreateTestEmployees(5).CreateTestUsers(5).CreateTableModels(5);
+                var manager = new Managers.GridManager<TableModel, ViewModel, FindModel>(context);
+                var LastUpdatedDateEnd = (DateTime?)null;
+                var fm = new FindModel { LastUpdatedDateEnd = LastUpdatedDateEnd };
+        
+                var excpectQueryable = manager.GetGridListWithOneLevelIncludes();
+        
+                if (LastUpdatedDateEnd.HasValue)
+                {
+                    excpectQueryable = excpectQueryable.Where(m => m.LastUpdatedDate <= LastUpdatedDateEnd);
+                }
+                var requestModel = new Models.RequestModel<FindModel>
+                {
+                    CurrentPage = 0,
+                    PageSize = 25,
+                    FindModel = fm
+                };
+                var actualQueryable = await manager.GetGridResponseModelAsync(requestModel);
+                var excpectedCount = excpectQueryable.Skip(requestModel.PageSize * requestModel.CurrentPage).Take(requestModel.PageSize).Count();
+                Assert.Equal(excpectedCount, actualQueryable.List.Count());
+            }
+        }
+        
+        [Theory(DisplayName = "Grid.Managers.GridManager.GetGridResponseModelAsync list filtered LastUpdatedDateEnd")]
+        [InlineData(2017, 11, 23)]
+        public async System.Threading.Tasks.Task GridManagerGetGridResponseModelAsync_filteredByLastUpdatedDateEnd(int? year, int? mounth, int? day)
+        {
+            using (var context = new TestContext.TestDbContext(TestTools.CreateNewContextOptions()))
+            {
+                context.CreateTestEmployees(5).CreateTestUsers(5).CreateTableModels(5);
+                var manager = new Managers.GridManager<TableModel, ViewModel, FindModel>(context);
+                DateTime? LastUpdatedDateEnd = new DateTime(year.Value, mounth.Value, day.Value);
+                var fm = new FindModel { LastUpdatedDateEnd = LastUpdatedDateEnd };
+        
+                var excpectQueryable = manager.GetGridListWithOneLevelIncludes();
+        
+                if (LastUpdatedDateEnd.HasValue)
+                {
+                    excpectQueryable = excpectQueryable.Where(m => m.LastUpdatedDate <= LastUpdatedDateEnd);
+                }
+                var requestModel = new Models.RequestModel<FindModel>
+                {
+                    CurrentPage = 0,
+                    PageSize = 25,
+                    FindModel = fm
+                };
+                var actualQueryable = await manager.GetGridResponseModelAsync(requestModel);
+                var excpectedCount = excpectQueryable.Skip(requestModel.PageSize * requestModel.CurrentPage).Take(requestModel.PageSize).Count();
+                Assert.Equal(excpectedCount, actualQueryable.List.Count());
+            }
+        }
+        
+        [Fact(DisplayName = "Grid.Managers.GridManager.GetGridResponseModelAsync list filtered LastUpdatedDateEnd first row")]
+        public async System.Threading.Tasks.Task GridManagerGetGridResponseModelAsync_filteredByLastUpdatedDateEndFirstRow()
+        {
+            using (var context = new TestContext.TestDbContext(TestTools.CreateNewContextOptions()))
+            {
+                context.CreateTestEmployees(5).CreateTestUsers(5).CreateTableModels(5);
+                var manager = new Managers.GridManager<TableModel, ViewModel, FindModel>(context);
+                var LastUpdatedDateEnd = context.Set<TableModel>()?.FirstOrDefault()?.LastUpdatedDate;
+                var fm = new FindModel { LastUpdatedDateEnd = LastUpdatedDateEnd };
+        
+                var excpectQueryable = manager.GetGridListWithOneLevelIncludes();
+        
+                if (LastUpdatedDateEnd.HasValue)
+                {
+                    excpectQueryable = excpectQueryable.Where(m => m.LastUpdatedDate <= LastUpdatedDateEnd);
+                }
+                var requestModel = new Models.RequestModel<FindModel>
+                {
+                    CurrentPage = 0,
+                    PageSize = 25,
+                    FindModel = fm
+                };
+                var actualQueryable = await manager.GetGridResponseModelAsync(requestModel);
+                var excpectedCount = excpectQueryable.Skip(requestModel.PageSize * requestModel.CurrentPage).Take(requestModel.PageSize).Count();
+                Assert.Equal(excpectedCount, actualQueryable.List.Count());
+            }
+        }
+
+        [Theory(DisplayName = "Grid.Managers.GridManager.SaveGridListAsync Is type")]
+        [InlineData(2)]
+        [InlineData(64)]
+        [InlineData(256)]
+        public async System.Threading.Tasks.Task GridManagerSaveGridListAsync_IsType(int number)
+        {
+            using (var context = new TestContext.TestDbContext(TestTools.CreateNewContextOptions()))
+            {
+                context.CreateTestEmployees(number).CreateTestUsers(number).CreateTableModels(number);
+                var listmodels = context.Set<TableModel>().ToList();
+                var manager = new Managers.GridManager<TableModel, ViewModel, FindModel>(context);
+                var tableModel = await manager.SaveGridListAsync(listmodels);
+
+                Assert.IsType<System.Collections.Generic.List<ViewModel>>(tableModel);
+            }
+        }
+        [Theory(DisplayName = "Grid.Managers.GridManager.SaveGridListAsync id > 0")]
+        [InlineData(2)]
+        [InlineData(64)]
+        [InlineData(256)]
+        public async System.Threading.Tasks.Task GridManagerSaveGridListAsync_IdNot0(int number)
+        {
+            using (var context = new TestContext.TestDbContext(TestTools.CreateNewContextOptions()))
+            {
+                context.CreateTestEmployees(number).CreateTestUsers(number).CreateTableModels(number);
+                var listmodels = context.Set<TableModel>().ToList();
+                var manager = new Managers.GridManager<TableModel, ViewModel, FindModel>(context);
+                var tableModel = await manager.SaveGridListAsync(listmodels);
+                listmodels.ForEach((item) => {
+                    Assert.NotEqual(0, item.Id);
+                });
+            }
+        }
+        [Theory(DisplayName = "Grid.Managers.GridManager.SaveGridListAsync Update Model")]
+        [InlineData(2)]
+        [InlineData(64)]
+        [InlineData(256)]
+        public async System.Threading.Tasks.Task GridManagerSaveGridListAsync_updatemodel(int number)
+        {
+            using (var context = new TestContext.TestDbContext(TestTools.CreateNewContextOptions()))
+            {
+                context.CreateTestEmployees(number).CreateTestUsers(number).CreateTableModels(number);
+                var listmodels = context.Set<TableModel>().ToList();
+                listmodels.ForEach((item) => {
+                    item.Test = "test";
+                });
+                var manager = new Managers.GridManager<TableModel, ViewModel, FindModel>(context);
+                var actual = await manager.SaveGridListAsync(listmodels);
+                actual.ToList().ForEach((item) => {
+                    item.Test = "test";
+                    Assert.Equal("test", item.Test);
+                });
+            }
+        }
+        [Theory(DisplayName = "Grid.Managers.GridManager.SaveGridListAsync Exception Id < 0")]
+        [InlineData(2)]
+        [InlineData(64)]
+        [InlineData(256)]
+        public async System.Threading.Tasks.Task GridManagerSaveGridListAsync_ExceptionNegativeId(int number)
+        {
+            using (var context = new TestContext.TestDbContext(TestTools.CreateNewContextOptions()))
+            {
+                context.CreateTestEmployees(number).CreateTestUsers(number).CreateTableModels(number);
+                var listmodels = context.Set<TableModel>().ToList();
+                listmodels.ForEach((item) => {
+                    item.Id = item.Id * (-1);
+                });
+                
+                var manager = new Managers.GridManager<TableModel, ViewModel, FindModel>(context);
+                var actualexception = await Test.Tools.TestTools.ThrowsAsync<Exception>(async () => await manager.SaveGridListAsync(listmodels));
+        
+                Assert.NotNull(actualexception.Message);
+                Assert.Matches(@"Данные не сохранены! Ошибка сохранения записи ([^\d])", actualexception.Message);
+            }
+        }
+        [Theory(DisplayName = "Grid.Managers.GridManager.SaveGridListAsync DbUpdateConcurrencyException Id > 0")]
+        [InlineData(2)]
+        [InlineData(64)]
+        [InlineData(256)]
+        public async System.Threading.Tasks.Task GridManagerSaveGridListAsync_DbUpdateConcurrencyExceptionPositiveId(int number)
+        {
+            using (var context = new TestContext.TestDbContext(TestTools.CreateNewContextOptions()))
+            {
+                context.CreateTestEmployees(number).CreateTestUsers(number);
+        
+                var model = InitTableModel.DbLoad(number, 5);
+                model.Id = number;
+                var listmodels = context.Set<TableModel>().ToList();
+                listmodels.Add(model);
+                var manager = new Managers.GridManager<TableModel, ViewModel, FindModel>(context);
+        
+                var actualexception = await Test.Tools.TestTools.ThrowsAsync<DbUpdateConcurrencyException>(async () => await manager.SaveGridListAsync(listmodels));
+                Assert.NotNull(actualexception.Message);
+            }
+        }
+        
+        [Theory(DisplayName = "Grid.Managers.GridManager.SaveGridListAsync Save New ModelsList")]
+        [InlineData(2)]
+        [InlineData(64)]
+        [InlineData(256)]
+        public async System.Threading.Tasks.Task GridManagerSaveGridListAsync_SaveNewModelsList(int count)
+        {
+            using (var context = new TestContext.TestDbContext(TestTools.CreateNewContextOptions()))
+            {
+                context.CreateTestEmployees(1).CreateTestUsers(1);
+                var manager = new Managers.GridManager<TableModel, ViewModel, FindModel>(context);
+        
+                var listmodels = new System.Collections.Generic.List<TableModel>();
+                var userId = context.Set<User>().FirstOrDefault().Id;
+                var employeeId = context.Set<Employee>().FirstOrDefault().Id;
+                for (var i=0; i<count; i++)
+                {
+                    var newmodel = manager.GetGridRowNewModel();
+                    newmodel.UserId = userId;
+                    newmodel.EmployeeId = employeeId;
+                    newmodel.Test = "test";
+                    newmodel.IsBool = true;
+                    newmodel.Decimal = 1.01m;
+                    listmodels.Add(newmodel);
+                }
+        
+                var actual = await manager.SaveGridListAsync(listmodels);
+
+                Assert.IsType<System.Collections.Generic.List<ViewModel>>(actual);
+                Assert.Equal(count, actual.Count());
+                actual.ToList().ForEach((item) => {
+                    Assert.True(item.Id > 0);
+                    Assert.Equal("test", item.Test);
+                    Assert.Equal(userId, item.UserId);
+                    Assert.Equal(employeeId, item.EmployeeId);
+                    Assert.Equal(true, item.IsBool);
+                    Assert.Equal(1.01m, item.Decimal);
+                });
+            }
+        }
+
     }
-}	
+}
