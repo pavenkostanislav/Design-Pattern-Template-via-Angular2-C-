@@ -1,0 +1,157 @@
+﻿<form class="form-horizontal" role="form" name="myForm" *ngIf="model" #editForm="ngForm" (ngSubmit)="onSubmit()">
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <div class="form-group">
+                <div class="col-lg-10 col-sm-10">
+                    <h4>{{name}}</h4>
+                </div>
+                <div class="col-lg-26 col-sm-26 text-center">
+                    <a (click)="onClickCancel(editForm)" class="btn btn-xs">
+                        <i class="fa fa-2x fa-undo fa-fw text-danger"></i>
+                    </a>
+                    <a (click)="onClickReadInfo()" class="btn btn-xs" *ngIf="canReadInfo" [class.disabled]="!permissions.canRead || isViewOnly || isNewOrCopy">
+                        <i class="fa fa-2x fa-info fa-fw text-success"></i>{{tableId && attachmentCount ? ' | ' + attachmentCount : ''  }}
+                    </a>
+                    <a (click)="onClickRefresh()" class="btn btn-xs" title="Обновить карточку {{name}}" [class.disabled]="!permissions.canRead || isViewOnly">
+                        <i class="fa fa-2x fa-refresh fa-fw text-warning"></i>
+                    </a>
+                    <a (click)="onClickSave()" class="btn btn-xs" *ngIf="canEdit" [class.disabled]="!permissions.canEdit || isViewOnly">
+                        <i class="fa fa-2x fa-save fa-fw text-success" [class.disabled]="!permissions.canEdit || isViewOnly || !isValid()"></i>
+                    </a>
+                    <a (click)="onClickAttach()" class="btn btn-xs" *ngIf="canAttach" [class.disabled]="!permissions.canRead || isViewOnly || isNewOrCopy">
+                        <i class="fa fa-2x fa-paperclip fa-fw text-success"></i>{{tableId && attachmentCount ? ' | ' + attachmentCount : ''  }}
+                    </a>
+                    <a (click)="onClickAddNew()" class="btn btn-xs" title="Добавить новую запись в карточку {{name}}" *ngIf="canAdd" [class.disabled]="!permissions.canAdd || isViewOnly || isNewOrCopy">
+                        <i class="fa fa-2x fa-plus fa-fw text-warning"></i>
+                    </a>
+                    <a (click)="onClickAddCopy()" class="btn btn-xs" title="Добавить копию записи в карточку {{name}}" *ngIf="canCopy" [class.disabled]="!permissions.canAdd || isViewOnly || isNewOrCopy">
+                        <i class="fa fa-2x fa-copy fa-fw text-warning"></i>
+                    </a>
+                    <a-print-list [documentTypeId]="documentTypeId"
+                                  [ownerId]="model.ownerId"
+                                  [objectId]="id"
+                                  [metaObjectId]="tableId"
+                                  [btn_class]="'btn btn-xs text-default'"
+                                  [i_class]="'fa fa-2x fa-print'"
+                                  [disabled]="!permissions.canRead || isViewOnly || isNewOrCopy">
+                    </a-print-list>
+                </div>
+            </div>
+        </div>
+        <div class="panel-body">
+            <div *ngFor="let col of listColumn let i = index" class="form-group">
+                <label class="control-label col-lg-12 col-sm-12">{{col.type == 'checkbox' ? '' : col.name}}</label>
+                <div class="col-lg-24 col-sm-24">
+                    <div *ngIf="col.type == 'calc'" class="form-control text-center">{{model[col.key]}}</div>
+                    <div *ngIf="col.type == 'text'" [class.has-error]="col.isNotNull ? model[col.key] == null : false">
+                        <input type="text" class="form-control" [(ngModel)]="model[col.key]"
+                               [ngModelOptions]="{standalone: true}"
+                               [name]="model.key"
+                               [disabled]="!permissions.canEdit || isViewOnly"
+							   [maxlength]="model.maxlength"
+							   [tabindex]="i"
+                               [required]="model.required" />
+                    </div>
+                    <div *ngIf="col.type == 'textarea'" [class.has-error]="col.isNotNull ? model[col.key] == null : false">
+                        <textarea type="textarea" class="form-control" [(ngModel)]="model[col.key]"
+                               [ngModelOptions]="{standalone: true}"
+                               [name]="model.key"
+                               [disabled]="!permissions.canEdit || isViewOnly"
+							   [tabindex]="i"
+							   [rows]="col.rows"
+                               [required]="model.required" ></textarea>
+                    </div>
+                    <div *ngIf="col.type == 'number'" [class.has-error]="col.isNotNull ? model[col.key] == null : false">
+                        <input type="number"
+                               class="form-control text-center"
+                               [(ngModel)]="model[col.key]"
+                               [ngModelOptions]="{standalone: true}"
+                               [step]="col.step"
+                               [min]="col.min"
+                               [max]="col.max"
+                               [name]="model.key"
+                               [disabled]="!permissions.canEdit || isViewOnly"
+							   [tabindex]="i"
+                               [required]="model.required" />
+                    </div>
+                    <div class="text-center" *ngIf="col.type == 'date'" [class.has-error]="col.isNotNull ? model[col.key] == null : false">
+                        <date-time [(ngModel)]="model[col.key]" [ngModelOptions]="{standalone: true}" [format]="'DD.MM.YYYY'" 
+                               [required]="model.required" [name]="model.key" 
+							   [tabindex]="i"
+                                   [disabled]="!permissions.canEdit || isViewOnly"></date-time>
+                    </div>
+                    <div class="text-center" *ngIf="col.type == 'datetime'" [class.has-error]="col.isNotNull ? model[col.key] == null : false">
+                        <date-time [(ngModel)]="model[col.key]" [ngModelOptions]="{standalone: true}" [format]="'DD.MM.YYYY hh:mm'" 
+                               [required]="model.required" [name]="model.key"
+							   [tabindex]="i"
+                                   [disabled]="!permissions.canEdit || isViewOnly"></date-time>
+                    </div>
+                    <div class="text-center" *ngIf="col.type == 'time'" [class.has-error]="col.isNotNull ? model[col.key] == null : false">
+                        <date-time [(ngModel)]="model[col.key]" [ngModelOptions]="{standalone: true}" [format]="'hh:mm:ss'" 
+                               [required]="model.required" [name]="model.key"
+							   [tabindex]="i"
+                                   [disabled]="!permissions.canEdit || isViewOnly"></date-time>
+                    </div>
+                    <div *ngIf="col.type == 'dropdown'" [class.has-error]="col.isNotNull ? model[col.key] == null : false">
+                        <dropdown [itemType]="col.dd_itemType"
+                                  [parentId]="col.dd_parentId ? model[col.dd_parentId] : 0"
+                                  [minTerm]="col.dd_minTerm ? col.dd_minTerm : 0"
+                                  [allowClear]="col.dd_allowClear ? col.dd_allowClear : true"
+                                  [(ngModel)]="model[col.key]"
+                                  [ngModelOptions]="{standalone: true}"
+                                  [name]="model.key"
+                               [required]="model.required"
+                                  class="form-control"
+							   [tabindex]="i"
+                                  [disabled]="!permissions.canEdit || isViewOnly">
+                        </dropdown>
+                    </div>
+                    <div class="text-left" *ngIf="col.type == 'checkbox'" [class.has-error]="col.isNotNull ? model[col.key] == null : false">
+                        <label>
+                            <input type="checkbox" *ngIf="col.type == 'checkbox'"
+                                   [name]="model.key"
+                                   [(ngModel)]="model[col.key]"
+                                   [ngModelOptions]="{standalone: true}"
+                                   [class.has-error]="col.isNotNull ? model[col.key] == null : false"
+								[tabindex]="i"
+                               [required]="model.required">
+                            {{col.name}}
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+<div id="InfoModalGridEdit" class="modal fade" *ngIf="model">
+    <div class="modal-dialog">
+        <div class="modal-content alert alert-default">
+            <div class="modal-header cursor-move">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title">Дополнительная информация</h4>
+            </div>
+            <div class="modal-body">
+                Номер записи: <strong>{{model.id}}</strong><br />
+                Кем создано: <strong>{{model.createdBy}}</strong><br />
+                Когда создано: <strong>{{model.createdDate | ruDate}}</strong><br />
+                Кем изменено: <strong>{{model.lastUpdatedBy}}</strong><br />
+                Когда изменено: <strong>{{model.lastUpdatedDate | ruDate}}</strong>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="AttachmentModalGridEdit" class="modal fade" data-keyboard="false" *ngIf="model">
+    <div class="modal-dialog modal-reference">
+        <div draggable class="modal-content alert alert-default">
+            <div class="modal-header cursor-move">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title">Вложения</h4>
+            </div>
+            <div class="modal-body">
+                <attachment-list [metaObjectId]="tableId" [objectId]="model.id" [canShow]="true"></attachment-list>
+            </div>
+        </div>
+    </div>
+</div>
