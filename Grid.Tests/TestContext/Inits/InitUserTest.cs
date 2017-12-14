@@ -1,7 +1,7 @@
-﻿using Grid.Test.TestContext.Models;
+﻿using Grid.Tests.TestContext.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace Grid.Test.TestContext.Inits
+namespace Grid.Tests.TestContext.Inits
 {
 	public static class InitUserTest
     {

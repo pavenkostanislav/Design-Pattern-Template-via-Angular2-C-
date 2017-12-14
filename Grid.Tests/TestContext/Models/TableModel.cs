@@ -2,7 +2,7 @@
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 
-namespace Grid.Test.TestContext.Models
+namespace Grid.Tests.TestContext.Models
 {
     [Table("TableModelTest", Schema = "dbo")]
     public class TableModel : Grid.Interfaces.ILogModel,

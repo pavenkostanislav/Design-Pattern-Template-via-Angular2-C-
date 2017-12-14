@@ -1,9 +1,9 @@
 ﻿using System;
+using Grid.Tests.TestContext.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
-using Grid.Test.TestContext.Models;
 
-namespace Grid.Test.TestContext.Inits
+namespace Grid.Tests.TestContext.Inits
 
 {
 	public static class InitTableModel

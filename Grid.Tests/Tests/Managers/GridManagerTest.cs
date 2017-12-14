@@ -1,12 +1,12 @@
 ﻿using System;
-using Xunit;
 using System.Linq;
-using Grid.Test.TestContext.Models;
-using Grid.Test.TestContext.Inits;
+using Grid.Tests.TestContext.Inits;
+using Grid.Tests.TestContext.Models;
+using Grid.Tests.Tools;
 using Microsoft.EntityFrameworkCore;
-using Grid.Test.Tools;
+using Xunit;
 
-namespace Grid.Test.Tests.Tools
+namespace Grid.Tests.Tests.Managers
 {
     public class GridManagerTest
     {
@@ -15,7 +15,7 @@ namespace Grid.Test.Tests.Tools
         {
             using (var context = new TestContext.TestDbContext(TestTools.CreateNewContextOptions()))
             {
-                var manager = new Managers.GridManager<TableModel, ViewModel, FindModel>(context);
+                var manager = new Grid.Managers.GridManager<TableModel, ViewModel, FindModel>(context);
                 Assert.NotNull(manager);
             }
         }
@@ -24,7 +24,7 @@ namespace Grid.Test.Tests.Tools
         {
             using (var context = new TestContext.TestDbContext(TestTools.CreateNewContextOptions()))
             {
-                var manager = new Managers.GridManager<TableModel, ViewModel, FindModel>(context);
+                var manager = new Grid.Managers.GridManager<TableModel, ViewModel, FindModel>(context);
 
                 var tableModel = manager.GetGridRowNewModel();
                 Assert.IsType<TableModel>(tableModel);
@@ -35,7 +35,7 @@ namespace Grid.Test.Tests.Tools
         {
             using (var context = new TestContext.TestDbContext(TestTools.CreateNewContextOptions()))
             {
-                var manager = new Managers.GridManager<TableModel, ViewModel, FindModel>(context);
+                var manager = new Grid.Managers.GridManager<TableModel, ViewModel, FindModel>(context);
 
                 var findModel = manager.GetGridRowFindModel();
                 Assert.IsType<FindModel>(findModel);
@@ -50,7 +50,7 @@ namespace Grid.Test.Tests.Tools
             using (var context = new TestContext.TestDbContext(TestTools.CreateNewContextOptions()))
             {
                 context.CreateTestEmployees(number).CreateTestUsers(number).CreateTableModels(number);
-                var manager = new Managers.GridManager<TableModel, ViewModel, FindModel>(context);
+                var manager = new Grid.Managers.GridManager<TableModel, ViewModel, FindModel>(context);
                 var model = context.Set<TableModel>().Skip(number - 1).Take(1).FirstOrDefault();
 
                 var tableModel = await manager.GetGridRowModelAsync(model.Id);
@@ -66,7 +66,7 @@ namespace Grid.Test.Tests.Tools
             using (var context = new TestContext.TestDbContext(TestTools.CreateNewContextOptions()))
             {
                 context.CreateTestEmployees(number).CreateTestUsers(number).CreateTableModels(number);
-                var manager = new Managers.GridManager<TableModel, ViewModel, FindModel>(context);
+                var manager = new Grid.Managers.GridManager<TableModel, ViewModel, FindModel>(context);
                 var model = context.Set<TableModel>().Skip(number - 1).Take(1).FirstOrDefault();
 
                 var tableModel = await manager.GetGridRowModelAsync(model.Id, true);
@@ -82,7 +82,7 @@ namespace Grid.Test.Tests.Tools
             using (var context = new TestContext.TestDbContext(TestTools.CreateNewContextOptions()))
             {
                 context.CreateTestEmployees(number).CreateTestUsers(number).CreateTableModels(number);
-                var manager = new Managers.GridManager<TableModel, ViewModel, FindModel>(context);
+                var manager = new Grid.Managers.GridManager<TableModel, ViewModel, FindModel>(context);
                 var model = context.Set<TableModel>().Skip(number - 1).Take(1).FirstOrDefault();
 
                 var tableModel = await manager.GetGridRowModelAsync(model.Id);
@@ -98,7 +98,7 @@ namespace Grid.Test.Tests.Tools
             using (var context = new TestContext.TestDbContext(TestTools.CreateNewContextOptions()))
             {
                 context.CreateTestEmployees(number).CreateTestUsers(number).CreateTableModels(number);
-                var manager = new Managers.GridManager<TableModel, ViewModel, FindModel>(context);
+                var manager = new Grid.Managers.GridManager<TableModel, ViewModel, FindModel>(context);
                 var model = context.Set<TableModel>().Skip(number - 1).Take(1).FirstOrDefault();
 
                 var tableModel = await manager.GetGridRowModelAsync(model.Id, true);
@@ -114,7 +114,7 @@ namespace Grid.Test.Tests.Tools
             using (var context = new TestContext.TestDbContext(TestTools.CreateNewContextOptions()))
             {
                 context.CreateTestEmployees(number).CreateTestUsers(number).CreateTableModels(number);
-                var manager = new Managers.GridManager<TableModel, ViewModel, FindModel>(context);
+                var manager = new Grid.Managers.GridManager<TableModel, ViewModel, FindModel>(context);
                 var model = context.Set<TableModel>()
                                     .Skip(number - 1)
                                     .Take(1)
@@ -140,7 +140,7 @@ namespace Grid.Test.Tests.Tools
             using (var context = new TestContext.TestDbContext(TestTools.CreateNewContextOptions()))
             {
                 context.CreateTestEmployees(number).CreateTestUsers(number).CreateTableModels(number);
-                var manager = new Managers.GridManager<TableModel, ViewModel, FindModel>(context);
+                var manager = new Grid.Managers.GridManager<TableModel, ViewModel, FindModel>(context);
                 var model = context.Set<TableModel>().Skip(number - 1).Take(1).FirstOrDefault();
 
                 var tableModel = await manager.GetGridRowCopyModelAsync(model.Id);
@@ -156,7 +156,7 @@ namespace Grid.Test.Tests.Tools
             using (var context = new TestContext.TestDbContext(TestTools.CreateNewContextOptions()))
             {
                 context.CreateTestEmployees(number).CreateTestUsers(number).CreateTableModels(number);
-                var manager = new Managers.GridManager<TableModel, ViewModel, FindModel>(context);
+                var manager = new Grid.Managers.GridManager<TableModel, ViewModel, FindModel>(context);
                 var model = context.Set<TableModel>().Skip(number - 1).Take(1).FirstOrDefault();
 
                 var tableModel = await manager.GetGridRowCopyModelAsync(model.Id);
@@ -172,9 +172,9 @@ namespace Grid.Test.Tests.Tools
             using (var context = new TestContext.TestDbContext(TestTools.CreateNewContextOptions()))
             {
                 context.CreateTestEmployees(number).CreateTestUsers(number).CreateTableModels(number);
-                var manager = new Managers.GridManager<TableModel, ViewModel, FindModel>(context);
+                var manager = new Grid.Managers.GridManager<TableModel, ViewModel, FindModel>(context);
                 var lastindex = context.Set<TableModel>().Max(m => m.Id);
-                var actualexception = await Test.Tools.TestTools.ThrowsAsync<Exception>(async () => await manager.GetGridRowCopyModelAsync(lastindex + 1));
+                var actualexception = await TestTools.ThrowsAsync<Exception>(async () => await manager.GetGridRowCopyModelAsync(lastindex + 1));
                 Assert.NotNull(actualexception.Message);
                 Assert.Matches(@"Ошибка получения записи из базы ([^\d])", actualexception.Message);
             }
@@ -189,7 +189,7 @@ namespace Grid.Test.Tests.Tools
             using (var context = new TestContext.TestDbContext(TestTools.CreateNewContextOptions()))
             {
                 context.CreateTestEmployees(number).CreateTestUsers(number).CreateTableModels(number);
-                var manager = new Managers.GridManager<TableModel, ViewModel, FindModel>(context);
+                var manager = new Grid.Managers.GridManager<TableModel, ViewModel, FindModel>(context);
                 var model = context.Set<TableModel>().Skip(number - 1).Take(1).FirstOrDefault();
 
                 var tableModel = await manager.GetGridRowViewModelAsync(model.Id);
@@ -205,7 +205,7 @@ namespace Grid.Test.Tests.Tools
             using (var context = new TestContext.TestDbContext(TestTools.CreateNewContextOptions()))
             {
                 context.CreateTestEmployees(number).CreateTestUsers(number).CreateTableModels(number);
-                var manager = new Managers.GridManager<TableModel, ViewModel, FindModel>(context);
+                var manager = new Grid.Managers.GridManager<TableModel, ViewModel, FindModel>(context);
                 var model = context.Set<TableModel>().Skip(number - 1).Take(1).FirstOrDefault();
 
                 var tableModel = await manager.GetGridRowViewModelAsync(model.Id);
@@ -221,9 +221,9 @@ namespace Grid.Test.Tests.Tools
             using (var context = new TestContext.TestDbContext(TestTools.CreateNewContextOptions()))
             {
                 context.CreateTestEmployees(number).CreateTestUsers(number).CreateTableModels(number);
-                var manager = new Managers.GridManager<TableModel, ViewModel, FindModel>(context);
+                var manager = new Grid.Managers.GridManager<TableModel, ViewModel, FindModel>(context);
                 var lastindex = context.Set<TableModel>().Max(m => m.Id);
-                var actualexception = await Test.Tools.TestTools.ThrowsAsync<Exception>(async () => await manager.GetGridRowViewModelAsync(lastindex + 1));
+                var actualexception = await TestTools.ThrowsAsync<Exception>(async () => await manager.GetGridRowViewModelAsync(lastindex + 1));
                 Assert.NotNull(actualexception.Message);
                 Assert.Matches(@"Ошибка получения записи из базы ([^\d])", actualexception.Message);
             }
@@ -241,7 +241,7 @@ namespace Grid.Test.Tests.Tools
 
                 var model = InitTableModel.DbLoad(number, 5);
 
-                var manager = new Managers.GridManager<TableModel, ViewModel, FindModel>(context);
+                var manager = new Grid.Managers.GridManager<TableModel, ViewModel, FindModel>(context);
                 var tableModel = await manager.SaveGridRowModelAsync(model);
 
                 Assert.IsType<ViewModel>(tableModel);
@@ -259,7 +259,7 @@ namespace Grid.Test.Tests.Tools
 
                 var model = InitTableModel.DbLoad(number, 5);
 
-                var manager = new Managers.GridManager<TableModel, ViewModel, FindModel>(context);
+                var manager = new Grid.Managers.GridManager<TableModel, ViewModel, FindModel>(context);
                 var tableModel = await manager.SaveGridRowModelAsync(model);
 
                 Assert.NotEqual(0, tableModel.Id);
@@ -277,7 +277,7 @@ namespace Grid.Test.Tests.Tools
 
                 var model = InitTableModel.DbLoad(number, 5);
 
-                var manager = new Managers.GridManager<TableModel, ViewModel, FindModel>(context);
+                var manager = new Grid.Managers.GridManager<TableModel, ViewModel, FindModel>(context);
                 model = await manager.SaveGridRowModelAsync(model);
                 var testmodel = context.Set<TableModel>().Find(model.Id);
                 testmodel.Test = "test";
@@ -298,9 +298,9 @@ namespace Grid.Test.Tests.Tools
 
                 var model = InitTableModel.DbLoad(number, 5);
                 model.Id = number * (-1);
-                var manager = new Managers.GridManager<TableModel, ViewModel, FindModel>(context);
+                var manager = new Grid.Managers.GridManager<TableModel, ViewModel, FindModel>(context);
 
-                var actualexception = await Test.Tools.TestTools.ThrowsAsync<Exception>(async () => await manager.SaveGridRowModelAsync(model));
+                var actualexception = await TestTools.ThrowsAsync<Exception>(async () => await manager.SaveGridRowModelAsync(model));
 
                 Assert.NotNull(actualexception.Message);
                 Assert.Matches(@"Данные не сохранены! Ошибка сохранения записи ([^\d])", actualexception.Message);
@@ -318,11 +318,11 @@ namespace Grid.Test.Tests.Tools
 
                 var model = InitTableModel.DbLoad(number, 5);
                 model.Id = number;
-                var manager = new Managers.GridManager<TableModel, ViewModel, FindModel>(context);
+                var manager = new Grid.Managers.GridManager<TableModel, ViewModel, FindModel>(context);
 
                 var temp = context.Set<TableModel>().FirstOrDefault(m => m.Id == model.Id);
 
-                var actualexception = await Test.Tools.TestTools.ThrowsAsync<DbUpdateConcurrencyException>(async () => await manager.SaveGridRowModelAsync(model));
+                var actualexception = await TestTools.ThrowsAsync<DbUpdateConcurrencyException>(async () => await manager.SaveGridRowModelAsync(model));
 
                 Assert.NotNull(actualexception.Message);
             }
@@ -339,9 +339,9 @@ namespace Grid.Test.Tests.Tools
 
                 var model = InitTableModel.DbLoad(number, 5);
                 model.Id = number * (-1);
-                var manager = new Managers.GridManager<TableModel, ViewModel, FindModel>(context);
+                var manager = new Grid.Managers.GridManager<TableModel, ViewModel, FindModel>(context);
 
-                var actualexception = await Test.Tools.TestTools.ThrowsAsync<Exception>(async () => await manager.SaveModelInContextAsync(model));
+                var actualexception = await TestTools.ThrowsAsync<Exception>(async () => await manager.SaveModelInContextAsync(model));
 
                 Assert.NotNull(actualexception.Message);
                 Assert.Matches(@"Данные не сохранены! Ошибка сохранения записи ([^\d])", actualexception.Message);
@@ -360,7 +360,7 @@ namespace Grid.Test.Tests.Tools
 
                 var model = InitTableModel.DbLoad(number, 5);
 
-                var manager = new Managers.GridManager<TableModel, ViewModel, FindModel>(context);
+                var manager = new Grid.Managers.GridManager<TableModel, ViewModel, FindModel>(context);
                 model = await manager.SaveGridRowModelAsync(model);
                 var copymodel = await manager.GetGridRowCopyModelAsync(model.Id);
                 var actualmodel = await manager.SaveGridRowModelAsync(copymodel);
@@ -382,7 +382,7 @@ namespace Grid.Test.Tests.Tools
 
                 var model = InitTableModel.DbLoad(number, 5);
 
-                var manager = new Managers.GridManager<TableModel, ViewModel, FindModel>(context);
+                var manager = new Grid.Managers.GridManager<TableModel, ViewModel, FindModel>(context);
 
                 var newmodel = manager.GetGridRowNewModel();
                 newmodel.UserId = context.Set<User>().FirstOrDefault().Id;
@@ -412,7 +412,7 @@ namespace Grid.Test.Tests.Tools
             using (var context = new TestContext.TestDbContext(TestTools.CreateNewContextOptions()))
             {
                 context.CreateTestEmployees(number).CreateTestUsers(number).CreateTableModels(number);
-                var manager = new Managers.GridManager<TableModel, ViewModel, FindModel>(context);
+                var manager = new Grid.Managers.GridManager<TableModel, ViewModel, FindModel>(context);
                 var model = context.Set<TableModel>().Skip(number - 1).Take(1).FirstOrDefault();
 
                 var tableModel = await manager.GetSelectItemViewModelAsync(model.Id);
@@ -428,7 +428,7 @@ namespace Grid.Test.Tests.Tools
             using (var context = new TestContext.TestDbContext(TestTools.CreateNewContextOptions()))
             {
                 context.CreateTestEmployees(number).CreateTestUsers(number).CreateTableModels(number);
-                var manager = new Managers.GridManager<TableModel, ViewModel, FindModel>(context);
+                var manager = new Grid.Managers.GridManager<TableModel, ViewModel, FindModel>(context);
                 var model = context.Set<TableModel>().Skip(number - 1).Take(1).FirstOrDefault();
 
                 var tableModel = await manager.GetSelectItemViewModelAsync(model.Id);
@@ -447,7 +447,7 @@ namespace Grid.Test.Tests.Tools
             using (var context = new TestContext.TestDbContext(TestTools.CreateNewContextOptions()))
             {
                 context.CreateTestEmployees(number).CreateTestUsers(number).CreateTableModels(number);
-                var manager = new Managers.GridManager<TableModel, ViewModel, FindModel>(context);
+                var manager = new Grid.Managers.GridManager<TableModel, ViewModel, FindModel>(context);
                 var lastindex = context.Set<TableModel>().Max(m => m.Id);
                 var tableModel = await manager.GetSelectItemViewModelAsync(lastindex + 1);
                 Assert.Null(tableModel);
@@ -465,7 +465,7 @@ namespace Grid.Test.Tests.Tools
             {
                 context.CreateTestEmployees(5).CreateTestUsers(5).CreateTableModels(5);
                 var randKeyId = TestTools.rInt(1024, -1024);
-                var manager = new Managers.GridManager<TableModel, ViewModel, FindModel>(context);
+                var manager = new Grid.Managers.GridManager<TableModel, ViewModel, FindModel>(context);
                 var model = context.Set<TableModel>().Last();
 
                 var actualList = manager.GetGridSelectList(randKeyId, term);
@@ -487,7 +487,7 @@ namespace Grid.Test.Tests.Tools
             {
                 context.CreateTestEmployees(5).CreateTestUsers(5).CreateTableModels(5);
                 var randKeyId = TestTools.rInt(1024, -1024);
-                var manager = new Managers.GridManager<TableModel, ViewModel, FindModel>(context);
+                var manager = new Grid.Managers.GridManager<TableModel, ViewModel, FindModel>(context);
                 var model = context.Set<TableModel>().Last();
 
                 var actualList = manager.GetGridSelectList(randKeyId, term).ToList();
@@ -510,7 +510,7 @@ namespace Grid.Test.Tests.Tools
             {
                 context.CreateTestEmployees(5).CreateTestUsers(5).CreateTableModels(5);
                 var randKeyId = TestTools.rInt(1024, -1024);
-                var manager = new Managers.GridManager<TableModel, ViewModel, FindModel>(context);
+                var manager = new Grid.Managers.GridManager<TableModel, ViewModel, FindModel>(context);
                 var model = context.Set<TableModel>().Last();
 
                 var actualList = manager.GetGridSelectList(randKeyId, term).ToList();
@@ -524,7 +524,7 @@ namespace Grid.Test.Tests.Tools
             using (var context = new TestContext.TestDbContext(TestTools.CreateNewContextOptions()))
             {
                 var randKeyId = TestTools.rInt(1024, -1024);
-                var manager = new Managers.GridManager<TableModel, ViewModel, FindModel>(context);
+                var manager = new Grid.Managers.GridManager<TableModel, ViewModel, FindModel>(context);
 
                 var actualList = manager.GetGridSelectList(randKeyId, null).ToList();
                 Assert.NotNull(actualList);
@@ -542,7 +542,7 @@ namespace Grid.Test.Tests.Tools
             {
                 context.CreateTestEmployees(5).CreateTestUsers(5).CreateTableModels(5);
                 var randKeyId = TestTools.rInt(1024, -1024);
-                var manager = new Managers.GridManager<TableModel, ViewModel, FindModel>(context);
+                var manager = new Grid.Managers.GridManager<TableModel, ViewModel, FindModel>(context);
                 var model = context.Set<TableModel>().Last();
 
                 var actualList = await manager.GetGridSelectListAsync(randKeyId, term);
@@ -561,7 +561,7 @@ namespace Grid.Test.Tests.Tools
             {
                 context.CreateTestEmployees(5).CreateTestUsers(5).CreateTableModels(5);
                 var randKeyId = TestTools.rInt(1024, -1024);
-                var manager = new Managers.GridManager<TableModel, ViewModel, FindModel>(context);
+                var manager = new Grid.Managers.GridManager<TableModel, ViewModel, FindModel>(context);
                 var model = context.Set<TableModel>().Last();
 
                 var actualList = (await manager.GetGridSelectListAsync(randKeyId, term)).ToList();
@@ -584,7 +584,7 @@ namespace Grid.Test.Tests.Tools
             {
                 context.CreateTestEmployees(5).CreateTestUsers(5).CreateTableModels(5);
                 var randKeyId = TestTools.rInt(1024, -1024);
-                var manager = new Managers.GridManager<TableModel, ViewModel, FindModel>(context);
+                var manager = new Grid.Managers.GridManager<TableModel, ViewModel, FindModel>(context);
                 var model = context.Set<TableModel>().Last();
 
                 var actualList = (await manager.GetGridSelectListAsync(randKeyId, term)).ToList();
@@ -606,7 +606,7 @@ namespace Grid.Test.Tests.Tools
             {
                 context.CreateTestEmployees(5).CreateTestUsers(5).CreateTableModels(5);
                 var randKeyId = TestTools.rInt(1024, -1024);
-                var manager = new Managers.GridManager<TableModel, ViewModel, FindModel>(context);
+                var manager = new Grid.Managers.GridManager<TableModel, ViewModel, FindModel>(context);
                 var model = context.Set<TableModel>().Last();
 
                 var actualList = await manager.GetGridSelectListAsync(randKeyId, term);
@@ -620,7 +620,7 @@ namespace Grid.Test.Tests.Tools
             using (var context = new TestContext.TestDbContext(TestTools.CreateNewContextOptions()))
             {
                 var randKeyId = TestTools.rInt(1024, -1024);
-                var manager = new Managers.GridManager<TableModel, ViewModel, FindModel>(context);
+                var manager = new Grid.Managers.GridManager<TableModel, ViewModel, FindModel>(context);
 
                 var actualList = await manager.GetGridSelectListAsync(randKeyId, null);
                 Assert.NotNull(actualList);
@@ -634,7 +634,7 @@ namespace Grid.Test.Tests.Tools
             {
                 context.CreateTestEmployees(5).CreateTestUsers(5).CreateTableModels(5);
                 var randKeyId = TestTools.rInt(1024, -1024);
-                var manager = new Managers.GridManager<TableModel, ViewModel, FindModel>(context);
+                var manager = new Grid.Managers.GridManager<TableModel, ViewModel, FindModel>(context);
                 var model = context.Set<TableModel>().Last();
 
                 var actualList = manager.GetGridListWithOneLevelIncludes();
@@ -649,7 +649,7 @@ namespace Grid.Test.Tests.Tools
             {
                 context.CreateTestEmployees(5).CreateTestUsers(5).CreateTableModels(5);
                 var randKeyId = TestTools.rInt(1024, -1024);
-                var manager = new Managers.GridManager<TableModel, ViewModel, FindModel>(context);
+                var manager = new Grid.Managers.GridManager<TableModel, ViewModel, FindModel>(context);
                 var model = context.Set<TableModel>().Last();
 
                 var actualList = manager.GetGridListWithOneLevelIncludes().ToList();
@@ -668,7 +668,7 @@ namespace Grid.Test.Tests.Tools
             {
                 context.CreateTestEmployees(5).CreateTestUsers(5).CreateTableModels(5);
                 var randKeyId = TestTools.rInt(1024, -1024);
-                var manager = new Managers.GridManager<TableModel, ViewModel, FindModel>(context);
+                var manager = new Grid.Managers.GridManager<TableModel, ViewModel, FindModel>(context);
                 var model = context.Set<TableModel>().Last();
 
                 var actualList = manager.GetGridListWithOneLevelIncludes().ToList();
@@ -682,7 +682,7 @@ namespace Grid.Test.Tests.Tools
             using (var context = new TestContext.TestDbContext(TestTools.CreateNewContextOptions()))
             {
                 var randKeyId = TestTools.rInt(1024, -1024);
-                var manager = new Managers.GridManager<TableModel, ViewModel, FindModel>(context);
+                var manager = new Grid.Managers.GridManager<TableModel, ViewModel, FindModel>(context);
 
                 var actualList = manager.GetGridListWithOneLevelIncludes().ToList();
                 Assert.NotNull(actualList);
@@ -696,7 +696,7 @@ namespace Grid.Test.Tests.Tools
 
                 context.CreateTestEmployees(5).CreateTestUsers(5).CreateTableModels(5);
                 var randKeyId = TestTools.rInt(1024, -1024);
-                var manager = new Managers.GridManager<TableModel, ViewModel, FindModel>(context);
+                var manager = new Grid.Managers.GridManager<TableModel, ViewModel, FindModel>(context);
                 var model = context.Set<TableModel>().Last();
 
                 var actualList = manager.GetGridListWithOneLevelIncludes().ToList();
@@ -726,7 +726,7 @@ namespace Grid.Test.Tests.Tools
             {
                 context.CreateTestEmployees(5).CreateTestUsers(5).CreateTableModels(5);
                 var randKeyId = TestTools.rInt(1024, -1024);
-                var manager = new Managers.GridManager<TableModel, ViewModel, FindModel>(context);
+                var manager = new Grid.Managers.GridManager<TableModel, ViewModel, FindModel>(context);
                 var model = context.Set<TableModel>().Last();
 
                 var actualList = await manager.GetGridListWithOneLevelIncludesAsync();
@@ -741,7 +741,7 @@ namespace Grid.Test.Tests.Tools
             {
                 context.CreateTestEmployees(5).CreateTestUsers(5).CreateTableModels(5);
                 var randKeyId = TestTools.rInt(1024, -1024);
-                var manager = new Managers.GridManager<TableModel, ViewModel, FindModel>(context);
+                var manager = new Grid.Managers.GridManager<TableModel, ViewModel, FindModel>(context);
                 var model = context.Set<TableModel>().Last();
 
                 var actualList = (await manager.GetGridListWithOneLevelIncludesAsync()).ToList();
@@ -760,7 +760,7 @@ namespace Grid.Test.Tests.Tools
             {
                 context.CreateTestEmployees(5).CreateTestUsers(5).CreateTableModels(5);
                 var randKeyId = TestTools.rInt(1024, -1024);
-                var manager = new Managers.GridManager<TableModel, ViewModel, FindModel>(context);
+                var manager = new Grid.Managers.GridManager<TableModel, ViewModel, FindModel>(context);
                 var model = context.Set<TableModel>().Last();
 
                 var actualList = (await manager.GetGridListWithOneLevelIncludesAsync()).ToList();
@@ -774,7 +774,7 @@ namespace Grid.Test.Tests.Tools
             using (var context = new TestContext.TestDbContext(TestTools.CreateNewContextOptions()))
             {
                 var randKeyId = TestTools.rInt(1024, -1024);
-                var manager = new Managers.GridManager<TableModel, ViewModel, FindModel>(context);
+                var manager = new Grid.Managers.GridManager<TableModel, ViewModel, FindModel>(context);
 
                 var actualList = (await manager.GetGridListWithOneLevelIncludesAsync()).ToList();
                 Assert.NotNull(actualList);
@@ -788,7 +788,7 @@ namespace Grid.Test.Tests.Tools
 
                 context.CreateTestEmployees(5).CreateTestUsers(5).CreateTableModels(5);
                 var randKeyId = TestTools.rInt(1024, -1024);
-                var manager = new Managers.GridManager<TableModel, ViewModel, FindModel>(context);
+                var manager = new Grid.Managers.GridManager<TableModel, ViewModel, FindModel>(context);
                 var model = context.Set<TableModel>().Last();
 
                 var actualList = (await manager.GetGridListWithOneLevelIncludesAsync()).ToList();
@@ -818,7 +818,7 @@ namespace Grid.Test.Tests.Tools
             {
                 context.CreateTestEmployees(5).CreateTestUsers(5).CreateTableModels(5);
                 var randKeyId = TestTools.rInt(1024, -1024);
-                var manager = new Managers.GridManager<TableModel, ViewModel, FindModel>(context);
+                var manager = new Grid.Managers.GridManager<TableModel, ViewModel, FindModel>(context);
                 var model = context.Set<TableModel>().Last();
 
                 var actualList = manager.GetGridList();
@@ -833,7 +833,7 @@ namespace Grid.Test.Tests.Tools
             {
                 context.CreateTestEmployees(5).CreateTestUsers(5).CreateTableModels(5);
                 var randKeyId = TestTools.rInt(1024, -1024);
-                var manager = new Managers.GridManager<TableModel, ViewModel, FindModel>(context);
+                var manager = new Grid.Managers.GridManager<TableModel, ViewModel, FindModel>(context);
                 var model = context.Set<TableModel>().Last();
 
                 var actualList = manager.GetGridList().ToList();
@@ -852,7 +852,7 @@ namespace Grid.Test.Tests.Tools
             {
                 context.CreateTestEmployees(5).CreateTestUsers(5).CreateTableModels(5);
                 var randKeyId = TestTools.rInt(1024, -1024);
-                var manager = new Managers.GridManager<TableModel, ViewModel, FindModel>(context);
+                var manager = new Grid.Managers.GridManager<TableModel, ViewModel, FindModel>(context);
                 var model = context.Set<TableModel>().Last();
 
                 var actualList = manager.GetGridList().ToList();
@@ -866,7 +866,7 @@ namespace Grid.Test.Tests.Tools
             using (var context = new TestContext.TestDbContext(TestTools.CreateNewContextOptions()))
             {
                 var randKeyId = TestTools.rInt(1024, -1024);
-                var manager = new Managers.GridManager<TableModel, ViewModel, FindModel>(context);
+                var manager = new Grid.Managers.GridManager<TableModel, ViewModel, FindModel>(context);
 
                 var actualList = manager.GetGridList().ToList();
                 Assert.NotNull(actualList);
@@ -880,7 +880,7 @@ namespace Grid.Test.Tests.Tools
 
                 context.CreateTestEmployees(5).CreateTestUsers(5).CreateTableModels(5);
                 var randKeyId = TestTools.rInt(1024, -1024);
-                var manager = new Managers.GridManager<TableModel, ViewModel, FindModel>(context);
+                var manager = new Grid.Managers.GridManager<TableModel, ViewModel, FindModel>(context);
                 var model = context.Set<TableModel>().Last();
 
                 var actualList = manager.GetGridList().ToList();
@@ -910,7 +910,7 @@ namespace Grid.Test.Tests.Tools
             {
                 context.CreateTestEmployees(5).CreateTestUsers(5).CreateTableModels(5);
                 var randKeyId = TestTools.rInt(1024, -1024);
-                var manager = new Managers.GridManager<TableModel, ViewModel, FindModel>(context);
+                var manager = new Grid.Managers.GridManager<TableModel, ViewModel, FindModel>(context);
                 var model = context.Set<TableModel>().Last();
 
                 var actualList = await manager.GetGridListAsync();
@@ -925,7 +925,7 @@ namespace Grid.Test.Tests.Tools
             {
                 context.CreateTestEmployees(5).CreateTestUsers(5).CreateTableModels(5);
                 var randKeyId = TestTools.rInt(1024, -1024);
-                var manager = new Managers.GridManager<TableModel, ViewModel, FindModel>(context);
+                var manager = new Grid.Managers.GridManager<TableModel, ViewModel, FindModel>(context);
                 var model = context.Set<TableModel>().Last();
 
                 var actualList = (await manager.GetGridListAsync()).ToList();
@@ -944,7 +944,7 @@ namespace Grid.Test.Tests.Tools
             {
                 context.CreateTestEmployees(5).CreateTestUsers(5).CreateTableModels(5);
                 var randKeyId = TestTools.rInt(1024, -1024);
-                var manager = new Managers.GridManager<TableModel, ViewModel, FindModel>(context);
+                var manager = new Grid.Managers.GridManager<TableModel, ViewModel, FindModel>(context);
                 var model = context.Set<TableModel>().Last();
 
                 var actualList = (await manager.GetGridListAsync()).ToList();
@@ -958,7 +958,7 @@ namespace Grid.Test.Tests.Tools
             using (var context = new TestContext.TestDbContext(TestTools.CreateNewContextOptions()))
             {
                 var randKeyId = TestTools.rInt(1024, -1024);
-                var manager = new Managers.GridManager<TableModel, ViewModel, FindModel>(context);
+                var manager = new Grid.Managers.GridManager<TableModel, ViewModel, FindModel>(context);
 
                 var actualList = (await manager.GetGridListAsync()).ToList();
                 Assert.NotNull(actualList);
@@ -972,7 +972,7 @@ namespace Grid.Test.Tests.Tools
 
                 context.CreateTestEmployees(5).CreateTestUsers(5).CreateTableModels(5);
                 var randKeyId = TestTools.rInt(1024, -1024);
-                var manager = new Managers.GridManager<TableModel, ViewModel, FindModel>(context);
+                var manager = new Grid.Managers.GridManager<TableModel, ViewModel, FindModel>(context);
                 var model = context.Set<TableModel>().Last();
 
                 var actualList = (await manager.GetGridListAsync()).ToList();
@@ -1002,7 +1002,7 @@ namespace Grid.Test.Tests.Tools
             {
                 context.CreateTestEmployees(5).CreateTestUsers(5).CreateTableModels(5);
                 var randKeyId = TestTools.rInt(1024, -1024);
-                var manager = new Managers.GridManager<TableModel, ViewModel, FindModel>(context);
+                var manager = new Grid.Managers.GridManager<TableModel, ViewModel, FindModel>(context);
                 var model = context.Set<TableModel>().Last();
 
                 var actualList = await manager.GetGridListViewModelAsync();
@@ -1017,7 +1017,7 @@ namespace Grid.Test.Tests.Tools
             {
                 context.CreateTestEmployees(5).CreateTestUsers(5).CreateTableModels(5);
                 var randKeyId = TestTools.rInt(1024, -1024);
-                var manager = new Managers.GridManager<TableModel, ViewModel, FindModel>(context);
+                var manager = new Grid.Managers.GridManager<TableModel, ViewModel, FindModel>(context);
                 var model = context.Set<TableModel>().Last();
 
                 var actualList = (await manager.GetGridListViewModelAsync()).ToList();
@@ -1036,7 +1036,7 @@ namespace Grid.Test.Tests.Tools
             {
                 context.CreateTestEmployees(5).CreateTestUsers(5).CreateTableModels(5);
                 var randKeyId = TestTools.rInt(1024, -1024);
-                var manager = new Managers.GridManager<TableModel, ViewModel, FindModel>(context);
+                var manager = new Grid.Managers.GridManager<TableModel, ViewModel, FindModel>(context);
                 var model = context.Set<TableModel>().Last();
 
                 var actualList = (await manager.GetGridListViewModelAsync()).ToList();
@@ -1050,7 +1050,7 @@ namespace Grid.Test.Tests.Tools
             using (var context = new TestContext.TestDbContext(TestTools.CreateNewContextOptions()))
             {
                 var randKeyId = TestTools.rInt(1024, -1024);
-                var manager = new Managers.GridManager<TableModel, ViewModel, FindModel>(context);
+                var manager = new Grid.Managers.GridManager<TableModel, ViewModel, FindModel>(context);
 
                 var actualList = (await manager.GetGridListViewModelAsync()).ToList();
                 Assert.NotNull(actualList);
@@ -1064,7 +1064,7 @@ namespace Grid.Test.Tests.Tools
 
                 context.CreateTestEmployees(5).CreateTestUsers(5).CreateTableModels(5);
                 var randKeyId = TestTools.rInt(1024, -1024);
-                var manager = new Managers.GridManager<TableModel, ViewModel, FindModel>(context);
+                var manager = new Grid.Managers.GridManager<TableModel, ViewModel, FindModel>(context);
                 var model = context.Set<TableModel>().Last();
 
                 var actualList = (await manager.GetGridListViewModelAsync()).ToList();
@@ -1098,7 +1098,7 @@ namespace Grid.Test.Tests.Tools
             using (var context = new TestContext.TestDbContext(TestTools.CreateNewContextOptions()))
             {
                 context.CreateTestEmployees(5).CreateTestUsers(5).CreateTableModels(5);
-                var manager = new Managers.GridManager<TableModel, ViewModel, FindModel>(context);
+                var manager = new Grid.Managers.GridManager<TableModel, ViewModel, FindModel>(context);
                 var model = context.Set<TableModel>().Last();
 
                 var actualResponseModel = await manager.GetGridResponseModelAsync();
@@ -1112,7 +1112,7 @@ namespace Grid.Test.Tests.Tools
             using (var context = new TestContext.TestDbContext(TestTools.CreateNewContextOptions()))
             {
                 context.CreateTestEmployees(5).CreateTestUsers(5).CreateTableModels(5);
-                var manager = new Managers.GridManager<TableModel, ViewModel, FindModel>(context);
+                var manager = new Grid.Managers.GridManager<TableModel, ViewModel, FindModel>(context);
                 var model = context.Set<TableModel>().Last();
 
                 var actualResponseModel = await manager.GetGridResponseModelAsync();
@@ -1126,7 +1126,7 @@ namespace Grid.Test.Tests.Tools
             using (var context = new TestContext.TestDbContext(TestTools.CreateNewContextOptions()))
             {
                 context.CreateTestEmployees(5).CreateTestUsers(5).CreateTableModels(5);
-                var manager = new Managers.GridManager<TableModel, ViewModel, FindModel>(context);
+                var manager = new Grid.Managers.GridManager<TableModel, ViewModel, FindModel>(context);
                 var actualResponseModel = await manager.GetGridResponseModelAsync();
                 Assert.NotNull(actualResponseModel);
             }
@@ -1137,7 +1137,7 @@ namespace Grid.Test.Tests.Tools
         {
             using (var context = new TestContext.TestDbContext(TestTools.CreateNewContextOptions()))
             {
-                var manager = new Managers.GridManager<TableModel, ViewModel, FindModel>(context);
+                var manager = new Grid.Managers.GridManager<TableModel, ViewModel, FindModel>(context);
 
                 var actualResponseModel = await manager.GetGridResponseModelAsync();
                 Assert.NotNull(actualResponseModel);
@@ -1159,7 +1159,7 @@ namespace Grid.Test.Tests.Tools
             {
 
                 context.CreateTestEmployees(5).CreateTestUsers(5).CreateTableModels(5);
-                var manager = new Managers.GridManager<TableModel, ViewModel, FindModel>(context);
+                var manager = new Grid.Managers.GridManager<TableModel, ViewModel, FindModel>(context);
 
                 var requestModel = new Models.RequestModel<FindModel> { CurrentPage = currentPage, PageSize = pageSize, KeyId = keyId };
                 var actualResponseModel = await manager.GetGridResponseModelAsync(requestModel);
@@ -1193,7 +1193,7 @@ namespace Grid.Test.Tests.Tools
             using (var context = new TestContext.TestDbContext(TestTools.CreateNewContextOptions()))
             {
                 context.CreateTestEmployees(5).CreateTestUsers(5).CreateTableModels(5);
-                var manager = new Managers.GridManager<TableModel, ViewModel, FindModel>(context);
+                var manager = new Grid.Managers.GridManager<TableModel, ViewModel, FindModel>(context);
 
                 var excpectQueryable = context.Set<TableModel>().AsQueryable();
                 var actualQueryable = manager.QueryableFilter(excpectQueryable, null);
@@ -1212,7 +1212,7 @@ namespace Grid.Test.Tests.Tools
             using (var context = new TestContext.TestDbContext(TestTools.CreateNewContextOptions()))
             {
                 context.CreateTestEmployees(Id).CreateTestUsers(Id).CreateTableModels(Id);
-                var manager = new Managers.GridManager<TableModel, ViewModel, FindModel>(context);
+                var manager = new Grid.Managers.GridManager<TableModel, ViewModel, FindModel>(context);
                 var fm = new FindModel { Id = Id };
 
                 var excpectQueryable = context.Set<TableModel>().AsQueryable();
@@ -1239,7 +1239,7 @@ namespace Grid.Test.Tests.Tools
             using (var context = new TestContext.TestDbContext(TestTools.CreateNewContextOptions()))
             {
                 context.CreateTestEmployees(5).CreateTestUsers(5).CreateTableModels(5);
-                var manager = new Managers.GridManager<TableModel, ViewModel, FindModel>(context);
+                var manager = new Grid.Managers.GridManager<TableModel, ViewModel, FindModel>(context);
                 var fm = new FindModel { CreatedBy = CreatedBy };
         
                 var excpectQueryable = context.Set<TableModel>().AsQueryable();
@@ -1266,7 +1266,7 @@ namespace Grid.Test.Tests.Tools
             using (var context = new TestContext.TestDbContext(TestTools.CreateNewContextOptions()))
             {
                 context.CreateTestEmployees(5).CreateTestUsers(5).CreateTableModels(5);
-                var manager = new Managers.GridManager<TableModel, ViewModel, FindModel>(context);
+                var manager = new Grid.Managers.GridManager<TableModel, ViewModel, FindModel>(context);
                 var fm = new FindModel { LastUpdatedBy = LastUpdatedBy };
 
                 var excpectQueryable = context.Set<TableModel>().AsQueryable();
@@ -1287,7 +1287,7 @@ namespace Grid.Test.Tests.Tools
             using (var context = new TestContext.TestDbContext(TestTools.CreateNewContextOptions()))
             {
                 context.CreateTestEmployees(5).CreateTestUsers(5).CreateTableModels(5);
-                var manager = new Managers.GridManager<TableModel, ViewModel, FindModel>(context);
+                var manager = new Grid.Managers.GridManager<TableModel, ViewModel, FindModel>(context);
                 var CreatedDateStart = (DateTime?)null;
                 var fm = new FindModel { CreatedDateStart = CreatedDateStart };
 
@@ -1311,7 +1311,7 @@ namespace Grid.Test.Tests.Tools
             using (var context = new TestContext.TestDbContext(TestTools.CreateNewContextOptions()))
             {
                 context.CreateTestEmployees(5).CreateTestUsers(5).CreateTableModels(5);
-                var manager = new Managers.GridManager<TableModel, ViewModel, FindModel>(context);
+                var manager = new Grid.Managers.GridManager<TableModel, ViewModel, FindModel>(context);
                 DateTime? CreatedDateStart = new DateTime(year.Value, mounth.Value, day.Value);
                 var fm = new FindModel { CreatedDateStart = CreatedDateStart };
 
@@ -1334,7 +1334,7 @@ namespace Grid.Test.Tests.Tools
             using (var context = new TestContext.TestDbContext(TestTools.CreateNewContextOptions()))
             {
                 context.CreateTestEmployees(5).CreateTestUsers(5).CreateTableModels(5);
-                var manager = new Managers.GridManager<TableModel, ViewModel, FindModel>(context);
+                var manager = new Grid.Managers.GridManager<TableModel, ViewModel, FindModel>(context);
                 var CreatedDateStart = context.Set<TableModel>()?.FirstOrDefault()?.CreatedDate;
                 var fm = new FindModel { CreatedDateStart = CreatedDateStart };
 
@@ -1357,7 +1357,7 @@ namespace Grid.Test.Tests.Tools
             using (var context = new TestContext.TestDbContext(TestTools.CreateNewContextOptions()))
             {
                 context.CreateTestEmployees(5).CreateTestUsers(5).CreateTableModels(5);
-                var manager = new Managers.GridManager<TableModel, ViewModel, FindModel>(context);
+                var manager = new Grid.Managers.GridManager<TableModel, ViewModel, FindModel>(context);
                 var LastUpdatedDateStart = (DateTime?)null;
                 var fm = new FindModel { LastUpdatedDateStart = LastUpdatedDateStart };
 
@@ -1381,7 +1381,7 @@ namespace Grid.Test.Tests.Tools
             using (var context = new TestContext.TestDbContext(TestTools.CreateNewContextOptions()))
             {
                 context.CreateTestEmployees(5).CreateTestUsers(5).CreateTableModels(5);
-                var manager = new Managers.GridManager<TableModel, ViewModel, FindModel>(context);
+                var manager = new Grid.Managers.GridManager<TableModel, ViewModel, FindModel>(context);
                 DateTime? LastUpdatedDateStart = new DateTime(year.Value, mounth.Value, day.Value);
                 var fm = new FindModel { LastUpdatedDateStart = LastUpdatedDateStart };
 
@@ -1404,7 +1404,7 @@ namespace Grid.Test.Tests.Tools
             using (var context = new TestContext.TestDbContext(TestTools.CreateNewContextOptions()))
             {
                 context.CreateTestEmployees(5).CreateTestUsers(5).CreateTableModels(5);
-                var manager = new Managers.GridManager<TableModel, ViewModel, FindModel>(context);
+                var manager = new Grid.Managers.GridManager<TableModel, ViewModel, FindModel>(context);
                 var LastUpdatedDateStart = context.Set<TableModel>()?.FirstOrDefault()?.LastUpdatedDate;
                 var fm = new FindModel { LastUpdatedDateStart = LastUpdatedDateStart };
 
@@ -1427,7 +1427,7 @@ namespace Grid.Test.Tests.Tools
             using (var context = new TestContext.TestDbContext(TestTools.CreateNewContextOptions()))
             {
                 context.CreateTestEmployees(5).CreateTestUsers(5).CreateTableModels(5);
-                var manager = new Managers.GridManager<TableModel, ViewModel, FindModel>(context);
+                var manager = new Grid.Managers.GridManager<TableModel, ViewModel, FindModel>(context);
                 var CreatedDateEnd = (DateTime?)null;
                 var fm = new FindModel { CreatedDateEnd = CreatedDateEnd };
 
@@ -1451,7 +1451,7 @@ namespace Grid.Test.Tests.Tools
             using (var context = new TestContext.TestDbContext(TestTools.CreateNewContextOptions()))
             {
                 context.CreateTestEmployees(5).CreateTestUsers(5).CreateTableModels(5);
-                var manager = new Managers.GridManager<TableModel, ViewModel, FindModel>(context);
+                var manager = new Grid.Managers.GridManager<TableModel, ViewModel, FindModel>(context);
                 DateTime? CreatedDateEnd = new DateTime(year.Value, mounth.Value, day.Value);
                 var fm = new FindModel { CreatedDateEnd = CreatedDateEnd };
 
@@ -1474,7 +1474,7 @@ namespace Grid.Test.Tests.Tools
             using (var context = new TestContext.TestDbContext(TestTools.CreateNewContextOptions()))
             {
                 context.CreateTestEmployees(5).CreateTestUsers(5).CreateTableModels(5);
-                var manager = new Managers.GridManager<TableModel, ViewModel, FindModel>(context);
+                var manager = new Grid.Managers.GridManager<TableModel, ViewModel, FindModel>(context);
                 var CreatedDateEnd = context.Set<TableModel>()?.FirstOrDefault()?.CreatedDate;
                 var fm = new FindModel { CreatedDateEnd = CreatedDateEnd };
 
@@ -1497,7 +1497,7 @@ namespace Grid.Test.Tests.Tools
             using (var context = new TestContext.TestDbContext(TestTools.CreateNewContextOptions()))
             {
                 context.CreateTestEmployees(5).CreateTestUsers(5).CreateTableModels(5);
-                var manager = new Managers.GridManager<TableModel, ViewModel, FindModel>(context);
+                var manager = new Grid.Managers.GridManager<TableModel, ViewModel, FindModel>(context);
                 var LastUpdatedDateEnd = (DateTime?)null;
                 var fm = new FindModel { LastUpdatedDateEnd = LastUpdatedDateEnd };
 
@@ -1521,7 +1521,7 @@ namespace Grid.Test.Tests.Tools
             using (var context = new TestContext.TestDbContext(TestTools.CreateNewContextOptions()))
             {
                 context.CreateTestEmployees(5).CreateTestUsers(5).CreateTableModels(5);
-                var manager = new Managers.GridManager<TableModel, ViewModel, FindModel>(context);
+                var manager = new Grid.Managers.GridManager<TableModel, ViewModel, FindModel>(context);
                 DateTime? LastUpdatedDateEnd = new DateTime(year.Value, mounth.Value, day.Value);
                 var fm = new FindModel { LastUpdatedDateEnd = LastUpdatedDateEnd };
 
@@ -1544,7 +1544,7 @@ namespace Grid.Test.Tests.Tools
             using (var context = new TestContext.TestDbContext(TestTools.CreateNewContextOptions()))
             {
                 context.CreateTestEmployees(5).CreateTestUsers(5).CreateTableModels(5);
-                var manager = new Managers.GridManager<TableModel, ViewModel, FindModel>(context);
+                var manager = new Grid.Managers.GridManager<TableModel, ViewModel, FindModel>(context);
                 var LastUpdatedDateEnd = context.Set<TableModel>()?.FirstOrDefault()?.LastUpdatedDate;
                 var fm = new FindModel { LastUpdatedDateEnd = LastUpdatedDateEnd };
 
@@ -1567,7 +1567,7 @@ namespace Grid.Test.Tests.Tools
             using (var context = new TestContext.TestDbContext(TestTools.CreateNewContextOptions()))
             {
                 context.CreateTestEmployees(5).CreateTestUsers(5).CreateTableModels(5);
-                var manager = new Managers.GridManager<TableModel, ViewModel, FindModel>(context);
+                var manager = new Grid.Managers.GridManager<TableModel, ViewModel, FindModel>(context);
 
                 var excpectQueryable = manager.GetGridListWithOneLevelIncludes();
                 var actualQueryable = manager.GetGridList(null, null);
@@ -1585,7 +1585,7 @@ namespace Grid.Test.Tests.Tools
             using (var context = new TestContext.TestDbContext(TestTools.CreateNewContextOptions()))
             {
                 context.CreateTestEmployees(Id).CreateTestUsers(Id).CreateTableModels(Id);
-                var manager = new Managers.GridManager<TableModel, ViewModel, FindModel>(context);
+                var manager = new Grid.Managers.GridManager<TableModel, ViewModel, FindModel>(context);
                 var fm = new FindModel { Id = Id };
 
                 var excpectQueryable = manager.GetGridListWithOneLevelIncludes();
@@ -1611,7 +1611,7 @@ namespace Grid.Test.Tests.Tools
             using (var context = new TestContext.TestDbContext(TestTools.CreateNewContextOptions()))
             {
                 context.CreateTestEmployees(5).CreateTestUsers(5).CreateTableModels(5);
-                var manager = new Managers.GridManager<TableModel, ViewModel, FindModel>(context);
+                var manager = new Grid.Managers.GridManager<TableModel, ViewModel, FindModel>(context);
                 var fm = new FindModel { CreatedBy = CreatedBy };
 
                 var excpectQueryable = manager.GetGridListWithOneLevelIncludes();
@@ -1638,7 +1638,7 @@ namespace Grid.Test.Tests.Tools
             using (var context = new TestContext.TestDbContext(TestTools.CreateNewContextOptions()))
             {
                 context.CreateTestEmployees(5).CreateTestUsers(5).CreateTableModels(5);
-                var manager = new Managers.GridManager<TableModel, ViewModel, FindModel>(context);
+                var manager = new Grid.Managers.GridManager<TableModel, ViewModel, FindModel>(context);
                 var fm = new FindModel { LastUpdatedBy = LastUpdatedBy };
 
                 var excpectQueryable = manager.GetGridListWithOneLevelIncludes();
@@ -1659,7 +1659,7 @@ namespace Grid.Test.Tests.Tools
             using (var context = new TestContext.TestDbContext(TestTools.CreateNewContextOptions()))
             {
                 context.CreateTestEmployees(5).CreateTestUsers(5).CreateTableModels(5);
-                var manager = new Managers.GridManager<TableModel, ViewModel, FindModel>(context);
+                var manager = new Grid.Managers.GridManager<TableModel, ViewModel, FindModel>(context);
                 var CreatedDateStart = (DateTime?)null;
                 var fm = new FindModel { CreatedDateStart = CreatedDateStart };
 
@@ -1683,7 +1683,7 @@ namespace Grid.Test.Tests.Tools
             using (var context = new TestContext.TestDbContext(TestTools.CreateNewContextOptions()))
             {
                 context.CreateTestEmployees(5).CreateTestUsers(5).CreateTableModels(5);
-                var manager = new Managers.GridManager<TableModel, ViewModel, FindModel>(context);
+                var manager = new Grid.Managers.GridManager<TableModel, ViewModel, FindModel>(context);
                 DateTime? CreatedDateStart = new DateTime(year.Value, mounth.Value, day.Value);
                 var fm = new FindModel { CreatedDateStart = CreatedDateStart };
 
@@ -1706,7 +1706,7 @@ namespace Grid.Test.Tests.Tools
             using (var context = new TestContext.TestDbContext(TestTools.CreateNewContextOptions()))
             {
                 context.CreateTestEmployees(5).CreateTestUsers(5).CreateTableModels(5);
-                var manager = new Managers.GridManager<TableModel, ViewModel, FindModel>(context);
+                var manager = new Grid.Managers.GridManager<TableModel, ViewModel, FindModel>(context);
                 var CreatedDateStart = context.Set<TableModel>()?.FirstOrDefault()?.CreatedDate;
                 var fm = new FindModel { CreatedDateStart = CreatedDateStart };
 
@@ -1729,7 +1729,7 @@ namespace Grid.Test.Tests.Tools
             using (var context = new TestContext.TestDbContext(TestTools.CreateNewContextOptions()))
             {
                 context.CreateTestEmployees(5).CreateTestUsers(5).CreateTableModels(5);
-                var manager = new Managers.GridManager<TableModel, ViewModel, FindModel>(context);
+                var manager = new Grid.Managers.GridManager<TableModel, ViewModel, FindModel>(context);
                 var LastUpdatedDateStart = (DateTime?)null;
                 var fm = new FindModel { LastUpdatedDateStart = LastUpdatedDateStart };
 
@@ -1753,7 +1753,7 @@ namespace Grid.Test.Tests.Tools
             using (var context = new TestContext.TestDbContext(TestTools.CreateNewContextOptions()))
             {
                 context.CreateTestEmployees(5).CreateTestUsers(5).CreateTableModels(5);
-                var manager = new Managers.GridManager<TableModel, ViewModel, FindModel>(context);
+                var manager = new Grid.Managers.GridManager<TableModel, ViewModel, FindModel>(context);
                 DateTime? LastUpdatedDateStart = new DateTime(year.Value, mounth.Value, day.Value);
                 var fm = new FindModel { LastUpdatedDateStart = LastUpdatedDateStart };
 
@@ -1776,7 +1776,7 @@ namespace Grid.Test.Tests.Tools
             using (var context = new TestContext.TestDbContext(TestTools.CreateNewContextOptions()))
             {
                 context.CreateTestEmployees(5).CreateTestUsers(5).CreateTableModels(5);
-                var manager = new Managers.GridManager<TableModel, ViewModel, FindModel>(context);
+                var manager = new Grid.Managers.GridManager<TableModel, ViewModel, FindModel>(context);
                 var LastUpdatedDateStart = context.Set<TableModel>()?.FirstOrDefault()?.LastUpdatedDate;
                 var fm = new FindModel { LastUpdatedDateStart = LastUpdatedDateStart };
 
@@ -1798,7 +1798,7 @@ namespace Grid.Test.Tests.Tools
             using (var context = new TestContext.TestDbContext(TestTools.CreateNewContextOptions()))
             {
                 context.CreateTestEmployees(5).CreateTestUsers(5).CreateTableModels(5);
-                var manager = new Managers.GridManager<TableModel, ViewModel, FindModel>(context);
+                var manager = new Grid.Managers.GridManager<TableModel, ViewModel, FindModel>(context);
                 var CreatedDateEnd = (DateTime?)null;
                 var fm = new FindModel { CreatedDateEnd = CreatedDateEnd };
 
@@ -1822,7 +1822,7 @@ namespace Grid.Test.Tests.Tools
             using (var context = new TestContext.TestDbContext(TestTools.CreateNewContextOptions()))
             {
                 context.CreateTestEmployees(5).CreateTestUsers(5).CreateTableModels(5);
-                var manager = new Managers.GridManager<TableModel, ViewModel, FindModel>(context);
+                var manager = new Grid.Managers.GridManager<TableModel, ViewModel, FindModel>(context);
                 DateTime? CreatedDateEnd = new DateTime(year.Value, mounth.Value, day.Value);
                 var fm = new FindModel { CreatedDateEnd = CreatedDateEnd };
 
@@ -1845,7 +1845,7 @@ namespace Grid.Test.Tests.Tools
             using (var context = new TestContext.TestDbContext(TestTools.CreateNewContextOptions()))
             {
                 context.CreateTestEmployees(5).CreateTestUsers(5).CreateTableModels(5);
-                var manager = new Managers.GridManager<TableModel, ViewModel, FindModel>(context);
+                var manager = new Grid.Managers.GridManager<TableModel, ViewModel, FindModel>(context);
                 var CreatedDateEnd = context.Set<TableModel>()?.FirstOrDefault()?.CreatedDate;
                 var fm = new FindModel { CreatedDateEnd = CreatedDateEnd };
 
@@ -1868,7 +1868,7 @@ namespace Grid.Test.Tests.Tools
             using (var context = new TestContext.TestDbContext(TestTools.CreateNewContextOptions()))
             {
                 context.CreateTestEmployees(5).CreateTestUsers(5).CreateTableModels(5);
-                var manager = new Managers.GridManager<TableModel, ViewModel, FindModel>(context);
+                var manager = new Grid.Managers.GridManager<TableModel, ViewModel, FindModel>(context);
                 var LastUpdatedDateEnd = (DateTime?)null;
                 var fm = new FindModel { LastUpdatedDateEnd = LastUpdatedDateEnd };
 
@@ -1892,7 +1892,7 @@ namespace Grid.Test.Tests.Tools
             using (var context = new TestContext.TestDbContext(TestTools.CreateNewContextOptions()))
             {
                 context.CreateTestEmployees(5).CreateTestUsers(5).CreateTableModels(5);
-                var manager = new Managers.GridManager<TableModel, ViewModel, FindModel>(context);
+                var manager = new Grid.Managers.GridManager<TableModel, ViewModel, FindModel>(context);
                 DateTime? LastUpdatedDateEnd = new DateTime(year.Value, mounth.Value, day.Value);
                 var fm = new FindModel { LastUpdatedDateEnd = LastUpdatedDateEnd };
 
@@ -1915,7 +1915,7 @@ namespace Grid.Test.Tests.Tools
             using (var context = new TestContext.TestDbContext(TestTools.CreateNewContextOptions()))
             {
                 context.CreateTestEmployees(5).CreateTestUsers(5).CreateTableModels(5);
-                var manager = new Managers.GridManager<TableModel, ViewModel, FindModel>(context);
+                var manager = new Grid.Managers.GridManager<TableModel, ViewModel, FindModel>(context);
                 var LastUpdatedDateEnd = context.Set<TableModel>()?.FirstOrDefault()?.LastUpdatedDate;
                 var fm = new FindModel { LastUpdatedDateEnd = LastUpdatedDateEnd };
 
@@ -1938,7 +1938,7 @@ namespace Grid.Test.Tests.Tools
             using (var context = new TestContext.TestDbContext(TestTools.CreateNewContextOptions()))
             {
                 context.CreateTestEmployees(5).CreateTestUsers(5).CreateTableModels(5);
-                var manager = new Managers.GridManager<TableModel, ViewModel, FindModel>(context);
+                var manager = new Grid.Managers.GridManager<TableModel, ViewModel, FindModel>(context);
 
                 var excpectQueryable = manager.GetGridListWithOneLevelIncludes();
                 var actualQueryable = await manager.GetGridResponseModelAsync(null);
@@ -1956,7 +1956,7 @@ namespace Grid.Test.Tests.Tools
             using (var context = new TestContext.TestDbContext(TestTools.CreateNewContextOptions()))
             {
                 context.CreateTestEmployees(Id).CreateTestUsers(Id).CreateTableModels(Id);
-                var manager = new Managers.GridManager<TableModel, ViewModel, FindModel>(context);
+                var manager = new Grid.Managers.GridManager<TableModel, ViewModel, FindModel>(context);
                 var fm = new FindModel { Id = Id };
         
                 var excpectQueryable = manager.GetGridListWithOneLevelIncludes();
@@ -1988,7 +1988,7 @@ namespace Grid.Test.Tests.Tools
             using (var context = new TestContext.TestDbContext(TestTools.CreateNewContextOptions()))
             {
                 context.CreateTestEmployees(5).CreateTestUsers(5).CreateTableModels(5);
-                var manager = new Managers.GridManager<TableModel, ViewModel, FindModel>(context);
+                var manager = new Grid.Managers.GridManager<TableModel, ViewModel, FindModel>(context);
                 var fm = new FindModel { CreatedBy = CreatedBy };
         
                 var excpectQueryable = manager.GetGridListWithOneLevelIncludes();
@@ -2020,7 +2020,7 @@ namespace Grid.Test.Tests.Tools
             using (var context = new TestContext.TestDbContext(TestTools.CreateNewContextOptions()))
             {
                 context.CreateTestEmployees(5).CreateTestUsers(5).CreateTableModels(5);
-                var manager = new Managers.GridManager<TableModel, ViewModel, FindModel>(context);
+                var manager = new Grid.Managers.GridManager<TableModel, ViewModel, FindModel>(context);
                 var fm = new FindModel { LastUpdatedBy = LastUpdatedBy };
         
                 var excpectQueryable = manager.GetGridListWithOneLevelIncludes();
@@ -2046,7 +2046,7 @@ namespace Grid.Test.Tests.Tools
             using (var context = new TestContext.TestDbContext(TestTools.CreateNewContextOptions()))
             {
                 context.CreateTestEmployees(5).CreateTestUsers(5).CreateTableModels(5);
-                var manager = new Managers.GridManager<TableModel, ViewModel, FindModel>(context);
+                var manager = new Grid.Managers.GridManager<TableModel, ViewModel, FindModel>(context);
                 var CreatedDateStart = (DateTime?)null;
                 var fm = new FindModel { CreatedDateStart = CreatedDateStart };
         
@@ -2075,7 +2075,7 @@ namespace Grid.Test.Tests.Tools
             using (var context = new TestContext.TestDbContext(TestTools.CreateNewContextOptions()))
             {
                 context.CreateTestEmployees(5).CreateTestUsers(5).CreateTableModels(5);
-                var manager = new Managers.GridManager<TableModel, ViewModel, FindModel>(context);
+                var manager = new Grid.Managers.GridManager<TableModel, ViewModel, FindModel>(context);
                 DateTime? CreatedDateStart = new DateTime(year.Value, mounth.Value, day.Value);
                 var fm = new FindModel { CreatedDateStart = CreatedDateStart };
         
@@ -2103,7 +2103,7 @@ namespace Grid.Test.Tests.Tools
             using (var context = new TestContext.TestDbContext(TestTools.CreateNewContextOptions()))
             {
                 context.CreateTestEmployees(5).CreateTestUsers(5).CreateTableModels(5);
-                var manager = new Managers.GridManager<TableModel, ViewModel, FindModel>(context);
+                var manager = new Grid.Managers.GridManager<TableModel, ViewModel, FindModel>(context);
                 var CreatedDateStart = context.Set<TableModel>()?.FirstOrDefault()?.CreatedDate;
                 var fm = new FindModel { CreatedDateStart = CreatedDateStart };
         
@@ -2131,7 +2131,7 @@ namespace Grid.Test.Tests.Tools
             using (var context = new TestContext.TestDbContext(TestTools.CreateNewContextOptions()))
             {
                 context.CreateTestEmployees(5).CreateTestUsers(5).CreateTableModels(5);
-                var manager = new Managers.GridManager<TableModel, ViewModel, FindModel>(context);
+                var manager = new Grid.Managers.GridManager<TableModel, ViewModel, FindModel>(context);
                 var LastUpdatedDateStart = (DateTime?)null;
                 var fm = new FindModel { LastUpdatedDateStart = LastUpdatedDateStart };
         
@@ -2160,7 +2160,7 @@ namespace Grid.Test.Tests.Tools
             using (var context = new TestContext.TestDbContext(TestTools.CreateNewContextOptions()))
             {
                 context.CreateTestEmployees(5).CreateTestUsers(5).CreateTableModels(5);
-                var manager = new Managers.GridManager<TableModel, ViewModel, FindModel>(context);
+                var manager = new Grid.Managers.GridManager<TableModel, ViewModel, FindModel>(context);
                 DateTime? LastUpdatedDateStart = new DateTime(year.Value, mounth.Value, day.Value);
                 var fm = new FindModel { LastUpdatedDateStart = LastUpdatedDateStart };
         
@@ -2188,7 +2188,7 @@ namespace Grid.Test.Tests.Tools
             using (var context = new TestContext.TestDbContext(TestTools.CreateNewContextOptions()))
             {
                 context.CreateTestEmployees(5).CreateTestUsers(5).CreateTableModels(5);
-                var manager = new Managers.GridManager<TableModel, ViewModel, FindModel>(context);
+                var manager = new Grid.Managers.GridManager<TableModel, ViewModel, FindModel>(context);
                 var LastUpdatedDateStart = context.Set<TableModel>()?.FirstOrDefault()?.LastUpdatedDate;
                 var fm = new FindModel { LastUpdatedDateStart = LastUpdatedDateStart };
         
@@ -2215,7 +2215,7 @@ namespace Grid.Test.Tests.Tools
             using (var context = new TestContext.TestDbContext(TestTools.CreateNewContextOptions()))
             {
                 context.CreateTestEmployees(5).CreateTestUsers(5).CreateTableModels(5);
-                var manager = new Managers.GridManager<TableModel, ViewModel, FindModel>(context);
+                var manager = new Grid.Managers.GridManager<TableModel, ViewModel, FindModel>(context);
                 var CreatedDateEnd = (DateTime?)null;
                 var fm = new FindModel { CreatedDateEnd = CreatedDateEnd };
         
@@ -2244,7 +2244,7 @@ namespace Grid.Test.Tests.Tools
             using (var context = new TestContext.TestDbContext(TestTools.CreateNewContextOptions()))
             {
                 context.CreateTestEmployees(5).CreateTestUsers(5).CreateTableModels(5);
-                var manager = new Managers.GridManager<TableModel, ViewModel, FindModel>(context);
+                var manager = new Grid.Managers.GridManager<TableModel, ViewModel, FindModel>(context);
                 DateTime? CreatedDateEnd = new DateTime(year.Value, mounth.Value, day.Value);
                 var fm = new FindModel { CreatedDateEnd = CreatedDateEnd };
         
@@ -2272,7 +2272,7 @@ namespace Grid.Test.Tests.Tools
             using (var context = new TestContext.TestDbContext(TestTools.CreateNewContextOptions()))
             {
                 context.CreateTestEmployees(5).CreateTestUsers(5).CreateTableModels(5);
-                var manager = new Managers.GridManager<TableModel, ViewModel, FindModel>(context);
+                var manager = new Grid.Managers.GridManager<TableModel, ViewModel, FindModel>(context);
                 var CreatedDateEnd = context.Set<TableModel>()?.FirstOrDefault()?.CreatedDate;
                 var fm = new FindModel { CreatedDateEnd = CreatedDateEnd };
         
@@ -2300,7 +2300,7 @@ namespace Grid.Test.Tests.Tools
             using (var context = new TestContext.TestDbContext(TestTools.CreateNewContextOptions()))
             {
                 context.CreateTestEmployees(5).CreateTestUsers(5).CreateTableModels(5);
-                var manager = new Managers.GridManager<TableModel, ViewModel, FindModel>(context);
+                var manager = new Grid.Managers.GridManager<TableModel, ViewModel, FindModel>(context);
                 var LastUpdatedDateEnd = (DateTime?)null;
                 var fm = new FindModel { LastUpdatedDateEnd = LastUpdatedDateEnd };
         
@@ -2329,7 +2329,7 @@ namespace Grid.Test.Tests.Tools
             using (var context = new TestContext.TestDbContext(TestTools.CreateNewContextOptions()))
             {
                 context.CreateTestEmployees(5).CreateTestUsers(5).CreateTableModels(5);
-                var manager = new Managers.GridManager<TableModel, ViewModel, FindModel>(context);
+                var manager = new Grid.Managers.GridManager<TableModel, ViewModel, FindModel>(context);
                 DateTime? LastUpdatedDateEnd = new DateTime(year.Value, mounth.Value, day.Value);
                 var fm = new FindModel { LastUpdatedDateEnd = LastUpdatedDateEnd };
         
@@ -2357,7 +2357,7 @@ namespace Grid.Test.Tests.Tools
             using (var context = new TestContext.TestDbContext(TestTools.CreateNewContextOptions()))
             {
                 context.CreateTestEmployees(5).CreateTestUsers(5).CreateTableModels(5);
-                var manager = new Managers.GridManager<TableModel, ViewModel, FindModel>(context);
+                var manager = new Grid.Managers.GridManager<TableModel, ViewModel, FindModel>(context);
                 var LastUpdatedDateEnd = context.Set<TableModel>()?.FirstOrDefault()?.LastUpdatedDate;
                 var fm = new FindModel { LastUpdatedDateEnd = LastUpdatedDateEnd };
         
@@ -2389,7 +2389,7 @@ namespace Grid.Test.Tests.Tools
             {
                 context.CreateTestEmployees(number).CreateTestUsers(number).CreateTableModels(number);
                 var listmodels = context.Set<TableModel>().ToList();
-                var manager = new Managers.GridManager<TableModel, ViewModel, FindModel>(context);
+                var manager = new Grid.Managers.GridManager<TableModel, ViewModel, FindModel>(context);
                 var tableModel = await manager.SaveGridListAsync(listmodels);
 
                 Assert.IsType<System.Collections.Generic.List<ViewModel>>(tableModel);
@@ -2405,7 +2405,7 @@ namespace Grid.Test.Tests.Tools
             {
                 context.CreateTestEmployees(number).CreateTestUsers(number).CreateTableModels(number);
                 var listmodels = context.Set<TableModel>().ToList();
-                var manager = new Managers.GridManager<TableModel, ViewModel, FindModel>(context);
+                var manager = new Grid.Managers.GridManager<TableModel, ViewModel, FindModel>(context);
                 var tableModel = await manager.SaveGridListAsync(listmodels);
                 listmodels.ForEach((item) => {
                     Assert.NotEqual(0, item.Id);
@@ -2425,7 +2425,7 @@ namespace Grid.Test.Tests.Tools
                 listmodels.ForEach((item) => {
                     item.Test = "test";
                 });
-                var manager = new Managers.GridManager<TableModel, ViewModel, FindModel>(context);
+                var manager = new Grid.Managers.GridManager<TableModel, ViewModel, FindModel>(context);
                 var actual = await manager.SaveGridListAsync(listmodels);
                 actual.ToList().ForEach((item) => {
                     item.Test = "test";
@@ -2447,8 +2447,8 @@ namespace Grid.Test.Tests.Tools
                     item.Id = item.Id * (-1);
                 });
                 
-                var manager = new Managers.GridManager<TableModel, ViewModel, FindModel>(context);
-                var actualexception = await Test.Tools.TestTools.ThrowsAsync<Exception>(async () => await manager.SaveGridListAsync(listmodels));
+                var manager = new Grid.Managers.GridManager<TableModel, ViewModel, FindModel>(context);
+                var actualexception = await TestTools.ThrowsAsync<Exception>(async () => await manager.SaveGridListAsync(listmodels));
         
                 Assert.NotNull(actualexception.Message);
                 Assert.Matches(@"Данные не сохранены! Ошибка сохранения записи ([^\d])", actualexception.Message);
@@ -2468,9 +2468,9 @@ namespace Grid.Test.Tests.Tools
                 model.Id = number;
                 var listmodels = context.Set<TableModel>().ToList();
                 listmodels.Add(model);
-                var manager = new Managers.GridManager<TableModel, ViewModel, FindModel>(context);
+                var manager = new Grid.Managers.GridManager<TableModel, ViewModel, FindModel>(context);
         
-                var actualexception = await Test.Tools.TestTools.ThrowsAsync<DbUpdateConcurrencyException>(async () => await manager.SaveGridListAsync(listmodels));
+                var actualexception = await TestTools.ThrowsAsync<DbUpdateConcurrencyException>(async () => await manager.SaveGridListAsync(listmodels));
                 Assert.NotNull(actualexception.Message);
             }
         }
@@ -2484,7 +2484,7 @@ namespace Grid.Test.Tests.Tools
             using (var context = new TestContext.TestDbContext(TestTools.CreateNewContextOptions()))
             {
                 context.CreateTestEmployees(1).CreateTestUsers(1);
-                var manager = new Managers.GridManager<TableModel, ViewModel, FindModel>(context);
+                var manager = new Grid.Managers.GridManager<TableModel, ViewModel, FindModel>(context);
         
                 var listmodels = new System.Collections.Generic.List<TableModel>();
                 var userId = context.Set<User>().FirstOrDefault().Id;

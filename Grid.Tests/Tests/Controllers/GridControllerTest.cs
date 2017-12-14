@@ -1,5 +1,5 @@
 ﻿
-namespace Grid.Test.Tests.Tools
+namespace Grid.Tests.Tests.Controllers
 {
     public class GridControllerTest
     {

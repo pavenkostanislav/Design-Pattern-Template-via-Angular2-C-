@@ -1,13 +1,12 @@
-﻿using Xunit;
+﻿using System.Linq;
+using Grid.Tests.TestContext.Inits;
+using Grid.Tests.TestContext.Models;
+using Grid.Tests.Tools;
 using Grid.Tools;
-using System.Linq;
-
-using Grid.Test.TestContext.Models;
-using Grid.Test.TestContext.Inits;
 using Microsoft.EntityFrameworkCore;
-using Grid.Test.Tools;
+using Xunit;
 
-namespace Grid.Test.Tests.Tools
+namespace Grid.Tests.Tests.Tools
 {
     public class GridToolsTest
     {

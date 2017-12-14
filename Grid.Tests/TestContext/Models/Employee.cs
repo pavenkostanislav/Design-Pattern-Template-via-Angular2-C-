@@ -2,7 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Grid.Test.TestContext.Models
+namespace Grid.Tests.TestContext.Models
 {
     [Table("Employee", Schema = "dbo")]
     public class Employee

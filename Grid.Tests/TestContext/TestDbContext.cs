@@ -1,10 +1,9 @@
-﻿using JetBrains.Annotations;
-using Grid.Test.TestContext.Inits;
-using Grid.Test.TestContext.Models;
+﻿using System.Linq;
+using Grid.Tests.TestContext.Inits;
+using Grid.Tests.TestContext.Models;
 using Microsoft.EntityFrameworkCore;
-using System.Linq;
 
-namespace Grid.Test.TestContext
+namespace Grid.Tests.TestContext
 {
     public class TestDbContext : DbContext
     {
