@@ -16,7 +16,7 @@ namespace Grid.Controllers
         }
 
         [Microsoft.AspNetCore.Mvc.HttpPost("list")]
-        virtual public async System.Threading.Tasks.Task<Microsoft.AspNetCore.Mvc.IActionResult> GetGridRequestModelAsync([FromBody] Grid.Models.RequestModel<GridFindModel> requestModel)
+        virtual public async System.Threading.Tasks.Task<Microsoft.AspNetCore.Mvc.IActionResult> GetGridResponseModelAsync([FromBody] Grid.Models.RequestModel<GridFindModel> requestModel)
         {
             try
             {

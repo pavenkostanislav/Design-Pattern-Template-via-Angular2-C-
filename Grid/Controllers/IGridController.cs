@@ -5,7 +5,7 @@ namespace Grid.Controllers
     public interface IGridController<GridTableModel, GridViewModel, GridFindModel>
     {
         [Microsoft.AspNetCore.Mvc.HttpPost("list")]
-        System.Threading.Tasks.Task<Microsoft.AspNetCore.Mvc.IActionResult> GetGridRequestModelAsync([FromBody] Grid.Models.RequestModel<GridFindModel> requestModel);
+        System.Threading.Tasks.Task<Microsoft.AspNetCore.Mvc.IActionResult> GetGridResponseModelAsync([FromBody] Grid.Models.RequestModel<GridFindModel> requestModel);
 
         [Microsoft.AspNetCore.Mvc.HttpGet("list/{keyId:int?}")]
         System.Threading.Tasks.Task<Microsoft.AspNetCore.Mvc.IActionResult> GetGridListAsync(int? keyId);
