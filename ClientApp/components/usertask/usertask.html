@@ -1,0 +1,55 @@
+﻿<div class="panel panel-primary">
+    <table class="table table-bordered table-hover table-striped table-condensed">
+        <thead>
+            <tr>
+                <th class="text-center">
+                    <a (click)="onRefreshList()" class="btn btn-xs btn-primary" title="Обновить список">
+                        <i class="fa fa-refresh fa-fw"></i>
+                    </a>
+                    <a href="/usertask/{{docId}}/edit/0/new/{{parentId}}/{{metaObjectId}}/{{objectId}}/{{docTypeId}}" class="btn btn-xs btn-primary" title="Добавить запись">
+                        <i class="fa fa-plus fa-fw"></i>
+                    </a>
+                </th>
+                <th class="text-center">Номер</th>
+                <th class="text-center">Дата создания</th>
+                <th class="text-center">Наименование</th>
+                <th class="text-center hidden-md hidden-sm hidden-xs {{docId === docTypeIdUserTask ? '' : 'hidden-lg'}}" *ngIf="docId === docTypeIdSupport">Задание</th>
+                <th class="text-center hidden-xs">Автор</th>
+                <th class="text-center hidden-md hidden-sm hidden-xs">Дата {{docId === docTypeIdUserTask ? 'утверждения' : 'закрытия'}}</th>
+                <th class="text-center hidden-md hidden-sm hidden-xs {{docId === docTypeIdUserTask ? '' : 'hidden-lg'}}" *ngIf="docId === docTypeIdSupport">Ответ</th>
+                <th class="text-center hidden-sm hidden-xs">Исполнитель</th>
+                <th class="text-center hidden-md hidden-sm hidden-xs">Дата прочтения</th>
+                <th class="text-center hidden-md hidden-sm hidden-xs">Дата исполнения</th>
+                <th class="text-center hidden-md hidden-sm hidden-xs {{docId === docTypeIdUserTask ? 'hidden-lg' : ''}}" *ngIf="docId === docTypeIdSupport">Модуль</th>
+                <th class="text-center hidden-md hidden-sm hidden-xs {{docId === docTypeIdUserTask ? 'hidden-lg' : ''}}" *ngIf="docId === docTypeIdSupport">Действие</th>
+                <th class="text-center hidden-md hidden-sm hidden-xs {{docId === docTypeIdUserTask ? 'hidden-lg' : ''}}" *ngIf="docId === docTypeIdSupport">Важность</th>
+                <th class="text-center hidden-md hidden-sm hidden-xs">Статус</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let usertask of usertaskList" 
+                class="{{   usertask.importanceId == importanceHigh ? 'danger' : 
+                            usertask.importanceId == importanceLow ? 'warning' : 
+                            ''  }}"
+                [class.info]="selected"
+                (click)="onSelected(usertask)" 
+                role="button">
+                <td> <a href="/usertask/edit/{{usertask.id}}" class="btn btn-xs btn-success" title="Открыть"><i class="fa fa-edit fa-fw"></i></a></td>
+                <td>{{usertask.id}}</td>
+                <td>{{usertask.date ? usertask.date.substring(0,10) : ''}}</td>
+                <td>{{usertask.name}}</td>
+                <td class="hidden-md hidden-sm hidden-xs {{docId === docTypeIdUserTask ? '' : 'hidden-lg'}}" *ngIf="docId === docTypeIdSupport">{{usertask.description}}</td>
+                <td class="hidden-xs">{{usertask.authorName}}</td>
+                <td class="hidden-md hidden-sm hidden-xs">{{usertask.approveDate}}</td>
+                <td class="hidden-md hidden-sm hidden-xs {{docId === docTypeIdUserTask ? '' : 'hidden-lg'}}" *ngIf="docId === docTypeIdSupport">{{usertask.response}}</td>
+                <td class="hidden-sm hidden-xs">{{usertask.performerName}}</td>
+                <td class="hidden-md hidden-sm hidden-xs">{{usertask.readDate}}</td>
+                <td class="hidden-md hidden-sm hidden-xs">{{usertask.responseDate}}</td>
+                <td class="hidden-md hidden-sm hidden-xs {{docId === docTypeIdUserTask ? 'hidden-lg' : ''}}" *ngIf="docId === docTypeIdSupport">{{usertask.moduleName}}</td>
+                <td class="hidden-md hidden-sm hidden-xs {{docId === docTypeIdUserTask ? 'hidden-lg' : ''}}" *ngIf="docId === docTypeIdSupport">{{usertask.actionName}}</td>
+                <td class="hidden-md hidden-sm hidden-xs {{docId === docTypeIdUserTask ? 'hidden-lg' : ''}}" *ngIf="docId === docTypeIdSupport">{{usertask.importanceName}}</td>
+                <td class="hidden-md hidden-sm hidden-xs">{{usertask.statusName}}</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
